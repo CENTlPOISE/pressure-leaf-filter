@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e3eaf1">
+<title>WI 02 – Pressure Leaf Filter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#18202b;--mut:#5f6b7a;--line:rgba(24,32,43,.09);--amber:#f0a020;--glass:rgba(255,255,255,.84);--ac:#f0a020;--r:18px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#e3eaf1;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;color:inherit}
+body{background-color:#e3eaf1;
+  background-image:radial-gradient(1100px 700px at 60% 35%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%),linear-gradient(rgba(110,132,160,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(110,132,160,.15) 1px,transparent 1px),linear-gradient(rgba(110,132,160,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(110,132,160,.08) 1px,transparent 1px);
+  background-size:auto,120px 120px,120px 120px,24px 24px,24px 24px}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#c:active{cursor:grabbing}
+#fallback{position:fixed;left:0;right:0;top:38%;text-align:center;color:#6b7480;font-size:14px;padding:0 24px;display:none}
+.hidden{display:none!important}
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);border:1px solid rgba(255,255,255,.75);box-shadow:0 10px 34px rgba(25,40,70,.16),0 1px 3px rgba(25,40,70,.08)}
+
+/* header */
+#top{position:fixed;z-index:5;top:max(10px,env(safe-area-inset-top));left:12px;right:12px;height:48px;display:flex;align-items:center;gap:10px;padding:0 8px 0 8px;border-radius:999px;max-width:560px}
+#top .logo{width:34px;height:34px;border-radius:50%;background:#18202b;display:grid;place-items:center;flex:none}
+#top .ttl{flex:1;min-width:0;line-height:1.15}
+#top .ttl b{display:block;font-size:15.5px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#top .ttl small{display:block;font-size:11px;color:var(--mut);font-weight:600;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbtn{border:0;background:#18202b;color:#fff;border-radius:999px;height:34px;padding:0 14px 0 11px;font:700 13px inherit;font-family:inherit;display:flex;align-items:center;gap:6px;cursor:pointer;flex:none}
+.hbtn:hover{background:#2a3647}
+/* rail */
+#rail{position:fixed;z-index:5;right:12px;top:calc(max(10px,env(safe-area-inset-top)) + 62px);display:flex;flex-direction:column;gap:6px;padding:6px;border-radius:20px}
+#rail button{width:50px;border:0;background:none;border-radius:14px;padding:7px 0 5px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-size:9.5px;font-weight:700;letter-spacing:.02em;color:#3b4656}
+#rail button svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#rail button:hover{background:rgba(24,32,43,.07)}
+#rail button.on{background:#18202b;color:#fff}
+#tip{position:fixed;z-index:6;pointer-events:none;background:#18202b;color:#fff;font-size:12px;font-weight:600;padding:5px 10px;border-radius:8px;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#toast{position:fixed;z-index:9;left:50%;top:calc(max(10px,env(safe-area-inset-top)) + 64px);transform:translate(-50%,-8px);background:#18202b;color:#fff;font-size:13px;font-weight:600;padding:8px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:.22s;white-space:nowrap}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#coach{position:fixed;z-index:4;left:50%;transform:translateX(-50%);top:calc(max(10px,env(safe-area-inset-top)) + 64px);padding:8px 16px;border-radius:999px;font-size:12.5px;font-weight:600;color:#3b4656;white-space:nowrap;transition:opacity .5s;pointer-events:none}
+#coach.off{opacity:0}
+@media (max-width:560px){#coach{display:none}}
+
+/* panels */
+#home,#sheet{position:fixed;z-index:5;display:flex;flex-direction:column;border-radius:22px;animation:pop .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+#home{padding:18px 18px 16px}
+#sheet{padding:0;max-height:54vh;overflow:hidden}
+@media (max-width:899px){
+  #home,#sheet{left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom))}
+  #rail{top:calc(max(10px,env(safe-area-inset-top)) + 62px)}
+  .desk{display:none!important}
+}
+@media (min-width:900px){
+  #home,#sheet{left:16px;top:74px;bottom:16px;width:384px;max-height:none}
+  #home,#sheet{bottom:auto}
+  #sheet{max-height:calc(100vh - 90px)}
+}
+#home .eyebrow{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+#home h1{font-size:22px;margin:4px 0 6px;letter-spacing:-.02em}
+#home p{margin:0 0 12px;font-size:13.5px;line-height:1.5;color:var(--mut)}
+.cta{border:0;background:#18202b;color:#fff;width:100%;padding:14px 18px;border-radius:14px;font:700 15px inherit;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px rgba(24,32,43,.28);transition:transform .12s}
+.cta:hover{transform:translateY(-1px)}
+.cta svg{width:16px;height:16px;fill:currentColor}
+.qrow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.qrow button{flex:1;min-width:90px;border:1px solid var(--line);background:rgba(255,255,255,.7);border-radius:12px;padding:10px 8px;font:700 12.5px inherit;font-family:inherit;cursor:pointer}
+.qrow button:hover{background:#fff}
+#home .foot{margin-top:12px;font-size:11.5px;color:var(--mut);display:flex;gap:6px;align-items:center}
+#home .foot i{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
+.mhint{margin:8px 0 0;text-align:center;font-size:12.5px;color:var(--mut)}
+
+#sheet .sbody{flex:1;overflow:auto;padding:14px 16px 6px;scrollbar-width:thin}
+#sheet .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.seg{display:flex;gap:5px}
+.seg div{flex:1;font-size:10px;font-weight:700;color:#8b95a3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.01em}
+.seg i{display:block;height:5px;border-radius:3px;background:rgba(24,32,43,.1);margin-bottom:5px;position:relative;overflow:hidden}
+.seg .done i{background:var(--c)}
+.seg .act i:after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--p);background:var(--c);border-radius:3px;transition:width .4s}
+.seg .act{color:var(--ink)}
+.stepbtn{border:0;background:rgba(24,32,43,.06);border-radius:999px;font:700 12.5px inherit;font-family:inherit;color:#3b4656;padding:6px 12px;cursor:pointer}
+.stepbtn:hover{background:rgba(24,32,43,.11)}
+.x{border:0;background:rgba(24,32,43,.06);width:32px;height:32px;border-radius:50%;font-size:20px;line-height:1;color:#3b4656;cursor:pointer;display:grid;place-items:center}
+.x:hover{background:rgba(24,32,43,.12)}
+.eyeb{display:flex;align-items:center;gap:8px;margin:6px 0 2px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ac)}
+.badge{font-style:normal;background:var(--ac);color:#fff;border-radius:7px;padding:2px 7px;font-size:11.5px;letter-spacing:.02em}
+#sheet h2{margin:2px 0 6px;font-size:19px;letter-spacing:-.015em;line-height:1.25}
+#sheet p{margin:0 0 10px;font-size:14px;line-height:1.55;color:#323d4b}
+.chk{list-style:none;padding:0;margin:4px 0 4px}
+.chk li{position:relative;padding-left:26px;margin-bottom:7px;font-size:14px;line-height:1.4;color:#323d4b}
+.chk li:before{content:"";position:absolute;left:2px;top:2px;width:15px;height:15px;border:2px solid var(--ac);border-radius:5px}
+.co{display:flex;gap:10px;border-radius:12px;padding:10px 12px;margin:8px 0;font-size:13px;line-height:1.45}
+.co b{flex:none;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding-top:2px;min-width:54px}
+.co.warn{background:#fff1ef;color:#7a2418}.co.warn b{color:#c8341f}
+.co.tbc{background:#eef3ff;color:#25427a}.co.tbc b{color:#3358b8}
+.co.note{background:#f1f4f7;color:#3b4656}.co.note b{color:#6a7686}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 12px}
+.chip{border:1px solid rgba(24,32,43,.12);background:#fff;border-radius:999px;padding:7px 12px 7px 10px;font:700 12.5px inherit;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:7px;transition:.15s}
+.chip:hover{border-color:var(--amber);background:#fff8e8}
+.chip.sel{background:#fff1d1;border-color:var(--amber)}
+.chip:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--amber)}
+.chip.repair{--dc:#d9402b}.chip.service{--dc:#e8981a}.chip.ok{--dc:#3f9d63}.chip.check{--dc:#3f78c9}.chip.tbc{--dc:#8267cf}
+.detail{background:rgba(255,255,255,.75);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:2px 0 12px;font-size:13.2px;line-height:1.5;color:#323d4b}
+.detail .dh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
+.detail .dh b{font-size:15px;color:var(--ink)}
+.detail .k{display:block;margin-top:7px}.detail .k u{text-decoration:none;font-weight:800;color:var(--ink)}
+.tg{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:3px 8px;white-space:nowrap;flex:none}
+.tg.repair{background:#fde4df;color:#b3301d}.tg.service{background:#fdecc9;color:#8a5a00}.tg.ok{background:#dcf2e4;color:#23703f}.tg.check{background:#dce8fb;color:#245aa8}.tg.tbc{background:#e8e1f8;color:#5b44a8}
+.link{border:0;background:none;font:700 13px inherit;font-family:inherit;text-decoration:underline;padding:2px 0 10px;cursor:pointer}
+.nav{display:flex;gap:10px;padding:10px 16px 14px;border-top:1px solid var(--line);background:rgba(255,255,255,.55)}
+.nav button{flex:1;padding:13px;border-radius:13px;font:700 14.5px inherit;font-family:inherit;cursor:pointer;border:1px solid rgba(24,32,43,.14);background:#fff}
+.nav button.pri{background:var(--ac);border-color:var(--ac);color:#fff;flex:1.5;box-shadow:0 5px 14px rgba(24,32,43,.18)}
+.nav button:disabled{opacity:.4;cursor:default}
+.menu{margin:2px 0 10px;border:1px solid var(--line);border-radius:14px;max-height:210px;overflow:auto;background:#fff}
+.menu button{display:block;width:100%;text-align:left;border:0;background:none;padding:9px 12px;font:inherit;font-size:13px;cursor:pointer;border-bottom:1px solid #eef0f3}
+.menu button.cur{background:#fff1d1;font-weight:800}
+.menu .sh{padding:6px 12px;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#fff;background:var(--c)}
+/* group card */
+.gc{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#fff;margin-bottom:10px}
+.gc .gh{background:linear-gradient(135deg,#18202b,#2f3d52);color:#fff;padding:14px 16px}
+.gc .gh small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.12em;opacity:.7;text-transform:uppercase}
+.gc .gh b{display:block;font-size:16px;margin-top:3px}
+.gc dl{display:grid;grid-template-columns:76px 1fr;gap:6px 10px;margin:0;padding:12px 16px;font-size:13px}
+.gc dt{font-size:10px;letter-spacing:.09em;color:var(--mut);font-weight:800;padding-top:3px}.gc dd{margin:0}
+.mem{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 4px}
+.mem div{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:7px 9px;font-size:12.5px;font-weight:600;line-height:1.2}
+.mem i{font-style:normal;width:26px;height:26px;border-radius:50%;background:#18202b;color:#fff;font-size:10.5px;display:grid;place-items:center;flex:none;font-weight:800}
+.lbl{position:fixed;left:0;top:0;pointer-events:none;background:rgba(24,32,43,.9);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;transform:translate(-50%,-130%);z-index:3}
+
+/* info modal */
+#infoOv{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(18,26,38,.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);animation:fade .2s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+#infoOv .modal{background:#fbfcfd;width:min(900px,100%);height:min(88vh,860px);border-radius:24px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.35);animation:pop .28s cubic-bezier(.2,.8,.2,1)}
+@media (max-width:700px){#infoOv{align-items:stretch}#infoOv .modal{height:100%;border-radius:0}}
+#infoOv header{display:flex;align-items:center;justify-content:space-between;padding:max(14px,env(safe-area-inset-top)) 16px 6px 22px}
+#infoOv header small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+#infoOv header b{font-size:18px;letter-spacing:-.01em}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:6px 18px 12px;scrollbar-width:none;border-bottom:1px solid var(--line)}
+.tabs button{flex:none;border:0;background:#eef1f5;border-radius:999px;padding:8px 14px;font:700 12.5px inherit;font-family:inherit;color:#3b4656;cursor:pointer;white-space:nowrap}
+.tabs button:hover{background:#e2e7ee}
+.tabs button.on{background:#18202b;color:#fff}
+#infoBody{flex:1;overflow:auto;padding:6px 24px 48px;font-size:14.5px;line-height:1.6;color:#323d4b}
+#infoBody h3{font-size:17px;margin:22px 0 8px;color:var(--ink);letter-spacing:-.01em}
+#infoBody p{margin:0 0 10px}
+.hero{background:linear-gradient(135deg,#18202b,#34445c);color:#fff;border-radius:18px;padding:20px 22px;margin-top:14px}
+.hero h3,#infoBody .hero h3{color:#fff;margin:0 0 6px;font-size:20px}.hero p{margin:0;color:#cfd8e4}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0 6px}
+@media (max-width:560px){.kpis{grid-template-columns:1fr 1fr}}
+.kpis div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 12px 10px}
+.kpis b{display:block;font-size:20px;letter-spacing:-.02em}.kpis span{font-size:11.5px;color:var(--mut);font-weight:600}
+table.kv{border-collapse:collapse;width:100%;font-size:13.5px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+table.kv th,table.kv td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line)}
+table.kv th{width:36%;background:#f4f6f9;color:var(--mut);font-size:12px}
+table.kv tr:last-child th,table.kv tr:last-child td{border-bottom:0}
+.note{background:#fff6e0;border-left:3px solid var(--amber);padding:9px 12px;font-size:13px;border-radius:6px}
+ol.steps{list-style:none;counter-reset:s;padding:0;margin:8px 0 12px}
+ol.steps li{counter-increment:s;position:relative;padding:2px 0 12px 40px}
+ol.steps li:before{content:counter(s);position:absolute;left:0;top:0;width:27px;height:27px;border-radius:50%;background:#18202b;color:#fff;font-size:12.5px;font-weight:800;display:grid;place-items:center}
+ol.steps li:after{content:"";position:absolute;left:13px;top:29px;bottom:2px;width:1px;background:rgba(24,32,43,.15)}
+ol.steps li:last-child:after{display:none}
+ul.ticks{list-style:none;padding:0;margin:6px 0 10px}
+ul.ticks li{position:relative;padding-left:24px;margin-bottom:7px}
+ul.ticks li:before{content:"";position:absolute;left:3px;top:6px;width:11px;height:6px;border-left:2.5px solid #3f9d63;border-bottom:2.5px solid #3f9d63;transform:rotate(-45deg)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.card b{display:block;margin-bottom:3px}.card span{font-size:13px;color:var(--mut)}
+.acc details{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;overflow:hidden}
+.acc summary{cursor:pointer;padding:12px 14px;font-weight:700;font-size:14px;list-style:none;display:flex;justify-content:space-between;gap:10px}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary:after{content:"+";font-size:18px;line-height:1;color:var(--mut)}
+.acc details[open] summary:after{content:"–"}
+.acc details p{margin:0;padding:0 14px 13px;font-size:13.5px}
+.scard{background:#fff;border:1px solid var(--line);border-left:5px solid #e8981a;border-radius:14px;padding:4px 16px 8px;margin:14px 0}
+.scard h4{margin:12px 0 4px;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.scard.red{border-left-color:#d9402b;background:#fff7f5}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
+.cc{text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 13px;cursor:pointer;font:inherit;transition:.15s;display:flex;flex-direction:column;gap:6px}
+.cc:hover{border-color:var(--amber);box-shadow:0 6px 16px rgba(24,32,43,.1);transform:translateY(-1px)}
+.cc .ch{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.cc b{font-size:14px;color:var(--ink);line-height:1.25}.cc span.f{font-size:12.5px;color:var(--mut);line-height:1.45}
+.tl h3{display:flex;align-items:center;gap:8px}
+.tl h3 i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.tli{display:flex;gap:12px;margin-bottom:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.tli>i{font-style:normal;flex:none;background:var(--c);color:#fff;font-weight:800;font-size:12px;height:24px;min-width:34px;display:grid;place-items:center;border-radius:8px;padding:0 6px}
+.tli>div>b{display:block;margin-bottom:2px}.tli p{margin:0 0 6px;font-size:13.5px}
+.tli .co{font-size:12.5px}
+.sbtn{border:0;background:var(--amber);color:#18202b;font:700 14px inherit;font-family:inherit;padding:11px 18px;border-radius:12px;cursor:pointer}
+.sbtn.ghost{background:#eef1f5;padding:6px 12px;font-size:12px;margin-top:2px}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="fallback"></div>
+<header id="top" class="glass">
+  <div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f0a020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14l-4 8v6l-4 3v-9z"/></svg></div>
+  <div class="ttl"><b id="ttl"></b><small id="sub"></small></div>
+  <button class="hbtn" id="bInfo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>Info</button>
+</header>
+<nav id="rail" class="glass">
+  <button id="bReset" title="Reset view"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 9.5V20h5v-6h4v6h5V9.5"/></svg>Reset</button>
+  <button id="bView" title="Change viewpoint"><svg viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7zM12 12l9-5M12 12v10M12 12L3 7"/></svg><span id="vName">View</span></button>
+  <button id="bLabels" title="Show part names"><svg viewBox="0 0 24 24"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg>Labels</button>
+  <button id="bXray" title="See inside the vessel"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>X-ray</button>
+  <button id="bCover" title="Lift the vessel cover"><svg viewBox="0 0 24 24"><path d="M4 15h16v5H4zM12 3v8M8 7l4-4 4 4"/></svg>Cover</button>
+</nav>
+<div id="coach" class="glass">Drag to rotate · pinch or scroll to zoom · tap any part</div>
+<div id="tip" class="hidden"></div>
+<div id="toast"></div>
+<section id="home" class="glass">
+  <div class="eyebrow">WI 02 · ChE Laboratory 2</div>
+  <h1>Pressure Leaf Filter</h1>
+  <p class="desk">Explore the lab's pressure leaf filter in 3D. Tap any part to learn what it does, or follow the guided procedure from setup to backwash.</p>
+  <button class="cta" id="bStart"><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>Start procedure</button>
+  <div class="qrow desk"><button data-tab="principle">How it works</button><button data-tab="components">Components</button><button data-tab="safety">Safety</button></div>
+  <p class="mhint">or tap any part to learn what it does</p>
+  <div class="foot desk"><i></i><span id="homeFoot"></span></div>
+</section>
+<div id="sheet" class="glass hidden"></div>
+<div id="infoOv" class="hidden"></div>
+<div id="labels"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* =====================================================================
+   EDIT HERE — all text shown in the viewer lives in this block.
+   Sources: Lab manual WI 02 (Pressure Leaf Filter Equipment), ChE Lab 2
+   Laboratory Plan, and the team's inspection photos.
+   ===================================================================== */
+window.CONTENT = {
+
+  title: 'Pressure Leaf Filter',
+  subtitle: 'WI 02 · ChE Laboratory 2',
+  institution: 'Chemical Engineering Laboratory · Bicol University',
+
+  group: {
+    course: 'Chemical Engineering Laboratory 2',
+    section: 'BS Chemical Engineering 4B',
+    term: '1st Semester, S.Y. 2026-2027',
+    equipment: 'WI 02 – Pressure Leaf Filter Equipment',
+    members: [
+      'Ricku Gabriel Areta',
+      'Sandara Shayne Bron',
+      'Kimberly Ann Lagrimas',
+      'Marielle Mapa',
+      'Ken Heinrich Ocbina',
+      'Albert Samonte',
+      'Rigil Kent Villanueva'
+    ]
+  },
+
+  /* ---------- Components (tap them in the 3D view) ----------
+     tag: repair | service | ok | check | tbc  (status shown as a badge) */
+  valveNote: 'Valve numbers follow the manual (§10.2). Open = handle parallel to the pipe.',
+  parts: {
+    tank:      { name: 'Conditioning Tank', label: 'Conditioning tank', tag: 'repair', cam: { el: 1.0 },
+      fn: 'Holds the process feed before filtration and can also be used to prepare the feed (water and coconut pulp). It supplies the gear pump.',
+      spec: 'Stainless steel · 65 L · Ø 0.385 m × 0.56 m high · 0.8 mm wall',
+      status: 'Complete and in good condition, but heavy rust near the drain makes the outflow rusty. Rust removal and an anti-rust coating are planned.' },
+    tankvalve: { name: 'Tank Outlet Valve', label: 'Tank valve', tag: 'service',
+      fn: 'Ball valve at the tank outlet. Open it to let the feed flow from the conditioning tank to the pump suction; close it at shutdown.',
+      status: 'Seized valves were noted in the diagnosis: clean, lubricate or replace.' },
+    pump:      { name: 'Gear Pump', label: 'Gear pump', tag: 'service',
+      fn: 'A positive-displacement pump that moves the feed from the conditioning tank into the pressure vessel and builds the pressure that drives filtration. Never run it with its outlet path closed: pressure can rise very quickly.',
+      status: 'Runs when powered, but could not yet draw and distribute water. The flow path is being checked. Needs cleaning and lubrication.' },
+    motor:     { name: 'Electric Motor', label: 'Motor', tag: 'check',
+      fn: 'Drives the gear pump through a belt and pulley.',
+      status: 'Appears functional. Wiring was only taped around the pipes and should be secured.' },
+    belt:      { name: 'Belt & Pulley', label: 'Belt & pulley', tag: 'repair',
+      fn: 'Transmits power from the motor to the gear pump. The belt must be intact and the pulley clear of hands and clothing before starting.',
+      status: 'Belt has minor damage and the pulley squeaks. A new V-belt, cleaning and lubrication are planned.' },
+    frame:     { name: 'Pump Frame', label: null, tag: 'ok',
+      fn: 'Wheeled steel frame that carries the motor and gear pump so the unit can be moved.',
+      status: 'No major problem recorded.' },
+    switch:    { name: 'Breaker Switch', label: 'Breaker switch', tag: 'repair', cam: { az: 0.2, el: 0.3 },
+      fn: 'Breaker box mounted above the motor. It turns the motor on and off. The operator stays at the switch during a run and power is cut here in an emergency.',
+      status: 'Has no protective housing and the wires are taped to the pipes. A weatherproof enclosure and secured wiring are proposed.' },
+    check:     { name: 'Swing Check Valve', label: 'Check valve', tag: 'tbc',
+      fn: 'One-way valve between the pump and the pressure vessel. It prevents backflow and loss of pressure inside the vessel.',
+      status: 'Listed in the manual (§8.1) but not recorded during inspection.' },
+    v1:        { name: 'Valve 1 · Feed Inlet', label: 'V1', tag: 'service',
+      fn: 'OPEN during filtration so the feed from the pump enters the pressure vessel. CLOSED during backwashing.' },
+    v2:        { name: 'Valve 2 · Backwash Inlet', label: 'V2', tag: 'service',
+      fn: 'CLOSED during filtration. OPENED for backwashing so water flows in reverse through the filter leaves.' },
+    v3:        { name: 'Valve 3 · Backwash Outlet', label: 'V3', tag: 'service',
+      fn: 'CLOSED during filtration. OPENED for backwashing to let the backwash water and loosened solids leave the vessel.' },
+    v4:        { name: 'Valve 4 · Filtrate Outlet', label: 'V4', tag: 'service',
+      fn: 'OPEN during filtration so the filtrate can leave the leaf manifold towards the filtrate faucet. CLOSED during backwashing.' },
+    faucet:    { name: 'Filtrate Faucet', label: 'Filtrate faucet', tag: 'ok', cam: { az: -0.55, el: 0.3 },
+      fn: 'Clear plastic tap at the end of the filtrate line, beside a vessel leg. The filtrate is collected here in a container. It stays closed until the pump is running and is closed again before shutdown.' },
+    drain:     { name: 'Vessel Drain Valve', label: 'Vessel drain', tag: 'service',
+      fn: 'Drains the pressure vessel from the bottom of its cone. Closed during filtration; opened to drain only after the pressure has been released.',
+      status: 'Seized valves were noted in the diagnosis: clean, lubricate or replace.' },
+    vessel:    { name: 'Pressure Vessel', label: 'Pressure vessel', tag: 'repair',
+      fn: 'Closed vessel where pressure builds up. That pressure is the driving force that pushes the liquid through the filter leaves while the solids stay behind.',
+      spec: 'Round vessel with cone bottom on three legs · bolted domed cover',
+      status: 'The rubber gasket between cover and vessel was found broken, and the cover bolts and the internal leaf supports are rusted. A chemical-resistant gasket, stainless bolts and rust treatment are planned.' },
+    lid:       { name: 'Cover, Gasket & Bolts', label: 'Vessel cover', tag: 'repair',
+      fn: 'Seals the pressure vessel. The gasket must be seated and every clamp bolt tight before running. Open the cover only when the gauge reads zero and the instructor allows it.',
+      status: 'Gasket broken and bolts rusted: replace before the test run.' },
+    leaves:    { name: 'Filter Leaves (×5)', label: 'Filter leaves', tag: 'service', cam: { az: 0.5, el: 0.5 },
+      fn: 'Rectangular leaves hung on a tubular manifold. Each has a riveted metal frame, a fine filter mesh and a diamond-pattern expanded-wire support. Liquid passes through while solids collect on the surface as a cake that also acts as an extra filter layer.',
+      spec: 'G.I. sheet frame · 324-mesh screen · 4-mesh expanded wire · 1500-mesh filter cloth · 5 leaves · 0.2547 m² total area',
+      status: 'Screen, case and cloth look serviceable but dirty. The supporting parts inside are rusted. Clean, inspect and replace damaged leaves.' },
+    gauge:     { name: 'Pressure Gauge', label: 'Pressure gauge', tag: 'check',
+      fn: 'Shows the pressure inside the vessel. The observer watches it during the whole run. The limit set by the instructor is marked on it, and it must read zero before the cover is opened.',
+      status: 'The only instrument found. It looked good but has not been tested yet.' },
+    vent:      { name: 'Air Vent', label: 'Air vent', tag: 'tbc',
+      fn: 'Small fitting on the cover used to release pressure and air from the top of the vessel. Together with the drain it is used to depressurize until the gauge reads zero.',
+      status: 'Not described in the manual.' },
+    piping:    { name: 'Piping & Fittings', label: null, tag: 'check',
+      fn: 'Pipes and fittings that carry the feed from the tank through the pump to the vessel, and the filtrate out of the vessel. Extra branches serve backwashing.',
+      status: 'Joints are secure and no leaks were seen, but the insides are probably rusty after long inactivity. The 3D routing is schematic.' }
+  },
+
+  partGroups: [
+    { name: 'Feed system', parts: ['tank', 'tankvalve', 'pump', 'motor', 'belt', 'frame', 'switch'] },
+    { name: 'Pressure vessel', parts: ['vessel', 'lid', 'leaves', 'gauge', 'vent', 'drain'] },
+    { name: 'Valves & piping', parts: ['v1', 'v2', 'v3', 'v4', 'check', 'piping'] },
+    { name: 'Filtrate collection', parts: ['faucet'] }
+  ],
+
+  /* ---------- Procedure ---------- */
+  sections: [
+    { key: 'A', name: 'Setup',     color: '#3f8ccb' },
+    { key: 'B', name: 'Operation', color: '#e8981a' },
+    { key: 'C', name: 'Shutdown',  color: '#3f9d63' },
+    { key: 'D', name: 'Backwash',  color: '#8267cf' },
+    { key: 'G', name: 'Group',     color: '#7c8594' }
+  ],
+
+  /* text = main instruction (HTML ok) · warn = safety callout · tbc = to be confirmed · note = hint */
+  steps: [
+    { id: 'A1', sec: 'A', title: 'Wear PPE and clear the area', parts: [],
+      text: 'Everyone near the equipment wears PPE: safety glasses, gloves and closed shoes. Keep the area clear and dry.<br>Assign roles: <b>one operator at the switch, one observer at the gauge, one person ready to cut power</b>.',
+      state: {} },
+    { id: 'A2', sec: 'A', title: 'Do the pre-operation check', parts: ['lid', 'belt', 'switch', 'gauge'],
+      text: '<ul class="chk"><li>Gasket seated and all cover bolts tight</li><li>No leaks at the joints</li><li>Switch enclosure closed, wiring secured, cord and plug undamaged</li><li>Belt intact and pulley clear</li><li>Gauge reads zero</li></ul>',
+      warn: 'The instructor signs off before the equipment is energized.',
+      state: {} },
+    { id: 'A3', sec: 'A', title: 'Set the valves for filtration', parts: ['v1', 'v4', 'v2', 'v3', 'drain', 'faucet'],
+      text: 'Open <b>Valve 1</b> (feed inlet) and <b>Valve 4</b> (filtrate outlet). Keep <b>Valve 2</b> and <b>Valve 3</b> (backwash) closed, and keep the vessel drain and the filtrate faucet closed.',
+      note: 'A valve is open when its handle is parallel to the pipe.',
+      state: { tankvalve: 1, v1: 1, v4: 1 } },
+    { id: 'A4', sec: 'A', title: 'Prepare the feed', parts: ['tank'],
+      text: 'Prepare the feed in the conditioning tank: <b>4.6 L of water</b>, then <b>2.4 kg of coconut pulp</b>. Make sure there is enough liquid for the pump to draw.',
+      note: 'For a first test run, use clean water only.',
+      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.35, feed: 'pulp' } },
+
+    { id: 'B1', sec: 'B', title: 'Switch on the pump', parts: ['pump', 'switch'],
+      text: 'Confirm the flow path to the vessel and the filtrate outlet is open, then plug in the cord and turn on the breaker. Stand to the side, not in front of the cover.',
+      warn: 'Never run the gear pump with its outlet path closed.',
+      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.35, feed: 'pulp', pump: 1, gauge: 0.12 } },
+    { id: 'B2', sec: 'B', title: 'Raise the pressure gradually', parts: ['gauge'],
+      text: 'Let the pressure rise slowly while the observer watches the gauge. Stay within the limit set by the instructor and marked on the gauge.',
+      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.33, feed: 'pulp', pump: 1, gauge: 0.5 } },
+    { id: 'B3', sec: 'B', title: 'Collect the filtrate', parts: ['faucet', 'leaves'], cam: { az: -0.5, el: 0.3 },
+      text: 'Open the filtrate faucet over a clean container and start the timer. The pressure pushes the liquid through the leaves; the solids stay on them as a cake.',
+      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.3, feed: 'pulp', pump: 1, gauge: 0.5, faucet: 1, beaker: 0.3, xray: 0.85 } },
+    { id: 'B4', sec: 'B', title: 'Monitor the run', parts: ['gauge', 'vessel', 'pump'],
+      text: 'Watch for: pressure above the limit or a sudden drop, leaks at the cover or joints, pump or pulley noise, a slipping belt, hot parts, cloudy filtrate, or no filtrate flow.',
+      warn: 'Stop at any of these. Do not tighten bolts while the vessel is pressurized.',
+      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.25, feed: 'pulp', pump: 1, gauge: 0.55, faucet: 1, beaker: 0.6, xray: 0.4 } },
+    { id: 'B5', sec: 'B', title: 'Record the results', parts: ['faucet'],
+      text: 'On data sheet WI-CHE-001-F1 record the weight of solids (kg), initial liquid volume (L), filtration time (min) and filtrate volume (L).<br><b>% Recovery</b> = filtrate volume ÷ initial liquid volume × 100<br><b>Filtration rate</b> = filtrate volume ÷ filtration time<br>Report to the nearest 0.01.',
+      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.2, feed: 'pulp', pump: 1, gauge: 0.55, faucet: 1, beaker: 0.9 } },
+
+    { id: 'C1', sec: 'C', title: 'Switch off and unplug the pump', parts: ['switch', 'pump'],
+      text: 'Switch the pump off and unplug it <b>before</b> touching any valve.',
+      warn: 'Closing the outlet on a running gear pump can overpressurize the lines.',
+      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.2, feed: 'pulp', pump: 0, gauge: 0.5, faucet: 1, beaker: 0.9 } },
+    { id: 'C2', sec: 'C', title: 'Release the pressure and close the valves', parts: ['vent', 'gauge'],
+      text: 'Release the pressure through the vent or drain until the <b>gauge reads zero</b>. Then close the filtrate faucet and all valves.',
+      state: { tank: 0.2, feed: 'pulp', gauge: 0, beaker: 0.9 } },
+    { id: 'C3', sec: 'C', title: 'Drain, clean and dry', parts: ['drain', 'lid', 'tank'],
+      text: 'Drain the vessel and the tank. Clean the equipment, <b>wipe it dry to limit rusting</b>, check for leaks and write the time, observations and problems in the logbook.',
+      warn: 'Open the cover only when the gauge reads zero and the instructor allows it.',
+      state: { drain: 1, tank: 0, lid: 1, beaker: 0.9 } },
+
+    { id: 'D1', sec: 'D', title: 'Fill the tank with clean water', parts: ['tank'],
+      text: 'Backwashing removes debris and trapped particles from the filter medium by reversing the flow. Start with every valve closed and the pump off, then fill the conditioning tank with clean water.',
+      state: { tank: 0.6, feed: 'water' } },
+    { id: 'D2', sec: 'D', title: 'Set the valves for backwash', parts: ['v2', 'v3', 'v1', 'v4', 'drain', 'faucet'],
+      text: 'Close <b>Valve 1</b>, <b>Valve 4</b>, the vessel drain and the filtrate faucet. Open <b>Valve 2</b> and <b>Valve 3</b>.',
+      state: { tankvalve: 1, tank: 0.6, feed: 'water', v2: 1, v3: 1 } },
+    { id: 'D3', sec: 'D', title: 'Run the backwash', parts: ['pump', 'leaves'],
+      text: 'Plug in and turn on the pump. Water now flows backwards through the leaves and carries the cake out through Valve 3. Watch the gauge and leaks as in a normal run.',
+      state: { tankvalve: 1, tank: 0.45, feed: 'water', v2: 1, v3: 1, pump: 1, gauge: 0.3, xray: 0.85 } },
+    { id: 'D4', sec: 'D', title: 'Stop, depressurize and inspect', parts: ['switch', 'lid', 'leaves'],
+      text: 'Switch off and unplug the pump, release the pressure until the gauge reads zero, close Valves 2 and 3 and drain. Then inspect and clean the leaves and record what was done in the logbook.',
+      warn: 'Open the cover only with the instructor’s permission.',
+      state: { tank: 0.2, feed: 'water', lid: 1, leaf: 1 } },
+
+    { id: 'G', sec: 'G', type: 'group', title: 'Group members', parts: [], text: '', state: {} }
+  ],
+
+  /* ---------- Info panel (the QR landing sections) ---------- */
+  info: [
+    { key: 'overview', name: 'Overview', html:
+      '<div class="hero"><h3>WI 02 – Pressure Leaf Filter Equipment</h3>' +
+      '<p>Liquid–solid filtration unit of the Chemical Engineering Laboratory, Bicol University. It separates suspended solids from a liquid using a pressurized vessel that contains stacked filter leaves.</p></div>' +
+      '<div class="kpis"><div><b>5</b><span>filter leaves</span></div><div><b>0.2547 m²</b><span>filtering area</span></div><div><b>65 L</b><span>conditioning tank</span></div><div><b>1500</b><span>mesh filter cloth</span></div></div>' +
+      '<h3>Equipment record</h3>' +
+      '<table class="kv"><tr><th>Property no.</th><td>UOLE-015</td></tr>' +
+      '<tr><th>Description</th><td>Leaf filter, fabricated</td></tr>' +
+      '<tr><th>Property holder</th><td>Chemical Engineering Laboratory</td></tr>' +
+      '<tr><th>Date acquired</th><td>March 2010</td></tr>' +
+      '<tr><th>Data sheet</th><td>WI-CHE-001-F1</td></tr></table>' +
+      '<h3>Where it is used</h3>' +
+      '<p>Pressure leaf filters are used for edible oils, pharmaceuticals, chemicals, beverages, biodiesel, sugar syrup, water treatment, mining and metallurgy, and oil and gas.</p>' +
+      '@TEAM@' },
+    { key: 'principle', name: 'Operating Principle', html:
+      '<h3>How it works</h3>' +
+      '<ol class="steps"><li>The <b>gear pump</b> moves the feed from the <b>conditioning tank</b> into the <b>pressure vessel</b>.</li>' +
+      '<li>Pressure builds up inside the vessel and pushes the liquid through the <b>filter leaves</b> (324-mesh screen, 4-mesh expanded wire, 1500-mesh cloth).</li>' +
+      '<li>The solids stay on the leaves. The clear <b>filtrate</b> flows into the leaf manifold and out through the filtrate outlet.</li>' +
+      '<li>As the cake builds up it acts as an extra filter layer and improves clarity, but flow drops. <b>Backwashing</b> reverses the flow to clean the leaves.</li></ol>' +
+      '<p class="note">Higher pressure suits finer particles; lower pressure suits more robust solids. The sample feed in the lab is coconut pulp and water.</p>' },
+    { key: 'components', name: 'Components', html: '@COMPONENTS@' },
+    { key: 'procedure', name: 'Procedure', html: '@PROCEDURE@' },
+    { key: 'testrun', name: 'Test Run', html:
+      '<h3>Parameters to monitor</h3>' +
+      '<div class="cards"><div class="card"><b>Pressure</b><span>On the gauge, against the limit set by the instructor</span></div>' +
+      '<div class="card"><b>Water flow</b><span>From the tank through the pump and out as filtrate</span></div>' +
+      '<div class="card"><b>Pump &amp; belt</b><span>Noise, vibration, belt slipping</span></div>' +
+      '<div class="card"><b>Leaks</b><span>At the cover, gasket and joints</span></div>' +
+      '<div class="card"><b>Valves</b><span>Response; open = handle parallel to the pipe</span></div></div>' +
+      '<h3>Test run procedure</h3>' +
+      '<ol class="steps"><li>Complete the pre-operation check and get instructor sign-off.</li>' +
+      '<li>Use <b>clean water only</b> in the conditioning tank.</li>' +
+      '<li>Confirm valve positions and the flow path, then start the pump.</li>' +
+      '<li>Check the pump can draw water and push it towards the vessel.</li>' +
+      '<li>Raise pressure gradually; record flow, pressure, leaks and noise.</li>' +
+      '<li>Shut down: pump off and unplugged, release pressure, close valves, drain.</li></ol>' +
+      '' },
+    { key: 'maintenance', name: 'Maintenance', html:
+      '<h3>Maintenance</h3>' +
+      '<ul class="ticks"><li><b>Inspect</b> seals, joints and the equipment for damage and leaks.</li>' +
+      '<li><b>Clean</b> regularly; remove rust and wipe dry after use.</li>' +
+      '<li><b>Lubricate</b> the pump pulley and seized valves; check belt tension and condition.</li>' +
+      '<li><b>Replace</b> the gasket, rusted bolts and damaged filter leaves as soon as needed.</li>' +
+      '<li><b>Check pressure</b> during every run and <b>backwash</b> to keep the leaves clear.</li>' +
+      '<li><b>Keep records</b> of every inspection, repair and replacement in the logbook.</li></ul>' +
+      '<h3>Troubleshooting</h3>' +
+      '<div class="acc">' +
+      '<details><summary>Equipment does not turn on although switched on</summary><p>Power is insufficient. Use a voltage regulator.</p></details>' +
+      '<details><summary>Feed comes out of the vessel</summary><p>Bolts are not tight or an exit valve is not open. Open the correct valve and tighten the bolts (gauge at zero).</p></details>' +
+      '<details><summary>Low flow rate</summary><p>Leaves may be clogged. Switch off, check for fine particles or cake build-up, clean or replace leaves.</p></details>' +
+      '<details><summary>Poor filtrate quality</summary><p>Filter media may be torn. Inspect and replace damaged leaves.</p></details>' +
+      '<details><summary>Clogged pipeline</summary><p>Little or no filtrate. Check blockages and leaks, clean the piping, re-check the feed ratio.</p></details>' +
+      '<details><summary>Pump runs but does not draw water</summary><p>Check the tank valve, the valve positions, the piping and the leaves for blockage.</p></details>' +
+      '<details><summary>Leaking cover</summary><p>Gasket worn or bolts rusted. Release pressure, then replace the gasket and bolts.</p></details>' +
+      '<details><summary>Squeaking pulley or slipping belt</summary><p>Clean, lubricate or replace the pulley and V-belt.</p></details></div>' },
+    { key: 'safety', name: 'Safety', html:
+      '<div class="scard"><h4>Before running</h4><ul class="ticks"><li>Only trained users operate the unit. Wear PPE: safety glasses, gloves, closed shoes.</li>' +
+      '<li>Pre-operation check signed off by the instructor before the equipment is energized.</li>' +
+      '<li>Roles: operator at the switch, observer at the gauge, one person ready to cut power.</li>' +
+      '<li>Water and electricity are present: wipe spills immediately.</li></ul></div>' +
+      '<div class="scard"><h4>While running</h4><ul class="ticks"><li>Raise the pressure gradually and stay within the limit set by the instructor.</li>' +
+      '<li>Never run the gear pump with its outlet path closed.</li>' +
+      '<li>Stand to the side, never in front of the cover. Do not leave it running unattended.</li>' +
+      '<li>Do not tighten or loosen the cover, bolts or fittings while the vessel is pressurized.</li>' +
+      '<li><b>Stop at:</b> pressure over the limit or a sudden drop, leaks or spraying, squeaking or vibration, belt slipping or burning smell, hot motor/switch/cord, smoke or sparks, pump running with no water, no filtrate, cloudy filtrate.</li></ul></div>' +
+      '<div class="scard"><h4>Shutdown</h4><ol class="steps"><li>Switch off and unplug the pump first.</li><li>Release pressure through the vent or drain until the gauge reads zero.</li>' +
+      '<li>Close all valves, drain the tank and vessel.</li><li>Open the cover only at zero pressure with the instructor’s permission.</li>' +
+      '<li>Clean, dry, check for leaks and record in the logbook.</li></ol></div>' +
+      '<div class="scard red"><h4>Emergency</h4><ul class="ticks"><li><b>Malfunction or leak:</b> switch off the pump, unplug if safe, step away, tell the instructor. Tag the unit “DO NOT OPERATE”.</li>' +
+      '<li><b>Electric shock:</b> cut the power first, then call the instructor and the campus clinic. Never use water on an electrical fire.</li>' +
+      '<li><b>Serious injury:</b> call 911 and the nearest hospital.</li>' +
+      '<li>Report every injury, near miss, spill or unsafe condition to the instructor immediately.</li></ul></div>' },
+    { key: 'model', name: '3D Model', html: '@MODEL@' }
+  ]
+};
+</script>
+<script>
+(function () {
+'use strict';
+var C = window.CONTENT, PARTS = C.parts, STEPS = C.steps;
+function $(s) { return document.querySelector(s); }
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+/* ------------------------------------------------------------------ */
+/*  Machine state (what the 3D model shows)                            */
+/* ------------------------------------------------------------------ */
+var DEF = { tank: 0, feed: 'water', pump: 0, gauge: 0, v1: 0, v2: 0, v3: 0, v4: 0, tankvalve: 0,
+            drain: 0, faucet: 0, lid: 0, leaf: 0, xray: 0, beaker: 0 };
+function mergeState(s) { var o = {}, k; for (k in DEF) o[k] = DEF[k]; for (k in (s || {})) o[k] = s[k]; return o; }
+
+/* ------------------------------------------------------------------ */
+/*  3D scene                                                           */
+/* ------------------------------------------------------------------ */
+function init3D() {
+  var T = window.THREE, cv = $('#c');
+  var renderer = new T.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = T.PCFSoftShadowMap;
+  renderer.outputEncoding = T.sRGBEncoding;
+
+  var scene = new T.Scene();
+  var camera = new T.PerspectiveCamera(38, 1, 0.05, 60);
+  var root = new T.Group(); scene.add(root);
+
+  scene.add(new T.HemisphereLight(0xffffff, 0xb5c2d0, 0.9));
+  var sun = new T.DirectionalLight(0xffffff, 0.85);
+  sun.position.set(2.2, 3.6, 2.6); sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.025;
+  var sc = sun.shadow.camera; sc.left = -2.2; sc.right = 2.2; sc.top = 2.2; sc.bottom = -2.2; sc.near = 0.5; sc.far = 12;
+  scene.add(sun); sun.target.position.set(0.3, 0.4, 0.15); scene.add(sun.target);
+  var fill = new T.DirectionalLight(0xdbe6ff, 0.3); fill.position.set(-2, 2, -2); scene.add(fill);
+  var floor = new T.Mesh(new T.PlaneGeometry(10, 10), new T.ShadowMaterial({ opacity: 0.17 }));
+  floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+
+  /* ---- registry ---- */
+  var P = {}, pickables = [];
+  Object.keys(PARTS).forEach(function (id) { P[id] = { objs: [], box: null }; });
+  function reg(m, id) {
+    if (!P[id]) throw new Error('Unknown part: ' + id);
+    m.material = m.material.clone();
+    m.userData.part = id; m.castShadow = true; m.receiveShadow = true;
+    pickables.push(m); P[id].objs.push(m); return m;
+  }
+  function M(c, o) {
+    o = o || {};
+    return new T.MeshStandardMaterial({
+      color: c, roughness: o.r !== undefined ? o.r : 0.55, metalness: o.m !== undefined ? o.m : 0.2,
+      transparent: !!o.t, opacity: o.o !== undefined ? o.o : 1, side: o.d ? T.DoubleSide : T.FrontSide
+    });
+  }
+  function put(parent, mesh, x, y, z) { mesh.position.set(x || 0, y || 0, z || 0); (parent || root).add(mesh); return mesh; }
+  function Box(w, h, d, m, part, parent, x, y, z) {
+    var o = put(parent, new T.Mesh(new T.BoxGeometry(w, h, d), m), x, y, z); return part ? reg(o, part) : o;
+  }
+  function Cyl(rt, rb, h, m, part, parent, x, y, z, ax, seg, open) {
+    var o = new T.Mesh(new T.CylinderGeometry(rt, rb, h, seg || 28, 1, !!open), m);
+    if (ax === 'x') o.rotation.z = Math.PI / 2; else if (ax === 'z') o.rotation.x = Math.PI / 2;
+    put(parent, o, x, y, z); return part ? reg(o, part) : o;
+  }
+  function Sph(r, m, part, parent, x, y, z) {
+    var o = put(parent, new T.Mesh(new T.SphereGeometry(r, 18, 12), m), x, y, z); return part ? reg(o, part) : o;
+  }
+  function Torus(R, tube, m, part, parent, x, y, z, flat) {
+    var o = new T.Mesh(new T.TorusGeometry(R, tube, 8, 40), m);
+    if (flat) o.rotation.x = Math.PI / 2;
+    put(parent, o, x, y, z); return part ? reg(o, part) : o;
+  }
+  /* cylinder between two points; rA at point a, rB at point b */
+  function Limb(a, b, rA, rB, m, part, seg) {
+    var A = new T.Vector3(a[0], a[1], a[2]), B = new T.Vector3(b[0], b[1], b[2]);
+    var d = B.clone().sub(A), len = d.length();
+    var gm = new T.CylinderGeometry(rB, rA, len, seg || 14);
+    if (seg === 4) gm.rotateY(Math.PI / 4);
+    var o = new T.Mesh(gm, m);
+    o.position.copy(A).add(d.clone().multiplyScalar(0.5));
+    o.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), d.clone().normalize());
+    root.add(o); return part ? reg(o, part) : o;
+  }
+  function Path(pts, r, color, part) {
+    var m = M(color, { r: 0.5, m: 0.1 }), i, s;
+    for (i = 0; i < pts.length - 1; i++) Limb(pts[i], pts[i + 1], r, r, m, part);
+    for (i = 1; i < pts.length - 1; i++) {
+      s = new T.Mesh(new T.SphereGeometry(r * 1.03, 14, 10), m);
+      s.position.set(pts[i][0], pts[i][1], pts[i][2]); root.add(s); reg(s, part);
+    }
+  }
+
+  /* ---- colours ---- */
+  var GRAY = '#aab1b6', PIPE = '#a3abb0', GREEN = '#2e9c4a', BRASS = '#b08a2e', PGREEN = '#2f6b3f';
+
+  /* ---- animated handles ---- */
+  var valves = {}, faucetPiv = null, needle = null, wheel = null, lidG, leafG;
+  function Valve(id, pos, axis, r) {
+    var g = new T.Group(); g.position.set(pos[0], pos[1], pos[2]);
+    if (axis === 'z') g.rotation.y = Math.PI / 2; else if (axis === 'y') g.rotation.z = Math.PI / 2;
+    root.add(g);
+    Cyl(r * 1.55, r * 1.55, 0.07, M(BRASS, { m: 0.5, r: 0.4 }), id, g, 0, 0, 0, 'x', 20);
+    Cyl(r * 1.25, r * 1.25, 0.012, M('#c9ccd0', { m: 0.6 }), id, g, 0.048, 0, 0, 'x', 18);
+    Cyl(r * 1.25, r * 1.25, 0.012, M('#c9ccd0', { m: 0.6 }), id, g, -0.048, 0, 0, 'x', 18);
+    Cyl(0.006, 0.006, r * 1.6, M('#888d92', { m: 0.6 }), id, g, 0, r * 1.5, 0, null, 8);
+    var piv = new T.Group(); piv.position.y = r * 2.3; g.add(piv);
+    Box(0.11, 0.012, 0.022, M(GREEN, { r: 0.5, m: 0.1 }), id, piv, 0.045, 0, 0);
+    valves[id] = piv;
+  }
+
+  /* ================= conditioning tank ================= */
+  var TX = 1.30, TZ = 0.30, TR = 0.1925, TB = 0.20, TH = 0.56;
+  var steel = M('#c9ced2', { m: 0.3, r: 0.4, d: true });
+  Cyl(TR, TR, TH, steel, 'tank', root, TX, TB + TH / 2, TZ, null, 48, true);
+  Cyl(TR, TR, 0.012, steel, 'tank', root, TX, TB + 0.006, TZ, null, 48);
+  Torus(TR, 0.007, steel, 'tank', root, TX, TB + TH, TZ, true);
+  [0.4, 0.4 + 2.094, 0.4 + 4.188].forEach(function (a) {
+    Limb([TX + Math.cos(a) * 0.15, TB, TZ + Math.sin(a) * 0.15], [TX + Math.cos(a) * 0.19, 0, TZ + Math.sin(a) * 0.19], 0.02, 0.014, steel, 'tank');
+  });
+  var waterMat = M('#79b6e6', { t: true, o: 0.78, r: 0.15, m: 0 });
+  var water = Cyl(0.185, 0.185, 1, waterMat, null, root, TX, TB, TZ, null, 40);
+
+  /* ================= pump frame, motor, pump, belt ================= */
+  var frameM = M('#aeb4b8', { m: 0.3, r: 0.5 });
+  Box(0.95, 0.03, 0.32, frameM, 'frame', root, 0.36, 0.12, TZ);
+  Box(0.95, 0.03, 0.025, frameM, 'frame', root, 0.36, 0.085, TZ - 0.15);
+  Box(0.95, 0.03, 0.025, frameM, 'frame', root, 0.36, 0.085, TZ + 0.15);
+  [[-0.07, -0.14], [-0.07, 0.14], [0.79, -0.14], [0.79, 0.14]].forEach(function (p) {
+    Cyl(0.025, 0.025, 0.02, M('#2b2e30'), 'frame', root, p[0], 0.03, TZ + p[1], 'z', 16);
+    Box(0.02, 0.05, 0.02, frameM, 'frame', root, p[0], 0.065, TZ + p[1]);
+  });
+  Box(0.16, 0.03, 0.16, M('#8a9298'), 'motor', root, 0.12, 0.15, TZ);
+  Cyl(0.08, 0.08, 0.22, M('#9aa2a8', { m: 0.35 }), 'motor', root, 0.12, 0.24, TZ, 'z', 30);
+  Cyl(0.086, 0.086, 0.05, M('#6e757a', { m: 0.35 }), 'motor', root, 0.12, 0.24, TZ - 0.135, 'z', 30);
+  Box(0.07, 0.04, 0.07, M('#7c848a'), 'motor', root, 0.12, 0.335, TZ);
+  Box(0.12, 0.03, 0.14, M('#245a34'), 'pump', root, 0.55, 0.15, TZ);
+  var pg = M(PGREEN, { m: 0.3, r: 0.5 });
+  Cyl(0.075, 0.075, 0.14, pg, 'pump', root, 0.55, 0.24, TZ, 'z', 30);
+  Cyl(0.06, 0.06, 0.03, pg, 'pump', root, 0.55, 0.24, TZ + 0.085, 'z', 24);
+  Cyl(0.03, 0.03, 0.12, pg, 'pump', root, 0.63, 0.24, TZ, 'x', 18);
+  Cyl(0.028, 0.028, 0.08, pg, 'pump', root, 0.55, 0.335, TZ, null, 18);
+  Cyl(0.008, 0.008, 0.08, M('#777'), 'pump', root, 0.12, 0.24, TZ + 0.12, 'z', 8);
+  Cyl(0.035, 0.035, 0.03, M('#26282a'), 'belt', root, 0.12, 0.24, TZ + 0.125, 'z', 24);
+  wheel = new T.Group(); wheel.position.set(0.55, 0.24, TZ + 0.125); root.add(wheel);
+  Torus(0.09, 0.011, M(PGREEN, { m: 0.3 }), 'belt', wheel, 0, 0, 0, false);
+  Cyl(0.02, 0.02, 0.04, M(PGREEN), 'belt', wheel, 0, 0, 0, 'z', 14);
+  [0, 1, 2].forEach(function (k) {
+    var sp = Box(0.18, 0.01, 0.01, M(PGREEN), 'belt', wheel, 0, 0, 0); sp.rotation.z = k * Math.PI / 3;
+  });
+  var beltM = M('#1d1f20', { r: 0.9, m: 0 });
+  Limb([0.12, 0.275, TZ + 0.125], [0.55, 0.33, TZ + 0.125], 0.006, 0.006, beltM, 'belt');
+  Limb([0.12, 0.205, TZ + 0.125], [0.55, 0.15, TZ + 0.125], 0.006, 0.006, beltM, 'belt');
+
+  /* ================= breaker box (plate on a post above the motor, motor end) ================= */
+  var SX = -0.03, SY = 0.43;
+  Cyl(0.011, 0.011, 0.30, M('#8a9298', { m: 0.4 }), 'switch', root, SX, 0.285, TZ - 0.02, null, 10);
+  Box(0.15, 0.17, 0.012, M('#9ca3a8', { m: 0.35, r: 0.5 }), 'switch', root, SX, SY, TZ - 0.005);
+  Box(0.07, 0.08, 0.04, M('#8d949a', { m: 0.3 }), 'switch', root, SX, SY + 0.005, TZ - 0.03);
+  Box(0.095, 0.115, 0.05, M('#f0f0ea', { r: 0.55, m: 0.05 }), 'switch', root, SX, SY, TZ + 0.03);
+  Cyl(0.02, 0.02, 0.014, M('#f08a24', { r: 0.5 }), 'switch', root, SX, SY + 0.03, TZ + 0.062, 'z', 18);
+  Box(0.052, 0.028, 0.006, M('#bfe3f0', { t: true, o: 0.45, r: 0.1, m: 0 }), 'switch', root, SX, SY - 0.022, TZ + 0.057);
+  Box(0.012, 0.02, 0.01, M('#f2c230', { r: 0.5 }), 'switch', root, SX + 0.01, SY - 0.022, TZ + 0.059);
+  Limb([SX, 0.372, TZ + 0.03], [0.08, 0.345, TZ + 0.03], 0.004, 0.004, M('#1d1d1d'), 'switch');
+  Limb([0.08, 0.345, TZ + 0.03], [0.12, 0.335, TZ], 0.004, 0.004, M('#1d1d1d'), 'switch');
+
+  /* ================= pressure vessel ================= */
+  var VX = -0.55, VZ = 0;
+  var paint = M('#b4bbbf', { m: 0.25, r: 0.55, d: true });
+  var shell = [];
+  shell.push(Cyl(0.23, 0.23, 0.30, paint, 'vessel', root, VX, 0.77, VZ, null, 48, true));
+  shell.push(Cyl(0.23, 0.05, 0.17, paint, 'vessel', root, VX, 0.535, VZ, null, 48, true));
+  shell.forEach(function (m) { m.userData.shell = true; });
+  Cyl(0.05, 0.05, 0.04, paint, 'vessel', root, VX, 0.43, VZ, null, 24);
+  Torus(0.235, 0.014, paint, 'vessel', root, VX, 0.92, VZ, true);
+  [Math.PI / 3, Math.PI, 5 * Math.PI / 3].forEach(function (a) {
+    Limb([VX + Math.cos(a) * 0.2, 0.64, VZ + Math.sin(a) * 0.2], [VX + Math.cos(a) * 0.34, 0, VZ + Math.sin(a) * 0.34], 0.042, 0.03, paint, 'vessel', 4);
+    Cyl(0.03, 0.03, 0.012, paint, 'vessel', root, VX + Math.cos(a) * 0.34, 0.006, VZ + Math.sin(a) * 0.34, null, 14);
+  });
+
+  /* cover group (lifts) */
+  lidG = new T.Group(); lidG.position.set(VX, 0.92, VZ); root.add(lidG);
+  Cyl(0.245, 0.245, 0.03, paint, 'lid', lidG, 0, 0.015, 0, null, 48);
+  var dome = new T.Mesh(new T.SphereGeometry(0.235, 40, 16, 0, Math.PI * 2, 0, Math.PI / 2), paint);
+  dome.scale.set(1, 0.45, 1); reg(put(lidG, dome, 0, 0.03, 0), 'lid');
+  Cyl(0.008, 0.008, 0.06, M('#9aa0a4', { m: 0.5 }), 'lid', lidG, -0.07, 0.16, 0, null, 8);
+  Cyl(0.008, 0.008, 0.06, M('#9aa0a4', { m: 0.5 }), 'lid', lidG, 0.07, 0.16, 0, null, 8);
+  Cyl(0.01, 0.01, 0.16, M('#9aa0a4', { m: 0.5 }), 'lid', lidG, 0, 0.19, 0, 'x', 10);
+  for (var k = 0; k < 6; k++) {
+    var ang = k * Math.PI / 3 + 0.3, lug = Box(0.045, 0.03, 0.028, M('#a2a9ae', { m: 0.4 }), 'lid', lidG, Math.cos(ang) * 0.25, 0.012, Math.sin(ang) * 0.25);
+    lug.rotation.y = -ang;
+    Cyl(0.007, 0.007, 0.055, M('#7e8388', { m: 0.7 }), 'lid', lidG, Math.cos(ang) * 0.25, -0.02, Math.sin(ang) * 0.25, null, 8);
+  }
+  /* gauge (on the cover) */
+  var gx = -0.12, gz = -0.09;
+  Cyl(0.01, 0.01, 0.09, M(BRASS, { m: 0.5 }), 'gauge', lidG, gx, 0.165, gz, null, 10);
+  var head = new T.Group(); head.position.set(gx, 0.235, gz); head.rotation.x = -0.75; lidG.add(head);
+  Cyl(0.05, 0.05, 0.03, M('#26282a', { m: 0.3 }), 'gauge', head, 0, 0, 0, 'z', 32);
+  var face = new T.Mesh(new T.CircleGeometry(0.043, 32), M('#f4f4ee', { r: 0.8, m: 0 }));
+  reg(put(head, face, 0, 0, 0.0158), 'gauge');
+  Torus(0.047, 0.004, M('#c9ccd0', { m: 0.7 }), 'gauge', head, 0, 0, 0.0155, false);
+  needle = new T.Group(); needle.position.z = 0.02; head.add(needle);
+  Box(0.004, 0.036, 0.002, M('#d8302a', { r: 0.5, m: 0 }), 'gauge', needle, 0, 0.016, 0);
+  /* vent */
+  Cyl(0.012, 0.012, 0.05, M(BRASS, { m: 0.5 }), 'vent', lidG, 0.12, 0.15, -0.08, null, 10);
+  Cyl(0.02, 0.02, 0.012, M('#d9b24a', { m: 0.5 }), 'vent', lidG, 0.12, 0.18, -0.08, null, 12);
+
+  /* filter leaves (inside the vessel): riveted channel frame, hanger ring, diamond expanded metal over fine mesh */
+  function leafTexture() {
+    var c = document.createElement('canvas'); c.width = 512; c.height = 384;
+    var g = c.getContext('2d'), x, y, W = 512, H = 384, dx = H / 0.72;
+    g.fillStyle = '#c9cdce'; g.fillRect(0, 0, W, H);
+    g.lineWidth = 1; g.strokeStyle = 'rgba(70,76,82,0.42)'; g.beginPath();
+    for (x = 0; x <= W; x += 3) { g.moveTo(x, 0); g.lineTo(x, H); }
+    for (y = 0; y <= H; y += 3) { g.moveTo(0, y); g.lineTo(W, y); }
+    g.stroke();
+    function diag(sign, w, col, off) {
+      var x0; g.lineWidth = w; g.strokeStyle = col; g.beginPath();
+      for (x0 = -dx - 64; x0 <= W + dx + 64; x0 += 64) { g.moveTo(x0 + off, 0); g.lineTo(x0 + off + sign * dx, H); }
+      g.stroke();
+    }
+    diag(1, 6, '#7d848a', 0); diag(-1, 6, '#7d848a', 0);
+    diag(1, 2, '#e4e8ea', -1.5); diag(-1, 2, '#e4e8ea', -1.5);
+    var t = new T.CanvasTexture(c); t.anisotropy = 4; t.encoding = T.sRGBEncoding; return t;
+  }
+  leafG = new T.Group(); root.add(leafG);
+  var rodM = M('#9aa0a4', { m: 0.5, r: 0.4 }), RODY = 0.915, LY = 0.79;
+  var leafTex = null; try { leafTex = leafTexture(); } catch (e0) { leafTex = null; }
+  var frameLeafM = M('#9ea5a9', { m: 0.45, r: 0.45 }), rivetM = M('#6f767b', { m: 0.6, r: 0.4 });
+  var faceMat = new T.MeshStandardMaterial({ color: leafTex ? 0xffffff : 0xcfd3d4, map: leafTex, roughness: 0.6, metalness: 0.25, side: T.DoubleSide });
+  Cyl(0.012, 0.012, 0.3, rodM, 'leaves', leafG, VX, RODY, VZ, 'z', 12);
+  for (var li = 0; li < 5; li++) {
+    var lz = VZ + (li - 2) * 0.045;
+    Box(0.30, 0.016, 0.016, frameLeafM, 'leaves', leafG, VX, LY + 0.102, lz);
+    Box(0.30, 0.016, 0.016, frameLeafM, 'leaves', leafG, VX, LY - 0.102, lz);
+    Box(0.016, 0.188, 0.016, frameLeafM, 'leaves', leafG, VX - 0.142, LY, lz);
+    Box(0.016, 0.188, 0.016, frameLeafM, 'leaves', leafG, VX + 0.142, LY, lz);
+    var lf = new T.Mesh(new T.PlaneGeometry(0.27, 0.19), faceMat);
+    reg(put(leafG, lf, VX, LY, lz), 'leaves');
+    Torus(0.017, 0.0035, rodM, 'leaves', leafG, VX, RODY, lz, false);
+    var rv = [], q;
+    for (q = 0; q < 5; q++) { rv.push([-0.12 + q * 0.06, 0.102]); rv.push([-0.12 + q * 0.06, -0.102]); }
+    for (q = 0; q < 3; q++) { rv.push([-0.142, -0.05 + q * 0.05]); rv.push([0.142, -0.05 + q * 0.05]); }
+    rv.forEach(function (p) {
+      Cyl(0.0045, 0.0045, 0.004, rivetM, null, leafG, VX + p[0], LY + p[1], lz + 0.0088, 'z', 10);
+      Cyl(0.0045, 0.0045, 0.004, rivetM, null, leafG, VX + p[0], LY + p[1], lz - 0.0088, 'z', 10);
+    });
+  }
+  Limb([VX, RODY, VZ], [VX + 0.23, RODY, VZ], 0.012, 0.012, rodM, 'leaves');
+
+  /* ================= piping ================= */
+  var FY = 0.68; /* feed inlet height on the vessel side wall */
+  Path([[TX - TR, 0.24, TZ], [0.69, 0.24, TZ]], 0.014, PIPE, 'piping');                                    /* tank -> pump */
+  Path([[0.55, 0.375, TZ], [0.55, FY, TZ], [VX, FY, TZ], [VX, FY, 0.23]], 0.014, PIPE, 'piping');          /* pump -> vessel side inlet */
+  Path([[VX + 0.23, RODY, 0], [-0.15, RODY, 0], [-0.15, 0.30, 0]], 0.014, PIPE, 'piping');                 /* filtrate */
+  Path([[0.2, FY, TZ], [0.2, 1.15, TZ], [-0.22, 1.15, TZ], [-0.22, 1.15, 0], [-0.22, RODY, 0]], 0.014, PIPE, 'piping'); /* backwash in */
+  Path([[VX - 0.05, 0.5, 0.09], [VX - 0.05, 0.5, 0.42], [VX - 0.05, 0.22, 0.42]], 0.014, PIPE, 'piping');  /* backwash out */
+  Path([[VX, 0.43, 0], [VX, 0.3, 0]], 0.014, PIPE, 'piping');                                               /* drain */
+  Torus(0.016, 0.004, M(PIPE), 'piping', root, VX - 0.05, 0.22, 0.42, true);
+  Torus(0.016, 0.004, M(PIPE), 'piping', root, VX, 0.3, 0, true);
+
+  Valve('tankvalve', [0.95, 0.24, TZ], 'x', 0.014);
+  Valve('v1', [-0.15, FY, TZ], 'x', 0.014);
+  Valve('v2', [-0.05, 1.15, TZ], 'x', 0.014);
+  Valve('v3', [VX - 0.05, 0.5, 0.25], 'z', 0.014);
+  Valve('v4', [-0.15, 0.65, 0], 'y', 0.014);
+  Valve('drain', [VX, 0.37, 0], 'y', 0.014);
+  /* swing check valve */
+  var chk = M(BRASS, { m: 0.5, r: 0.4 });
+  Box(0.07, 0.05, 0.05, chk, 'check', root, 0.38, FY, TZ);
+  Cyl(0.026, 0.026, 0.03, chk, 'check', root, 0.38, FY + 0.04, TZ, null, 18);
+
+  /* filtrate faucet: clear plastic tap, cross handle, elbow spout with ring tip */
+  var FXX = -0.15;
+  var tap = M('#e9eef0', { t: true, o: 0.82, r: 0.25, m: 0 }), tapDk = M('#cfd8dc', { t: true, o: 0.92, r: 0.3, m: 0 });
+  Cyl(0.02, 0.02, 0.06, tap, 'faucet', root, FXX, 0.275, 0, null, 16);
+  Cyl(0.027, 0.027, 0.014, tapDk, 'faucet', root, FXX, 0.31, 0, null, 6);
+  Cyl(0.013, 0.013, 0.055, tap, 'faucet', root, FXX, 0.25, 0.0275, 'z', 12);
+  Sph(0.016, tap, 'faucet', root, FXX, 0.25, 0.055);
+  Cyl(0.013, 0.011, 0.045, tap, 'faucet', root, FXX, 0.2275, 0.055, null, 12);
+  Torus(0.012, 0.003, tapDk, 'faucet', root, FXX, 0.205, 0.055, true);
+  faucetPiv = new T.Group(); faucetPiv.position.set(FXX, 0.327, 0); root.add(faucetPiv);
+  Cyl(0.007, 0.007, 0.02, tapDk, 'faucet', faucetPiv, 0, -0.005, 0, null, 10);
+  Cyl(0.014, 0.014, 0.012, tap, 'faucet', faucetPiv, 0, 0.006, 0, null, 14);
+  Box(0.08, 0.012, 0.016, tap, 'faucet', faucetPiv, 0, 0.006, 0);
+  Box(0.016, 0.012, 0.08, tap, 'faucet', faucetPiv, 0, 0.006, 0);
+  var glass = M('#cfe8f2', { t: true, o: 0.28, r: 0.1, m: 0, d: true });
+  Cyl(0.042, 0.036, 0.16, glass, null, root, FXX, 0.08, 0.055, null, 24, true);
+  var beakerLiq = Cyl(0.034, 0.034, 1, M('#cfe6f2', { t: true, o: 0.85, r: 0.1, m: 0 }), null, root, FXX, 0.003, 0.055, null, 20);
+  var drip = Sph(0.006, M('#bcdff2', { t: true, o: 0.9, m: 0 }), null, root, FXX, 0.2, 0.055);
+
+  /* ---- boxes per part (for camera focus) ---- */
+  root.updateMatrixWorld(true);
+  Object.keys(P).forEach(function (id) {
+    var b = new T.Box3(); P[id].objs.forEach(function (o) { b.expandByObject(o); }); P[id].box = b;
+  });
+
+  /* ---- camera / controls ---- */
+  var view = { az: 0.65, el: 0.36, r: 3.4, tx: 0.32, ty: 0.52, tz: 0.15 };
+  var want = {}; Object.keys(view).forEach(function (k) { want[k] = view[k]; });
+  var inset = { l: 0, b: 0, t: 0 };
+  var idle = true;
+  function fitR(sx, sy, margin) {
+    var w = window.innerWidth, h = window.innerHeight, tanH = Math.tan(camera.fov * Math.PI / 360), asp = w / h;
+    var aw = Math.max(w - inset.l, 120), ah = Math.max(h - inset.b - inset.t, 120);
+    return Math.max((sy * (h / ah)) / (2 * tanH), (sx * (w / aw)) / (2 * tanH * asp)) * margin;
+  }
+  function homeTarget() {
+    var r = fitR(2.7, 1.6, 1.08);
+    return { az: 0.65, el: 0.36, r: Math.min(Math.max(r, 2.0), 7.5), tx: 0.32, ty: 0.52, tz: 0.15 };
+  }
+  function setWant(o) { Object.keys(o).forEach(function (k) { want[k] = o[k]; }); }
+  function nearAz(az) { var cz = want.az; return az + Math.round((cz - az) / (2 * Math.PI)) * 2 * Math.PI; }
+  function goHome(az, el) {
+    var h = homeTarget(); if (typeof az === 'number') h.az = az; if (typeof el === 'number') h.el = el;
+    h.az = nearAz(h.az); setWant(h);
+  }
+  function focus(ids, opts) {
+    opts = opts || {};
+    if (!ids || !ids.length) { goHome(); return; }
+    var b = new T.Box3();
+    ids.forEach(function (id) { if (P[id] && P[id].box) b.union(P[id].box); });
+    var lift = 0;
+    if (ids.indexOf('lid') >= 0) lift = Math.max(lift, eff('lid') * 0.4);
+    if (ids.indexOf('leaves') >= 0) lift = Math.max(lift, eff('leaf') * 0.32, eff('lid') * 0.4);
+    b.max.y += lift;
+    var c = b.getCenter(new T.Vector3()), s = b.getSize(new T.Vector3());
+    var dim = Math.max(s.x, s.y, s.z);
+    var r = Math.max(fitR(Math.max(s.x, s.z), s.y, 1.3), dim * 1.9) + 0.3;
+    r = Math.min(Math.max(r, 0.8), 7.5);
+    var az = opts.az !== undefined ? opts.az : 0.65, el = opts.el !== undefined ? opts.el : 0.36;
+    setWant({ tx: c.x, ty: c.y, tz: c.z, r: r, az: nearAz(az), el: el });
+  }
+
+  var ptrs = {}, moved = 0, downT = 0, downXY = null, hoverT = 0, hoverId = null;
+  function nPtr() { return Object.keys(ptrs).length; }
+  function snapView() { Object.keys(want).forEach(function (k) { view[k] = want[k]; }); }
+  function panBy(dx, dy) {
+    var k = want.r * 0.0017, rx = Math.cos(want.az), rz = -Math.sin(want.az);
+    want.tx -= rx * dx * k; want.tz -= rz * dx * k; want.ty += dy * k;
+    want.ty = Math.min(Math.max(want.ty, -0.2), 1.6);
+    view.tx = want.tx; view.tz = want.tz; view.ty = want.ty;
+  }
+  function dist2() { var a = Object.keys(ptrs).map(function (k) { return ptrs[k]; }); return Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y); }
+  cv.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  cv.addEventListener('pointerdown', function (e) {
+    try { cv.setPointerCapture(e.pointerId); } catch (x) {}
+    idle = false;
+    ptrs[e.pointerId] = { x: e.clientX, y: e.clientY, btn: e.button };
+    if (nPtr() === 1) { moved = 0; downT = Date.now(); downXY = { x: e.clientX, y: e.clientY }; } else { moved = 99; }
+  });
+  cv.addEventListener('pointermove', function (e) {
+    var p = ptrs[e.pointerId];
+    if (!p) {
+      if (e.pointerType === 'mouse' && !nPtr()) {
+        var now = performance.now();
+        if (now - hoverT > 50) { hoverT = now; var hid = pick(e.clientX, e.clientY); setHover(hid); if (api.onHover) api.onHover(hid, e.clientX, e.clientY); }
+      }
+      return;
+    }
+    var dx = e.clientX - p.x, dy = e.clientY - p.y;
+    if (nPtr() === 1) {
+      moved += Math.abs(dx) + Math.abs(dy);
+      if (p.btn === 2 || e.shiftKey) panBy(dx, dy);
+      else {
+        want.az -= dx * 0.008; want.el = Math.min(Math.max(want.el + dy * 0.006, 0.04), 1.45);
+        view.az = want.az; view.el = want.el;
+      }
+    } else if (nPtr() === 2) {
+      var before = dist2(), mx0 = 0, my0 = 0, ks = Object.keys(ptrs);
+      ks.forEach(function (k) { mx0 += ptrs[k].x / 2; my0 += ptrs[k].y / 2; });
+      p.x = e.clientX; p.y = e.clientY;
+      var after = dist2(), mx1 = 0, my1 = 0;
+      ks.forEach(function (k) { mx1 += ptrs[k].x / 2; my1 += ptrs[k].y / 2; });
+      if (before > 0 && after > 0) { want.r = Math.min(Math.max(want.r * before / after, 0.5), 9); view.r = want.r; }
+      panBy(mx1 - mx0, my1 - my0);
+      return;
+    }
+    p.x = e.clientX; p.y = e.clientY;
+  });
+  function up(e) {
+    var wasOne = nPtr() === 1;
+    delete ptrs[e.pointerId];
+    if (wasOne && moved < 8 && Date.now() - downT < 600 && downXY && api.onPick) {
+      api.onPick(pick(e.clientX, e.clientY));
+    }
+  }
+  cv.addEventListener('pointerleave', function () { if (hoverId) { setHover(null); if (api.onHover) api.onHover(null); } });
+  cv.addEventListener('pointerup', up);
+  cv.addEventListener('pointercancel', function (e) { delete ptrs[e.pointerId]; });
+  cv.addEventListener('wheel', function (e) {
+    e.preventDefault(); idle = false;
+    want.r = Math.min(Math.max(want.r * Math.exp(e.deltaY * 0.0012), 0.5), 9);
+  }, { passive: false });
+
+  var rc = new T.Raycaster(), ndc = new T.Vector2();
+  function pick(cx, cy) {
+    var r = cv.getBoundingClientRect();
+    ndc.set(((cx - r.left) / r.width) * 2 - 1, -((cy - r.top) / r.height) * 2 + 1);
+    rc.setFromCamera(ndc, camera);
+    var hits = rc.intersectObjects(pickables, false);
+    for (var i = 0; i < hits.length; i++) {
+      var o = hits[i].object;
+      if (o.userData.shell && o.material.opacity < 0.5) continue; /* see-through shell: pick what is behind */
+      return o.userData.part;
+    }
+    return null;
+  }
+
+  /* ---- highlight / hover glow ---- */
+  var hlIds = [];
+  function refreshGlow() {
+    Object.keys(P).forEach(function (id) {
+      var hl = hlIds.indexOf(id) >= 0, hv = id === hoverId;
+      P[id].objs.forEach(function (o) {
+        o.material.emissive.setHex(hl || hv ? 0xf5a623 : 0x000000);
+        o.material.emissiveIntensity = hl ? 0.5 : hv ? 0.28 : 1;
+      });
+    });
+  }
+  function setHighlight(ids) { hlIds = (ids || []).filter(function (id) { return !!P[id]; }); refreshGlow(); }
+  function setHover(id) {
+    if (id === hoverId) return;
+    hoverId = id; refreshGlow(); cv.style.cursor = id ? 'pointer' : '';
+  }
+
+  /* ---- state ---- */
+  var cur = mergeState({}), tgt = mergeState({}), lastTrans = false, ov = { xray: 0, lid: 0 };
+  function eff(k) { return ov[k] ? Math.max(tgt[k], ov[k]) : tgt[k]; }
+  function setState(s) {
+    tgt = mergeState(s);
+    waterMat.color.set(tgt.feed === 'pulp' ? '#d8c79c' : '#79b6e6');
+  }
+  function resetNow() { cur = mergeState({}); tgt = mergeState({}); }
+  function setOverride(k, on) { ov[k] = on ? 1 : 0; }
+
+  /* ---- labels ---- */
+  var labEls = {}, labelsOn = false;
+  Object.keys(PARTS).forEach(function (id) {
+    if (!PARTS[id].label) return;
+    var d = document.createElement('div'); d.className = 'lbl hidden'; d.textContent = PARTS[id].label;
+    $('#labels').appendChild(d); labEls[id] = d;
+  });
+  function updateLabels() {
+    var w = window.innerWidth, h = window.innerHeight;
+    Object.keys(labEls).forEach(function (id) {
+      var el = labEls[id];
+      if (!labelsOn || (id === 'leaves' && cur.xray < 0.3)) { el.classList.add('hidden'); return; }
+      var b = P[id].box, v = new T.Vector3((b.min.x + b.max.x) / 2, b.max.y, (b.min.z + b.max.z) / 2);
+      if (id === 'lid' || id === 'gauge' || id === 'vent') v.y += cur.lid * 0.38;
+      if (id === 'leaves') v.y += cur.leaf * 0.3;
+      v.project(camera);
+      if (v.z > 1 || v.z < -1) { el.classList.add('hidden'); return; }
+      el.classList.remove('hidden');
+      el.style.left = ((v.x * 0.5 + 0.5) * w) + 'px';
+      el.style.top = ((-v.y * 0.5 + 0.5) * h) + 'px';
+    });
+  }
+
+  /* ---- resize ---- */
+  var homeActive = true;
+  function resize() {
+    var w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    if (inset.l || inset.b || inset.t) camera.setViewOffset(w, h, -inset.l / 2, (inset.b - inset.t) / 2, w, h); else camera.clearViewOffset();
+    camera.updateProjectionMatrix();
+    if (api.isHome()) { goHome(); }
+  }
+  window.addEventListener('resize', resize);
+
+  /* ---- frame loop ---- */
+  var last = performance.now(), PI2 = Math.PI / 2;
+  var valveIds = ['v1', 'v2', 'v3', 'v4', 'tankvalve', 'drain'];
+  function frame(now) {
+    requestAnimationFrame(frame);
+    var dt = Math.min((now - last) / 1000, 0.05); last = now; var t = now / 1000;
+    var a = Math.min(1, dt * 4), k;
+    for (k in cur) { if (typeof cur[k] === 'number') cur[k] += (eff(k) - cur[k]) * a; }
+    valveIds.forEach(function (id) { valves[id].rotation.y = (1 - cur[id]) * PI2; });
+    faucetPiv.rotation.y = cur.faucet * PI2 * 0.5;
+    lidG.position.y = 0.92 + cur.lid * 0.38;
+    leafG.position.y = cur.leaf * 0.3;
+    var trans = cur.xray > 0.02;
+    shell.forEach(function (m) {
+      m.material.opacity = 1 - 0.8 * cur.xray;
+      if (trans !== lastTrans) { m.material.transparent = trans; m.material.depthWrite = !trans; m.material.needsUpdate = true; }
+    });
+    lastTrans = trans;
+    wheel.rotation.z -= dt * 12 * cur.pump;
+    needle.rotation.z = 2.35 - cur.gauge * 4.7 + Math.sin(t * 28) * 0.012 * cur.pump;
+    var wh = cur.tank * 0.5; water.visible = wh > 0.004; water.scale.y = Math.max(wh, 0.001); water.position.y = TB + 0.012 + wh / 2;
+    var bh = cur.beaker * 0.13; beakerLiq.visible = bh > 0.003; beakerLiq.scale.y = Math.max(bh, 0.001); beakerLiq.position.y = 0.004 + bh / 2;
+    var flowing = cur.faucet > 0.6 && cur.pump > 0.6;
+    drip.visible = flowing; if (flowing) drip.position.y = 0.2 - ((t * 1.6) % 1) * 0.11;
+    if (hlIds.length) {
+      var pulse = 0.38 + 0.22 * Math.sin(t * 3.2);
+      hlIds.forEach(function (id) { P[id].objs.forEach(function (o) { o.material.emissiveIntensity = pulse; }); });
+    }
+    if (idle && api.isHome() && nPtr() === 0) { want.az += dt * 0.12; view.az = want.az; }
+    for (k in view) { view[k] += (want[k] - view[k]) * Math.min(1, dt * 5); }
+    var ce = Math.cos(view.el);
+    camera.position.set(view.tx + view.r * Math.sin(view.az) * ce, view.ty + view.r * Math.sin(view.el), view.tz + view.r * Math.cos(view.az) * ce);
+    camera.lookAt(view.tx, view.ty, view.tz);
+    var la = view.az + 0.85;
+    sun.position.set(0.3 + Math.sin(la) * 3.0, 3.6, 0.15 + Math.cos(la) * 3.0);
+    fill.position.set(0.3 - Math.sin(la) * 2.5, 2, 0.15 - Math.cos(la) * 2.5);
+    updateLabels();
+    renderer.render(scene, camera);
+  }
+
+  var api = {
+    onPick: null, onHover: null, isHome: function () { return true; },
+    setHighlight: setHighlight, focus: focus, home: goHome, setState: setState, resetNow: resetNow,
+    setLabels: function (on) { labelsOn = on; }, resize: resize, setOverride: setOverride,
+    stopIdle: function () { idle = false; },
+    setInset: function (l, b, t) { inset.l = l || 0; inset.b = b || 0; inset.t = t || 0; resize(); },
+    preset: function (az, el) { idle = false; goHome(az, el); }
+  };
+  resize(); goHome(); snapView();
+  requestAnimationFrame(frame);
+  return api;
+}
+
+/* ------------------------------------------------------------------ */
+/*  UI                                                                 */
+/* ------------------------------------------------------------------ */
+var gl = null;
+var mode = 'home', stepIdx = 0, selPart = null, stepMenu = false;
+var labelsOn = false, xrayOn = false, coverOn = false, presetIdx = 0;
+var TAGS = { repair: 'Needs repair', service: 'Needs service', ok: 'No issue', check: 'To inspect', tbc: 'To confirm' };
+var PRESETS = [['Iso', 0.65, 0.36], ['Front', 0, 0.1], ['Right', Math.PI / 2, 0.1], ['Back', Math.PI, 0.1], ['Left', -Math.PI / 2, 0.1], ['Top', 0.3, 1.4]];
+var HEADER_H = 64;
+
+function secIndex(key) { for (var i = 0; i < C.sections.length; i++) if (C.sections[i].key === key) return i; return 0; }
+function tagHTML(t) { return t && TAGS[t] ? '<span class="tg ' + t + '">' + TAGS[t] + '</span>' : ''; }
+function toast(msg) {
+  var t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toast.h); toast.h = setTimeout(function () { t.classList.remove('on'); }, 1500);
+}
+function coHTML(s) {
+  var h = '';
+  if (s.warn) h += '<div class="co warn"><b>Safety</b><span>' + s.warn + '</span></div>';
+  if (s.tbc) h += '<div class="co tbc"><b>To confirm</b><span>' + s.tbc + '</span></div>';
+  if (s.note) h += '<div class="co note"><b>Tip</b><span>' + s.note + '</span></div>';
+  return h;
+}
+
+function partDetail(id) {
+  var p = PARTS[id], h = '<div class="detail"><div class="dh"><b>' + esc(p.name) + '</b></div>' + p.fn;
+  if (p.spec) h += '<span class="k"><u>Specs:</u> ' + p.spec + '</span>';
+  if (/^v[1-4]$/.test(id)) h += '<span class="k"><u>Note:</u> ' + C.valveNote + '</span>';
+  return h + '</div>';
+}
+function progressHTML() {
+  var cs = secIndex(STEPS[stepIdx].sec), h = '<div class="seg">';
+  var inSec = STEPS.filter(function (s) { return s.sec === STEPS[stepIdx].sec; }), pos = inSec.indexOf(STEPS[stepIdx]) + 1;
+  C.sections.forEach(function (s, i) {
+    var st = i < cs ? 'done' : i === cs ? 'act' : '';
+    h += '<div class="' + st + '" style="--c:' + s.color + (i === cs ? ';--p:' + Math.round(pos / inSec.length * 100) + '%' : '') + '"><i></i>' + esc(s.key === 'G' ? s.name : s.key + ' · ' + s.name) + '</div>';
+  });
+  return h + '</div>';
+}
+function menuHTML() {
+  var h = '<div class="menu">', sec = '';
+  STEPS.forEach(function (s, i) {
+    if (s.sec !== sec) { sec = s.sec; var cs = C.sections[secIndex(sec)]; h += '<div class="sh" style="--c:' + cs.color + '">' + esc(cs.name.toUpperCase()) + '</div>'; }
+    h += '<button data-step="' + i + '" class="' + (i === stepIdx ? 'cur' : '') + '">' + (s.type === 'group' ? 'Group members' : s.id + ' · ' + esc(s.title)) + '</button>';
+  });
+  return h + '</div>';
+}
+function initials(n) { var p = n.split(' '); return (p[0][0] + p[p.length - 1][0]).toUpperCase(); }
+function groupHTML() {
+  var g = C.group;
+  return '<div class="gc"><div class="gh"><small>' + esc(g.equipment) + '</small><b>' + esc(g.course) + '</b></div>' +
+    '<dl><dt>SECTION</dt><dd>' + esc(g.section) + '</dd><dt>TERM</dt><dd>' + esc(g.term) + '</dd></dl></div>' +
+    '<div class="mem">' + g.members.map(function (m) { return '<div><i>' + initials(m) + '</i>' + esc(m) + '</div>'; }).join('') + '</div>';
+}
+
+function renderSheet() {
+  var el = $('#sheet'), home = $('#home'), h = '', nav = '';
+  if (mode === 'home' && !selPart) { el.classList.add('hidden'); home.classList.remove('hidden'); return; }
+  home.classList.add('hidden'); el.classList.remove('hidden');
+  if (mode === 'home') {
+    el.style.setProperty('--ac', '#f0a020');
+    h += '<div class="top"><span class="eyeb" style="margin:0">Component</span><button class="x" data-act="clearpart" aria-label="Close">×</button></div>' + partDetail(selPart);
+    nav = '<button data-act="clearpart">Close</button><button class="pri" data-act="start">&#9654; Start procedure</button>';
+  } else {
+    var s = STEPS[stepIdx], sec = C.sections[secIndex(s.sec)];
+    el.style.setProperty('--ac', sec.color);
+    h += progressHTML();
+    h += '<div class="top" style="margin-top:10px"><button class="stepbtn" data-act="menu">Step ' + (stepIdx + 1) + ' of ' + STEPS.length + (stepMenu ? ' ▴' : ' ▾') + '</button><button class="x" data-act="close" aria-label="Close">×</button></div>';
+    if (stepMenu) h += menuHTML();
+    if (s.type === 'group') { h += '<div class="eyeb"><i class="badge">Team</i></div><h2>Group members</h2>' + groupHTML(); }
+    else {
+      h += '<div class="eyeb"><i class="badge">' + s.id + '</i>' + esc(sec.name) + '</div><h2>' + esc(s.title) + '</h2><p>' + s.text + '</p>' + coHTML(s);
+      if (s.parts.length) h += '<div class="chips">' + s.parts.map(function (id) {
+        return '<button class="chip' + (selPart === id ? ' sel' : '') + '" data-part="' + id + '">' + esc(PARTS[id].name) + '</button>'; }).join('') + '</div>';
+      if (selPart) h += partDetail(selPart) + '<button class="link" data-act="backstep">Hide part info</button>';
+    }
+    var last = stepIdx === STEPS.length - 1;
+    nav = '<button data-act="back"' + (stepIdx === 0 ? ' disabled' : '') + '>‹ Back</button><button class="pri" data-act="next">' + (last ? 'Finish' : 'Next ›') + '</button>';
+  }
+  el.innerHTML = '<div class="sbody">' + h + '</div><div class="nav">' + nav + '</div>';
+}
+
+function updateInset() {
+  if (!gl) return;
+  var w = window.innerWidth, hEl = !$('#sheet').classList.contains('hidden') ? $('#sheet') : $('#home'), r = hEl.getBoundingClientRect();
+  if (w >= 900) gl.setInset(Math.round(r.right + 6), 0, HEADER_H);
+  else gl.setInset(0, Math.round(window.innerHeight - r.top + 4), HEADER_H);
+}
+function camFor(ids, s) {
+  if (s && s.cam) return s.cam;
+  if (ids.length === 1 && PARTS[ids[0]] && PARTS[ids[0]].cam) return PARTS[ids[0]].cam;
+  return {};
+}
+function applyScene() {
+  if (!gl) return;
+  if (mode === 'home') {
+    gl.setState({});
+    gl.setHighlight(selPart ? [selPart] : []);
+    if (selPart) gl.focus([selPart], camFor([selPart])); else gl.home();
+  } else {
+    var s = STEPS[stepIdx];
+    gl.setState(s.state);
+    var ids = selPart ? [selPart] : s.parts;
+    gl.setHighlight(ids); gl.focus(ids, selPart ? camFor(ids) : camFor(ids, s));
+  }
+}
+function refresh(scrollToDetail) {
+  renderSheet(); updateInset(); applyScene();
+  var b = $('#sheet .sbody');
+  if (b) { if (scrollToDetail) { var d = b.querySelector('.detail'); if (d && d.scrollIntoView) { try { d.scrollIntoView({ block: 'nearest' }); } catch (x) {} } } else b.scrollTop = 0; }
+}
+function go(newMode, idx) {
+  mode = newMode; if (idx !== undefined) stepIdx = idx;
+  selPart = null; stepMenu = false;
+  if (gl) { gl.stopIdle(); gl.isHome = function () { return mode === 'home' && !selPart; }; }
+  hideCoach(); refresh();
+}
+function choosePart(id) {
+  if (!id) { if (mode === 'home' && selPart) { selPart = null; refresh(); } return; }
+  selPart = id; stepMenu = false; hideCoach(); if (gl) gl.stopIdle(); refresh(true);
+}
+
+function onSheetClick(e) {
+  var t = e.target.closest('[data-act],[data-part],[data-step],[data-tab]'); if (!t) return;
+  if (t.dataset.part) { choosePart(t.dataset.part); return; }
+  if (t.dataset.step !== undefined) { go('step', parseInt(t.dataset.step, 10)); return; }
+  var a = t.dataset.act;
+  if (a === 'menu') { stepMenu = !stepMenu; renderSheet(); updateInset(); }
+  else if (a === 'close' || a === 'finish') go('home');
+  else if (a === 'next') { if (stepIdx >= STEPS.length - 1) go('home'); else go('step', stepIdx + 1); }
+  else if (a === 'back') { if (stepIdx > 0) go('step', stepIdx - 1); }
+  else if (a === 'backstep' || a === 'clearpart') { selPart = null; refresh(); }
+  else if (a === 'start') go('step', 0);
+}
+
+/* ---------- Info modal ---------- */
+var infoKey = 'overview';
+function infoHTML(item) {
+  var h = item.html;
+  if (h.indexOf('@TEAM@') >= 0) h = h.replace('@TEAM@', '<h3>Group</h3>' + groupHTML());
+  if (h === '@COMPONENTS@') {
+    h = '<h3>Components and functions</h3><p>Tap a component to see it highlighted in the 3D model.</p>';
+    C.partGroups.forEach(function (g) {
+      h += '<h3 class="gh3">' + esc(g.name) + '</h3><div class="cgrid">' + g.parts.map(function (id) {
+        var p = PARTS[id], f = p.fn.replace(/<[^>]+>/g, '');
+        return '<button class="cc" data-part="' + id + '"><div class="ch"><b>' + esc(p.name) + '</b></div><span class="f">' + esc(f.length > 110 ? f.slice(0, 107) + '…' : f) + '</span></button>';
+      }).join('') + '</div>';
+    });
+  } else if (h === '@PROCEDURE@') {
+    h = '<p>Step-by-step procedure for setting up, operating, shutting down and backwashing the filter.</p><p><button class="sbtn" data-act="startproc">&#9654; Open the guided 3D procedure</button></p><div class="tl">';
+    var sec = '';
+    STEPS.forEach(function (s, i) {
+      if (s.type === 'group') return;
+      var cs = C.sections[secIndex(s.sec)];
+      if (s.sec !== sec) { sec = s.sec; h += '<h3 style="--c:' + cs.color + '"><i></i>' + esc(sec + ' · ' + cs.name) + '</h3>'; }
+      h += '<div class="tli" style="--c:' + cs.color + '"><i>' + s.id + '</i><div><b>' + esc(s.title) + '</b><p>' + s.text + '</p>' + coHTML(s) + '<button class="sbtn ghost" data-step="' + i + '">View in 3D</button></div></div>';
+    });
+    h += '</div>';
+  } else if (h === '@MODEL@') {
+    h = '<h3>Interactive 3D model</h3><ul class="ticks"><li><b>Rotate:</b> drag with one finger or the mouse.</li><li><b>Zoom:</b> pinch, or use the mouse wheel.</li><li><b>Pan:</b> two fingers, or right-click drag.</li>' +
+      '<li><b>Component info:</b> tap any part. Hover shows its name on a computer.</li><li><b>Toolbar:</b> reset the view, switch viewpoint, show labels, see inside the vessel (X-ray) or lift the cover.</li><li><b>Keyboard:</b> &larr; &rarr; move through steps, Esc closes panels.</li><li><b>Procedure:</b> press Start procedure to be guided step by step.</li></ul>' +
+      '<p class="note">The model is a stylized rebuild from photos and measurements of the actual unit. Pipe routing and valve positions are schematic and should be checked against the equipment.</p>' +
+      '<p><button class="sbtn" data-act="closeinfo">Open the 3D model</button></p>';
+  }
+  return h;
+}
+function renderInfo() {
+  var el = $('#infoOv');
+  var item = C.info.filter(function (i) { return i.key === infoKey; })[0] || C.info[0];
+  el.innerHTML = '<div class="modal"><header><div><small>' + esc(C.subtitle) + '</small><b>' + esc(C.title) + '</b></div><button class="x" data-act="closeinfo" aria-label="Close">×</button></header>' +
+    '<div class="tabs">' + C.info.map(function (i) { return '<button data-tab="' + i.key + '" class="' + (i.key === item.key ? 'on' : '') + '">' + esc(i.name) + '</button>'; }).join('') + '</div>' +
+    '<div id="infoBody">' + infoHTML(item) + '</div></div>';
+  var on = el.querySelector('.tabs .on'); if (on && on.scrollIntoView) { try { on.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (x) {} }
+}
+function openInfo(key) { if (key) infoKey = key; renderInfo(); $('#infoOv').classList.remove('hidden'); hideCoach(); }
+function closeInfo() { $('#infoOv').classList.add('hidden'); }
+function onInfoClick(e) {
+  if (e.target === $('#infoOv')) { closeInfo(); return; }
+  var t = e.target.closest('[data-tab],[data-part],[data-act],[data-step]'); if (!t) return;
+  if (t.dataset.tab) { infoKey = t.dataset.tab; renderInfo(); return; }
+  if (t.dataset.part) { closeInfo(); mode = 'home'; stepMenu = false; selPart = null; choosePart(t.dataset.part); return; }
+  if (t.dataset.step !== undefined) { closeInfo(); go('step', parseInt(t.dataset.step, 10)); return; }
+  if (t.dataset.act === 'closeinfo') closeInfo();
+  if (t.dataset.act === 'startproc') { closeInfo(); go('step', 0); }
+}
+
+/* ---------- toolbar, hover, keys ---------- */
+function hideCoach() { var c = $('#coach'); if (c) c.classList.add('off'); }
+function onHover(id, x, y) {
+  var tip = $('#tip');
+  if (!id) { tip.classList.add('hidden'); return; }
+  tip.textContent = PARTS[id].name; tip.classList.remove('hidden');
+  tip.style.left = Math.min(x + 14, window.innerWidth - 180) + 'px'; tip.style.top = (y + 18) + 'px';
+}
+function onKey(e) {
+  var tag = (e.target && e.target.tagName) || '';
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+  var infoOpen = !$('#infoOv').classList.contains('hidden');
+  if (e.key === 'Escape') {
+    if (infoOpen) closeInfo(); else if (selPart) { selPart = null; refresh(); } else if (mode === 'step') go('home');
+  } else if (!infoOpen && mode === 'step') {
+    if (e.key === 'ArrowRight') { if (stepIdx < STEPS.length - 1) go('step', stepIdx + 1); }
+    else if (e.key === 'ArrowLeft') { if (stepIdx > 0) go('step', stepIdx - 1); }
+  }
+}
+
+/* ---------- boot ---------- */
+function loadThree() {
+  return new Promise(function (res, rej) {
+    if (window.THREE) return res();
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
+    s.onload = function () { window.THREE ? res() : rej(); }; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+function boot() {
+  $('#ttl').textContent = C.title;
+  $('#sub').textContent = C.subtitle + ' · ' + C.group.section.replace('BS Chemical Engineering', 'BSChE');
+  $('#homeFoot').textContent = C.group.section + ' · ' + C.group.term;
+  $('#sheet').addEventListener('click', onSheetClick);
+  $('#home').addEventListener('click', function (e) { var t = e.target.closest('[data-tab]'); if (t) openInfo(t.dataset.tab); });
+  $('#infoOv').addEventListener('click', onInfoClick);
+  $('#bStart').addEventListener('click', function () { go('step', 0); });
+  $('#bInfo').addEventListener('click', function () { openInfo(); });
+  $('#bLabels').addEventListener('click', function () { labelsOn = !labelsOn; this.classList.toggle('on', labelsOn); if (gl) gl.setLabels(labelsOn); toast(labelsOn ? 'Labels on' : 'Labels off'); });
+  $('#bXray').addEventListener('click', function () { xrayOn = !xrayOn; this.classList.toggle('on', xrayOn); if (gl) gl.setOverride('xray', xrayOn); toast(xrayOn ? 'X-ray: vessel is see-through' : 'X-ray off'); });
+  $('#bCover').addEventListener('click', function () { coverOn = !coverOn; this.classList.toggle('on', coverOn); if (gl) gl.setOverride('lid', coverOn); toast(coverOn ? 'Cover lifted' : 'Cover closed'); });
+  $('#bReset').addEventListener('click', function () { if (gl) { presetIdx = 0; $('#vName').textContent = 'View'; if (mode === 'home' && !selPart) gl.preset(0.65, 0.36); else gl.home(); } if (mode === 'home' && selPart) { selPart = null; refresh(); } toast('View reset'); });
+  $('#bView').addEventListener('click', function () {
+    presetIdx = (presetIdx + 1) % PRESETS.length; var p = PRESETS[presetIdx];
+    $('#vName').textContent = p[0]; toast('View: ' + p[0]);
+    if (gl) { if (mode === 'home' && !selPart) gl.preset(p[1], p[2]); else gl.focus(selPart ? [selPart] : STEPS[stepIdx].parts, { az: p[1], el: p[2] }); }
+  });
+  document.addEventListener('keydown', onKey);
+  setTimeout(hideCoach, 9000);
+  renderSheet();
+  window.addEventListener('resize', function () { updateInset(); });
+  if (window.ResizeObserver) { var ro = new ResizeObserver(function () { updateInset(); }); ro.observe($('#sheet')); ro.observe($('#home')); }
+  loadThree().then(function () {
+    try {
+      gl = init3D();
+      gl.onPick = choosePart; gl.onHover = onHover;
+      gl.isHome = function () { return mode === 'home' && !selPart; };
+      $('#c').addEventListener('pointerdown', hideCoach);
+      updateInset(); applyScene();
+    } catch (err) {
+      gl = null;
+      var f = $('#fallback'); f.style.display = 'block';
+      f.textContent = '3D view could not start on this device. The procedure and component information still work. Open Info.';
+      if (window.console) console.error(err);
+    }
+  }).catch(function () {
+    var f = $('#fallback'); f.style.display = 'block';
+    f.textContent = 'The 3D library could not load. Check your internet connection. The procedure and component information still work. Open Info.';
+  });
+}
+boot();
+})();
+</script>
+</body>
+</html>
