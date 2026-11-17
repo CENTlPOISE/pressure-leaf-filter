@@ -319,11 +319,9 @@ window.CONTENT = {
   parts: {
     tank:      { name: 'Conditioning Tank', label: 'Conditioning tank', tag: 'repair', cam: { el: 1.0 },
       fn: 'Holds the process feed before filtration and is used to prepare it (1.0 kg coconut pulp in water). A hole in the middle of the tank floor feeds a pipe that runs forward under the tank and out past its front edge on the pump side. There a tee sends the feed on to the gear pump and, through a short branch, to the tank drain.',
-      spec: 'Stainless steel · 65 L · Ø 15 in (0.381 m) × 58.7 cm high · feet 16.5 cm',
       status: 'Complete and in good condition, but heavy rust near the drain makes the outflow rusty. Rust removal and an anti-rust coating are planned.' },
     pump:      { name: 'Gear Pump', label: 'Gear pump', tag: 'service',
       fn: 'A positive-displacement pump that moves the feed from the conditioning tank into the pressure vessel and builds the pressure that drives filtration. Never run it with its outlet path closed.',
-      spec: 'Length 34 cm · height 30 cm · belt-driven by the motor',
       status: 'Runs when powered, but could not yet draw and distribute water. The flow path is being checked. Needs cleaning and lubrication.' },
     motor:     { name: 'Electric Motor', label: 'Motor', tag: 'check',
       fn: 'Drives the gear pump through a belt and pulley.',
@@ -335,31 +333,29 @@ window.CONTENT = {
       fn: 'Steel support frame that carries the motor and gear pump, with black stopper-like feet for stable positioning.',
       status: 'No major problem recorded.' },
     switch:    { name: 'Circuit Breaker', label: 'Circuit breaker', tag: 'repair', cam: { az: -0.2, el: 0.3 },
-      fn: 'Circuit breaker (13 × 7 cm) with the on/off toggles and an orange button, mounted against the electrical box. It turns the pump motor on and off.',
+      fn: 'Circuit breaker with the on/off toggles and an orange button, mounted against the electrical box. It turns the pump motor on and off.',
       status: 'Has no protective housing and the wires are taped to the pipes. A weatherproof enclosure and secured wiring are proposed.' },
     v1:        { name: 'Valve 1 · Feed Inlet', label: 'V1', tag: 'service',
       fn: 'OPEN during filtration so the feed from the pump enters the pressure vessel. CLOSED during backwashing.' },
     v2:        { name: 'Valve 2 · Backwash Inlet', label: 'V2', tag: 'service',
       fn: 'On the long pipe, just after it leaves the pump riser beside the breaker. CLOSED during filtration. OPENED for backwashing to send the pump flow along the long pipe to the far end of the vessel.' },
     v3:        { name: 'Valve 3 · Backwash Outlet', label: 'V3', tag: 'service',
-      fn: 'On the vertical drop pipe (about 50 cm, open end) at the far end of the long pipe. CLOSED during filtration. OPENED for backwashing so the water leaves to disposal.' },
+      fn: 'On the vertical drop pipe (open end) at the far end of the long pipe. CLOSED during filtration. OPENED for backwashing so the water leaves to disposal.' },
     v4:        { name: 'Valve 4 · Filtrate Outlet', label: 'V4', tag: 'service',
       fn: 'On the horizontal pipe at the top of the filtrate line, beside the vessel. OPEN during filtration; CLOSED during backwashing.' },
     faucet:    { name: 'Filtrate Faucet', label: 'Filtrate faucet', tag: 'ok', cam: { az: 0.55, el: 0.3 },
-      fn: 'Clear plastic tap at the bottom of the vertical filtrate pipe (36 cm), which rises from a low port on the vessel next to one of its legs. The filtrate is collected here in a container. It stays closed until the pump is running and is closed again before shutdown.' },
+      fn: 'Clear plastic tap at the bottom of the vertical filtrate pipe, which rises from a low port on the vessel next to one of its legs. The filtrate is collected here in a container. It stays closed until the pump is running and is closed again before shutdown.' },
     drain:     { name: 'Vessel Drain Valve', label: 'Vessel drain', tag: 'service',
       fn: 'Drains the pressure vessel from the lowest point of its dished bottom. Closed during filtration; opened to drain only after the pressure has been released.',
       status: 'Seized valves were noted in the diagnosis: clean, lubricate or replace.' },
     vessel:    { name: 'Pressure Vessel', label: 'Pressure vessel', tag: 'repair',
       fn: 'Closed vessel where pressure builds up. That pressure is the driving force that pushes the liquid through the filter leaves while the solids stay behind.',
-      spec: 'Ø 40 cm · 97 cm overall height · dished bottom · three 54 cm legs · bolted cover',
       status: 'The rubber gasket between cover and vessel was found broken, and the cover bolts and the internal leaf supports are rusted. A chemical-resistant gasket, stainless bolts and rust treatment are planned.' },
     lid:       { name: 'Cover, Gasket & Bolts', label: 'Vessel cover', tag: 'repair',
       fn: 'Seals the pressure vessel; the cover is bolted around its flange. The gasket must be seated and every cover bolt tight before running. Open the cover only when the gauge reads zero and the instructor allows it.',
       status: 'Gasket broken and bolts rusted: replace before the test run.' },
     leaves:    { name: 'Filter Leaves (×5)', label: 'Filter leaves', tag: 'service', cam: { az: -0.5, el: 0.5 },
       fn: 'Rectangular leaves hung on a tubular manifold. Each has a riveted metal frame, a fine filter mesh and a diamond-pattern expanded-wire support. Liquid passes through while solids collect on the surface as a cake that also acts as an extra filter layer.',
-      spec: 'G.I. sheet frame · 324-mesh screen · 4-mesh expanded wire · 1500-mesh filter cloth · 5 leaves · 0.2547 m² total area',
       status: 'Screen, case and cloth look serviceable but dirty. The supporting parts inside are rusted. Clean, inspect and replace damaged leaves.' },
     gauge:     { name: 'Pressure Gauge', label: 'Pressure gauge', tag: 'check',
       fn: 'Shows the pressure inside the vessel. The observer watches it during the whole run. The limit set by the instructor is marked on it, and it must read zero before the cover is opened.',
@@ -370,15 +366,13 @@ window.CONTENT = {
       fn: 'Lever-handled valve on the tank drain, just outside the pump-side wall of the conditioning tank. A short pipe from the tee turns down through an elbow and the valve, and ends in an open discharge pipe angled toward the floor. Closed during the run; used to empty the tank.' },
     ebox:      { name: 'Electrical Box', label: 'Electrical box', tag: 'ok', cam: { az: -0.2, el: 0.3 },
       fn: 'Gray metal electrical box mounted on the short pipe stub above the pump riser. It is wired to the circuit breaker that supplies power to the pump; the cable runs from it down to the motor.' },
-    regulator: { name: 'Voltage Regulator', label: 'Voltage regulator', tag: 'service',
-      fn: 'The equipment is plugged into the voltage regulator before the run, and unplugged after the pump is switched off.' },
     piping:    { name: 'Piping & Fittings', label: null, tag: 'check',
       fn: 'Pipes and fittings that carry the feed from the tank through the pump to the vessel, and the filtrate out of the vessel. Extra branches serve backwashing.',
       status: 'Joints are secure and no leaks were seen, but the insides are probably rusty after long inactivity. The 3D routing is schematic.' }
   },
 
   partGroups: [
-    { name: 'Feed system', parts: ['tank', 'tankdrain', 'pump', 'motor', 'belt', 'frame', 'switch', 'ebox', 'regulator'] },
+    { name: 'Feed system', parts: ['tank', 'tankdrain', 'pump', 'motor', 'belt', 'frame', 'switch', 'ebox'] },
     { name: 'Pressure vessel', parts: ['vessel', 'lid', 'leaves', 'gauge', 'swingbolt', 'drain'] },
     { name: 'Valves & piping', parts: ['v1', 'v2', 'v3', 'v4', 'piping'] },
     { name: 'Filtrate collection', parts: ['faucet'] }
@@ -396,10 +390,10 @@ window.CONTENT = {
 
   /* text = main instruction (HTML ok) · warn = safety callout · tbc = to be confirmed · note = hint */
   steps: [
-    { id: 'A1', sec: 'A', title: 'Wear PPE and sign the logbook', parts: ['regulator'],
+    { id: 'A1', sec: 'A', title: 'Wear PPE and sign the logbook', parts: [],
       text: 'Wear the required PPE (gloves, goggles, laboratory gown, mask and closed shoes) and review the safety section. Sign the <b>Equipment Usage / Borrower’s Logbook</b> and record the condition of the equipment before use.',
       state: {} },
-    { id: 'A2', sec: 'A', title: 'Inspect the components', parts: ['lid', 'ebox', 'switch', 'regulator', 'gauge'],
+    { id: 'A2', sec: 'A', title: 'Inspect the components', parts: ['lid', 'ebox', 'switch', 'gauge'],
       text: 'Inspect the hoses, valves, seals, lid gasket, pump switch enclosure and power cord for damage, leaks or wear.',
       warn: 'If any defect is found, do not operate the equipment. Report it to the laboratory technician.',
       state: {} },
@@ -413,7 +407,7 @@ window.CONTENT = {
     { id: 'A5', sec: 'A', title: 'Fill the conditioning tank', parts: ['tank'],
       text: 'Pour the <b>4.6 L of water</b> into the conditioning tank, then add the coconut pulp gradually while stirring until the mixture is even.',
       state: { v1: 1, v4: 1, tank: 0.086, feed: 'pulp' } },
-    { id: 'A6', sec: 'A', title: 'Plug in and place the container', parts: ['regulator', 'faucet'], cam: { az: 0.5, el: 0.3 },
+    { id: 'A6', sec: 'A', title: 'Plug in and place the container', parts: ['faucet'], cam: { az: 0.5, el: 0.3 },
       text: 'Plug the pump cord into the <b>voltage regulator</b> and place the empty graduated container under the filter faucet.',
       state: { v1: 1, v4: 1, tank: 0.086, feed: 'pulp' } },
 
@@ -431,7 +425,7 @@ window.CONTENT = {
       text: 'Stop the run when <b>only drops come out</b>, when the volume <b>does not change between two readings</b>, or after <b>15 minutes</b>. Record the filtration time and the volume of filtrate on the Data Sheet.',
       state: { v1: 1, v4: 1, tank: 0.03, feed: 'pulp', sw: 1, pump: 1, gauge: 0.5, vessel: 1.5, faucet: 1, beaker: 0.8, cake: 1, xray: 0.85 } },
 
-    { id: 'C1', sec: 'C', title: 'Switch off and unplug first', parts: ['switch', 'regulator', 'pump'],
+    { id: 'C1', sec: 'C', title: 'Switch off and unplug first', parts: ['switch', 'pump'],
       text: 'Switch off the pump and <b>unplug it first</b>, before touching any valve.',
       state: { v1: 1, v4: 1, tank: 0.03, feed: 'pulp', sw: 0, pump: 0, gauge: 0.5, vessel: 1.5, faucet: 1, beaker: 0.8, cake: 1, xray: 0.85 } },
     { id: 'C2', sec: 'C', title: 'Close V1 and V4, then release the pressure', parts: ['v1', 'v4', 'drain', 'gauge'],
@@ -450,7 +444,7 @@ window.CONTENT = {
     { id: 'D4', sec: 'D', title: 'Open valves 2 and 3', parts: ['v2', 'v3'],
       text: 'Open <b>Valve 2</b> and <b>Valve 3</b>.',
       state: { tank: 0.154, feed: 'water', v2: 1, v3: 1, cake: 1, beaker: 0.8 } },
-    { id: 'D5', sec: 'D', title: 'Run the pump for 2 to 3 minutes', parts: ['regulator', 'switch', 'pump', 'leaves'],
+    { id: 'D5', sec: 'D', title: 'Run the pump for 2 to 3 minutes', parts: ['switch', 'pump', 'leaves'],
       text: 'Plug the pump cord into the voltage regulator and turn on the pump. Let it run for <b>2 to 3 minutes</b>. Water flows backwards through the leaves and out through Valve 3.',
       state: { tank: 0.09, feed: 'water', v2: 1, v3: 1, sw: 1, pump: 1, gauge: 0.3, vessel: 1.5, cake: 0.3, beaker: 0.8, xray: 0.85 } },
     { id: 'D6', sec: 'D', title: 'Switch off, close V2 and V3, release pressure', parts: ['switch', 'v2', 'v3', 'gauge'],
@@ -922,14 +916,9 @@ function init3D() {
   Limb([0.155, 0.34, ZF - 0.02], [MX, 0.34, Z0 + 0.03], 0.0045, 0.0045, cableM, 'switch');
   Limb([MX, 0.34, Z0 + 0.03], [MX, 0.305, Z0 + 0.03], 0.0045, 0.0045, cableM, 'switch');
 
-  /* ================= voltage regulator and power cord (shown schematically) ================= */
-  var regB = M('#6d757b', { m: 0.3, r: 0.5 });
-  Box(0.22, 0.13, 0.16, regB, 'regulator', root, -0.18, 0.065, 0.86);
-  Box(0.09, 0.035, 0.006, M('#c9e6d2', { r: 0.4, m: 0 }), 'regulator', root, -0.18, 0.09, 0.943);
-  Cyl(0.02, 0.02, 0.012, M('#2a2d30'), 'regulator', root, -0.12, 0.045, 0.944, 'z', 16);
-  Limb([MX - 0.03, 0.12, Z0 + 0.19], [-0.12, 0.01, Z0 + 0.25], 0.006, 0.006, cableM, 'regulator');
-  Limb([-0.12, 0.01, Z0 + 0.25], [-0.12, 0.01, 0.80], 0.006, 0.006, cableM, 'regulator');
-  Limb([-0.12, 0.01, 0.80], [-0.12, 0.05, 0.86], 0.006, 0.006, cableM, 'regulator');
+  /* ================= motor power cord with plug ================= */
+  Limb([MX - 0.03, 0.12, Z0 + 0.19], [-0.12, 0.01, Z0 + 0.25], 0.006, 0.006, cableM, 'motor');
+  Box(0.03, 0.016, 0.045, M('#26292b', { r: 0.7, m: 0.1 }), 'motor', root, -0.12, 0.01, Z0 + 0.27);
 
   /* ================= piping (1-1/2 in) ================= */
   var YT = 0.36, XF = -0.85, ZL = 0.03, ZFa = VZ + 0.13, ZT = 0.24, XD = -0.78;
@@ -1334,7 +1323,6 @@ function coHTML(s) {
 
 function partDetail(id) {
   var p = PARTS[id], h = '<div class="detail"><div class="dh"><b>' + esc(p.name) + '</b></div>' + p.fn;
-  if (p.spec) h += '<span class="k"><u>Specs:</u> ' + p.spec + '</span>';
   if (/^v[1-4]$/.test(id)) h += '<span class="k"><u>Note:</u> ' + C.valveNote + '</span>';
   return h + '</div>';
 }
@@ -1545,7 +1533,7 @@ var SIM = (function () {
       text: 'The 4.6 L of water goes into the conditioning tank first, then the 1.0 kg of strained coconut pulp is added gradually while stirring until the mixture is even.',
       notes: [{ part: 'tank', text: 'Water, then pulp' }],
       fn: function (p) { return B({ v1: 1, v4: 1, tank: p < 0.55 ? L(0, 0.071, p / 0.55) : L(0.071, PULP, seg(p, 0.55, 1)), feed: p < 0.55 ? 'water' : 'pulp' }); } },
-    { id: 'Start', title: 'Plug in and switch on the pump', dur: 8, parts: ['regulator', 'switch', 'ebox', 'pump', 'gauge'], cam: { az: -0.55, el: 0.3 },
+    { id: 'Start', title: 'Plug in and switch on the pump', dur: 8, parts: ['switch', 'ebox', 'pump', 'gauge'], cam: { az: -0.55, el: 0.3 },
       text: 'The pump cord is plugged into the voltage regulator and the pump is switched on at the circuit breaker. The gear pump draws the feed from the tank and fills the pressure vessel.',
       notes: [{ part: 'pump', text: 'Gear pump running' }, { part: 'switch', text: 'Circuit breaker on' }, { part: 'gauge', text: 'Read the gauge' }],
       fn: function (p) {
@@ -1570,7 +1558,7 @@ var SIM = (function () {
       notes: [{ part: 'faucet', text: 'Only drops left' }],
       fn: function (p) { return B({ v1: 1, v4: 1, feed: 'pulp', sw: 1, pump: 1, tank: 0, vessel: L(0.5, 0.1, p), gauge: 0.5, faucet: 1, beaker: 0.8, cake: 1, xray: 0.85 }); },
       hud: function () { return { t: 326, v: 4, p: 100 }; } },
-    { id: 'Off', title: 'Switch off and unplug first', dur: 4, parts: ['switch', 'regulator', 'pump'], cam: { az: -0.55, el: 0.3 },
+    { id: 'Off', title: 'Switch off and unplug first', dur: 4, parts: ['switch', 'pump'], cam: { az: -0.55, el: 0.3 },
       text: 'The pump is switched off and unplugged first, before any valve is touched.',
       notes: [{ part: 'switch', text: 'Pump off, then unplug' }],
       fn: function (p) { var off = p > 0.3; return B({ v1: 1, v4: 1, feed: 'pulp', sw: off ? 0 : 1, pump: off ? 0 : 1, vessel: 0.1, gauge: 0.5, faucet: 1, beaker: 0.8, cake: 1, xray: 0.85 }); },
