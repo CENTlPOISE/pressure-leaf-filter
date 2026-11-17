@@ -44,19 +44,19 @@ body{background-color:#e3eaf1;
 @media (max-width:560px){#coach{display:none}}
 
 /* panels */
-#home,#sheet{position:fixed;z-index:5;display:flex;flex-direction:column;border-radius:22px;animation:pop .28s cubic-bezier(.2,.8,.2,1)}
+#home,#sheet,#sim{position:fixed;z-index:5;display:flex;flex-direction:column;border-radius:22px;animation:pop .28s cubic-bezier(.2,.8,.2,1)}
 @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
 #home{padding:18px 18px 16px}
-#sheet{padding:0;max-height:54vh;overflow:hidden}
+#sheet,#sim{padding:0;max-height:54vh;overflow:hidden}
 @media (max-width:899px){
-  #home,#sheet{left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom))}
+  #home,#sheet,#sim{left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom))}
   #rail{top:calc(max(10px,env(safe-area-inset-top)) + 62px)}
   .desk{display:none!important}
 }
 @media (min-width:900px){
-  #home,#sheet{left:16px;top:74px;bottom:16px;width:384px;max-height:none}
-  #home,#sheet{bottom:auto}
-  #sheet{max-height:calc(100vh - 90px)}
+  #home,#sheet,#sim{left:16px;top:74px;bottom:16px;width:384px;max-height:none}
+  #home,#sheet,#sim{bottom:auto}
+  #sheet,#sim{max-height:calc(100vh - 90px)}
 }
 #home .eyebrow{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
 #home h1{font-size:22px;margin:4px 0 6px;letter-spacing:-.02em}
@@ -71,8 +71,8 @@ body{background-color:#e3eaf1;
 #home .foot i{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
 .mhint{margin:8px 0 0;text-align:center;font-size:12.5px;color:var(--mut)}
 
-#sheet .sbody{flex:1;overflow:auto;padding:14px 16px 6px;scrollbar-width:thin}
-#sheet .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+#sheet .sbody,#sim .sbody{flex:1;overflow:auto;padding:14px 16px 6px;scrollbar-width:thin}
+#sheet .top,#sim .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .seg{display:flex;gap:5px}
 .seg div{flex:1;font-size:10px;font-weight:700;color:#8b95a3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.01em}
 .seg i{display:block;height:5px;border-radius:3px;background:rgba(24,32,43,.1);margin-bottom:5px;position:relative;overflow:hidden}
@@ -85,8 +85,8 @@ body{background-color:#e3eaf1;
 .x:hover{background:rgba(24,32,43,.12)}
 .eyeb{display:flex;align-items:center;gap:8px;margin:6px 0 2px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ac)}
 .badge{font-style:normal;background:var(--ac);color:#fff;border-radius:7px;padding:2px 7px;font-size:11.5px;letter-spacing:.02em}
-#sheet h2{margin:2px 0 6px;font-size:19px;letter-spacing:-.015em;line-height:1.25}
-#sheet p{margin:0 0 10px;font-size:14px;line-height:1.55;color:#323d4b}
+#sheet h2,#sim h2{margin:2px 0 6px;font-size:19px;letter-spacing:-.015em;line-height:1.25}
+#sheet p,#sim p{margin:0 0 10px;font-size:14px;line-height:1.55;color:#323d4b}
 .chk{list-style:none;padding:0;margin:4px 0 4px}
 .chk li{position:relative;padding-left:26px;margin-bottom:7px;font-size:14px;line-height:1.4;color:#323d4b}
 .chk li:before{content:"";position:absolute;left:2px;top:2px;width:15px;height:15px;border:2px solid var(--ac);border-radius:5px}
@@ -187,6 +187,67 @@ ul.ticks li:before{content:"";position:absolute;left:3px;top:6px;width:11px;heig
 .tli .co{font-size:12.5px}
 .sbtn{border:0;background:var(--amber);color:#18202b;font:700 14px inherit;font-family:inherit;padding:11px 18px;border-radius:12px;cursor:pointer}
 .sbtn.ghost{background:#eef1f5;padding:6px 12px;font-size:12px;margin-top:2px}
+
+.cta.alt{background:var(--amber);color:#18202b;box-shadow:0 6px 18px rgba(240,160,32,.35);margin-top:8px}
+.note3d{position:fixed;left:0;top:0;pointer-events:none;background:#fff;color:#18202b;font-size:11.5px;font-weight:700;line-height:1.3;padding:5px 10px;border-radius:10px;max-width:170px;text-align:center;transform:translate(-50%,-135%);box-shadow:0 4px 14px rgba(25,40,70,.28);border:1.5px solid var(--amber);z-index:3}
+.note3d:after{content:"";position:absolute;left:50%;bottom:-6px;width:9px;height:9px;background:#fff;border-right:1.5px solid var(--amber);border-bottom:1.5px solid var(--amber);transform:translateX(-50%) rotate(45deg)}
+.hud{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0 4px}
+.hud div{background:#18202b;color:#fff;border-radius:11px;padding:7px 4px 6px;text-align:center}
+.hud b{display:block;font-size:15px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.hud span{display:block;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9fb0c4;margin-top:1px}
+.simnote{font-size:11.5px;color:var(--mut);margin:6px 0 2px;line-height:1.4}
+.sdots{display:flex;gap:3px;margin:2px 0 8px}
+.sdots i{flex:1;height:5px;border-radius:3px;background:rgba(24,32,43,.1);position:relative;overflow:hidden;cursor:pointer}
+.sdots i.done{background:var(--ac)}
+.sdots i.act:after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--p);background:var(--ac)}
+#sim .nav button.ic{flex:none;width:48px;padding:12px 0}
+#sim .nav button.spd{flex:none;width:54px;padding:12px 0;font-size:13px}
+#sim .nav{align-items:stretch}
+
+/* ---- v4.1 layout refinements: one grid for header, panels and rail ---- */
+:root{--gap:16px;--panelw:384px;--r:20px}
+#top{border-radius:var(--r);height:52px;padding:0 9px 0 9px}
+#home,#sheet,#sim{border-radius:var(--r)}
+#rail{border-radius:var(--r)}
+#home{padding:20px 18px 16px;gap:0}
+#home .eyebrow{margin-bottom:2px}
+#home h1{font-size:23px;margin:2px 0 8px}
+#home p.desk{margin:0 0 14px}
+.acts{display:grid;gap:8px}
+.acts .cta{margin:0!important;min-height:58px;padding:10px 16px;justify-content:flex-start;gap:12px;text-align:left}
+.acts .cta .ico{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.16)}
+.acts .cta.alt .ico{background:rgba(24,32,43,.12)}
+.acts .cta .ico svg{width:15px;height:15px}
+.acts .cta b{display:block;font-size:15px;line-height:1.2}
+.acts .cta small{display:block;font-size:11.5px;font-weight:600;opacity:.75;margin-top:2px;line-height:1.2}
+.qrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.qrow button{min-width:0;padding:10px 6px}
+#home .mhint{margin:10px 0 0}
+#home .foot{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+#sheet .sbody,#sim .sbody{padding:16px 18px 8px}
+#sheet .nav,#sim .nav{padding:12px 18px 16px}
+#sim .nav{gap:8px}
+#sim .nav button.pri{flex:1 1 auto;min-width:0}
+#sim .hud{margin:12px 0 6px}
+.modal-pad{padding:0}
+#infoOv .modal{width:min(960px,100%)}
+#infoBody{padding:8px 28px 56px}
+#infoBody h3{margin:26px 0 10px;padding-top:2px}
+#infoBody h3:first-child{margin-top:16px}
+.tabs{padding:8px 22px 12px}
+@media (min-width:900px){
+  #top{left:var(--gap);top:var(--gap);right:auto;width:var(--panelw);max-width:none}
+  #home,#sheet,#sim{left:var(--gap);top:calc(var(--gap) + 52px + 12px);width:var(--panelw)}
+  #sheet,#sim{max-height:calc(100vh - 2*var(--gap) - 52px - 12px)}
+  #rail{right:var(--gap);top:50%;transform:translateY(-50%)}
+  #toast,#coach{top:calc(var(--gap) + 6px)}
+}
+@media (max-width:899px){
+  #top{left:10px;right:74px;max-width:none;border-radius:var(--r)}
+  #rail{right:10px;top:max(10px,env(safe-area-inset-top))}
+  #home,#sheet,#sim{left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom))}
+}
+@media (max-width:899px) and (max-height:700px){#sheet,#sim{max-height:46vh}}
 </style>
 </head>
 <body>
@@ -211,12 +272,16 @@ ul.ticks li:before{content:"";position:absolute;left:3px;top:6px;width:11px;heig
   <div class="eyebrow">WI 02 · ChE Laboratory 2</div>
   <h1>Pressure Leaf Filter</h1>
   <p class="desk">Explore the lab's pressure leaf filter in 3D. Tap any part to learn what it does, or follow the guided procedure from setup to backwash.</p>
-  <button class="cta" id="bStart"><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>Start procedure</button>
+  <div class="acts">
+    <button class="cta alt" id="bSim"><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg></span><span><b>Run simulation</b><small>Watch a full filtration and backwash cycle</small></span></button>
+    <button class="cta" id="bStart"><span class="ico"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg></span><span><b>Start procedure</b><small>Step-by-step guide from setup to records</small></span></button>
+  </div>
   <div class="qrow desk"><button data-tab="principle">How it works</button><button data-tab="components">Components</button><button data-tab="safety">Safety</button></div>
   <p class="mhint">or tap any part to learn what it does</p>
   <div class="foot desk"><i></i><span id="homeFoot"></span></div>
 </section>
 <div id="sheet" class="glass hidden"></div>
+<div id="sim" class="glass hidden"></div>
 <div id="infoOv" class="hidden"></div>
 <div id="labels"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -253,14 +318,12 @@ window.CONTENT = {
   valveNote: 'Valve numbers follow the manual (§10.2). Open = handle parallel to the pipe.',
   parts: {
     tank:      { name: 'Conditioning Tank', label: 'Conditioning tank', tag: 'repair', cam: { el: 1.0 },
-      fn: 'Holds the process feed before filtration and can also be used to prepare the feed (water and coconut pulp). It supplies the gear pump.',
-      spec: 'Stainless steel · 65 L · Ø 0.385 m × 0.56 m high · 0.8 mm wall',
+      fn: 'Holds the process feed before filtration and is used to prepare it (1.0 kg coconut pulp in water). A hole in the middle of the tank floor feeds a pipe that runs forward under the tank and out past its front edge on the pump side. There a tee sends the feed on to the gear pump and, through a short branch, to the tank drain.',
+      spec: 'Stainless steel · 65 L · Ø 15 in (0.381 m) × 58.7 cm high · feet 16.5 cm',
       status: 'Complete and in good condition, but heavy rust near the drain makes the outflow rusty. Rust removal and an anti-rust coating are planned.' },
-    tankvalve: { name: 'Tank Outlet Valve', label: 'Tank valve', tag: 'service',
-      fn: 'Ball valve at the tank outlet. Open it to let the feed flow from the conditioning tank to the pump suction; close it at shutdown.',
-      status: 'Seized valves were noted in the diagnosis: clean, lubricate or replace.' },
     pump:      { name: 'Gear Pump', label: 'Gear pump', tag: 'service',
-      fn: 'A positive-displacement pump that moves the feed from the conditioning tank into the pressure vessel and builds the pressure that drives filtration. Never run it with its outlet path closed: pressure can rise very quickly.',
+      fn: 'A positive-displacement pump that moves the feed from the conditioning tank into the pressure vessel and builds the pressure that drives filtration. Never run it with its outlet path closed.',
+      spec: 'Length 34 cm · height 30 cm · belt-driven by the motor',
       status: 'Runs when powered, but could not yet draw and distribute water. The flow path is being checked. Needs cleaning and lubrication.' },
     motor:     { name: 'Electric Motor', label: 'Motor', tag: 'check',
       fn: 'Drives the gear pump through a belt and pulley.',
@@ -269,53 +332,55 @@ window.CONTENT = {
       fn: 'Transmits power from the motor to the gear pump. The belt must be intact and the pulley clear of hands and clothing before starting.',
       status: 'Belt has minor damage and the pulley squeaks. A new V-belt, cleaning and lubrication are planned.' },
     frame:     { name: 'Pump Frame', label: null, tag: 'ok',
-      fn: 'Wheeled steel frame that carries the motor and gear pump so the unit can be moved.',
+      fn: 'Steel support frame that carries the motor and gear pump, with black stopper-like feet for stable positioning.',
       status: 'No major problem recorded.' },
-    switch:    { name: 'Breaker Switch', label: 'Breaker switch', tag: 'repair', cam: { az: 0.2, el: 0.3 },
-      fn: 'Breaker box mounted above the motor. It turns the motor on and off. The operator stays at the switch during a run and power is cut here in an emergency.',
+    switch:    { name: 'Circuit Breaker', label: 'Circuit breaker', tag: 'repair', cam: { az: -0.2, el: 0.3 },
+      fn: 'Circuit breaker (13 × 7 cm) with the on/off toggles and an orange button, mounted against the electrical box. It turns the pump motor on and off.',
       status: 'Has no protective housing and the wires are taped to the pipes. A weatherproof enclosure and secured wiring are proposed.' },
-    check:     { name: 'Swing Check Valve', label: 'Check valve', tag: 'tbc',
-      fn: 'One-way valve between the pump and the pressure vessel. It prevents backflow and loss of pressure inside the vessel.',
-      status: 'Listed in the manual (§8.1) but not recorded during inspection.' },
     v1:        { name: 'Valve 1 · Feed Inlet', label: 'V1', tag: 'service',
       fn: 'OPEN during filtration so the feed from the pump enters the pressure vessel. CLOSED during backwashing.' },
     v2:        { name: 'Valve 2 · Backwash Inlet', label: 'V2', tag: 'service',
-      fn: 'CLOSED during filtration. OPENED for backwashing so water flows in reverse through the filter leaves.' },
+      fn: 'On the long pipe, just after it leaves the pump riser beside the breaker. CLOSED during filtration. OPENED for backwashing to send the pump flow along the long pipe to the far end of the vessel.' },
     v3:        { name: 'Valve 3 · Backwash Outlet', label: 'V3', tag: 'service',
-      fn: 'CLOSED during filtration. OPENED for backwashing to let the backwash water and loosened solids leave the vessel.' },
+      fn: 'On the vertical drop pipe (about 50 cm, open end) at the far end of the long pipe. CLOSED during filtration. OPENED for backwashing so the water leaves to disposal.' },
     v4:        { name: 'Valve 4 · Filtrate Outlet', label: 'V4', tag: 'service',
-      fn: 'OPEN during filtration so the filtrate can leave the leaf manifold towards the filtrate faucet. CLOSED during backwashing.' },
-    faucet:    { name: 'Filtrate Faucet', label: 'Filtrate faucet', tag: 'ok', cam: { az: -0.55, el: 0.3 },
-      fn: 'Clear plastic tap at the end of the filtrate line, beside a vessel leg. The filtrate is collected here in a container. It stays closed until the pump is running and is closed again before shutdown.' },
+      fn: 'On the horizontal pipe at the top of the filtrate line, beside the vessel. OPEN during filtration; CLOSED during backwashing.' },
+    faucet:    { name: 'Filtrate Faucet', label: 'Filtrate faucet', tag: 'ok', cam: { az: 0.55, el: 0.3 },
+      fn: 'Clear plastic tap at the bottom of the vertical filtrate pipe (36 cm), which rises from a low port on the vessel next to one of its legs. The filtrate is collected here in a container. It stays closed until the pump is running and is closed again before shutdown.' },
     drain:     { name: 'Vessel Drain Valve', label: 'Vessel drain', tag: 'service',
-      fn: 'Drains the pressure vessel from the bottom of its cone. Closed during filtration; opened to drain only after the pressure has been released.',
+      fn: 'Drains the pressure vessel from the lowest point of its dished bottom. Closed during filtration; opened to drain only after the pressure has been released.',
       status: 'Seized valves were noted in the diagnosis: clean, lubricate or replace.' },
     vessel:    { name: 'Pressure Vessel', label: 'Pressure vessel', tag: 'repair',
       fn: 'Closed vessel where pressure builds up. That pressure is the driving force that pushes the liquid through the filter leaves while the solids stay behind.',
-      spec: 'Round vessel with cone bottom on three legs · bolted domed cover',
+      spec: 'Ø 40 cm · 97 cm overall height · dished bottom · three 54 cm legs · bolted cover',
       status: 'The rubber gasket between cover and vessel was found broken, and the cover bolts and the internal leaf supports are rusted. A chemical-resistant gasket, stainless bolts and rust treatment are planned.' },
     lid:       { name: 'Cover, Gasket & Bolts', label: 'Vessel cover', tag: 'repair',
-      fn: 'Seals the pressure vessel. The gasket must be seated and every clamp bolt tight before running. Open the cover only when the gauge reads zero and the instructor allows it.',
+      fn: 'Seals the pressure vessel; the cover is bolted around its flange. The gasket must be seated and every cover bolt tight before running. Open the cover only when the gauge reads zero and the instructor allows it.',
       status: 'Gasket broken and bolts rusted: replace before the test run.' },
-    leaves:    { name: 'Filter Leaves (×5)', label: 'Filter leaves', tag: 'service', cam: { az: 0.5, el: 0.5 },
+    leaves:    { name: 'Filter Leaves (×5)', label: 'Filter leaves', tag: 'service', cam: { az: -0.5, el: 0.5 },
       fn: 'Rectangular leaves hung on a tubular manifold. Each has a riveted metal frame, a fine filter mesh and a diamond-pattern expanded-wire support. Liquid passes through while solids collect on the surface as a cake that also acts as an extra filter layer.',
       spec: 'G.I. sheet frame · 324-mesh screen · 4-mesh expanded wire · 1500-mesh filter cloth · 5 leaves · 0.2547 m² total area',
       status: 'Screen, case and cloth look serviceable but dirty. The supporting parts inside are rusted. Clean, inspect and replace damaged leaves.' },
     gauge:     { name: 'Pressure Gauge', label: 'Pressure gauge', tag: 'check',
       fn: 'Shows the pressure inside the vessel. The observer watches it during the whole run. The limit set by the instructor is marked on it, and it must read zero before the cover is opened.',
       status: 'The only instrument found. It looked good but has not been tested yet.' },
-    vent:      { name: 'Air Vent', label: 'Air vent', tag: 'tbc',
-      fn: 'Small fitting on the cover used to release pressure and air from the top of the vessel. Together with the drain it is used to depressurize until the gauge reads zero.',
-      status: 'Not described in the manual.' },
+    swingbolt: { name: 'Swing Bolt', label: 'Swing bolt', tag: 'ok',
+      fn: 'Hinged eye bolt on the rim of the vessel cover, directly behind the pressure gauge. A pivoting eye carries a threaded rod with a washer and nut.' },
+    tankdrain: { name: 'Tank Drain Valve', label: 'Tank drain', tag: 'service',
+      fn: 'Lever-handled valve on the tank drain, just outside the pump-side wall of the conditioning tank. A short pipe from the tee turns down through an elbow and the valve, and ends in an open discharge pipe angled toward the floor. Closed during the run; used to empty the tank.' },
+    ebox:      { name: 'Electrical Box', label: 'Electrical box', tag: 'ok', cam: { az: -0.2, el: 0.3 },
+      fn: 'Gray metal electrical box mounted on the short pipe stub above the pump riser. It is wired to the circuit breaker that supplies power to the pump; the cable runs from it down to the motor.' },
+    regulator: { name: 'Voltage Regulator', label: 'Voltage regulator', tag: 'service',
+      fn: 'The equipment is plugged into the voltage regulator before the run, and unplugged after the pump is switched off.' },
     piping:    { name: 'Piping & Fittings', label: null, tag: 'check',
       fn: 'Pipes and fittings that carry the feed from the tank through the pump to the vessel, and the filtrate out of the vessel. Extra branches serve backwashing.',
       status: 'Joints are secure and no leaks were seen, but the insides are probably rusty after long inactivity. The 3D routing is schematic.' }
   },
 
   partGroups: [
-    { name: 'Feed system', parts: ['tank', 'tankvalve', 'pump', 'motor', 'belt', 'frame', 'switch'] },
-    { name: 'Pressure vessel', parts: ['vessel', 'lid', 'leaves', 'gauge', 'vent', 'drain'] },
-    { name: 'Valves & piping', parts: ['v1', 'v2', 'v3', 'v4', 'check', 'piping'] },
+    { name: 'Feed system', parts: ['tank', 'tankdrain', 'pump', 'motor', 'belt', 'frame', 'switch', 'ebox', 'regulator'] },
+    { name: 'Pressure vessel', parts: ['vessel', 'lid', 'leaves', 'gauge', 'swingbolt', 'drain'] },
+    { name: 'Valves & piping', parts: ['v1', 'v2', 'v3', 'v4', 'piping'] },
     { name: 'Filtrate collection', parts: ['faucet'] }
   ],
 
@@ -325,70 +390,83 @@ window.CONTENT = {
     { key: 'B', name: 'Operation', color: '#e8981a' },
     { key: 'C', name: 'Shutdown',  color: '#3f9d63' },
     { key: 'D', name: 'Backwash',  color: '#8267cf' },
+    { key: 'E', name: 'Records',   color: '#2a9ca6' },
     { key: 'G', name: 'Group',     color: '#7c8594' }
   ],
 
   /* text = main instruction (HTML ok) · warn = safety callout · tbc = to be confirmed · note = hint */
   steps: [
-    { id: 'A1', sec: 'A', title: 'Wear PPE and clear the area', parts: [],
-      text: 'Everyone near the equipment wears PPE: safety glasses, gloves and closed shoes. Keep the area clear and dry.<br>Assign roles: <b>one operator at the switch, one observer at the gauge, one person ready to cut power</b>.',
+    { id: 'A1', sec: 'A', title: 'Wear PPE and sign the logbook', parts: ['regulator'],
+      text: 'Wear the required PPE (gloves, goggles, laboratory gown, mask and closed shoes) and review the safety section. Sign the <b>Equipment Usage / Borrower’s Logbook</b> and record the condition of the equipment before use.',
       state: {} },
-    { id: 'A2', sec: 'A', title: 'Do the pre-operation check', parts: ['lid', 'belt', 'switch', 'gauge'],
-      text: '<ul class="chk"><li>Gasket seated and all cover bolts tight</li><li>No leaks at the joints</li><li>Switch enclosure closed, wiring secured, cord and plug undamaged</li><li>Belt intact and pulley clear</li><li>Gauge reads zero</li></ul>',
-      warn: 'The instructor signs off before the equipment is energized.',
+    { id: 'A2', sec: 'A', title: 'Inspect the components', parts: ['lid', 'ebox', 'switch', 'regulator', 'gauge'],
+      text: 'Inspect the hoses, valves, seals, lid gasket, pump switch enclosure and power cord for damage, leaks or wear.',
+      warn: 'If any defect is found, do not operate the equipment. Report it to the laboratory technician.',
       state: {} },
-    { id: 'A3', sec: 'A', title: 'Set the valves for filtration', parts: ['v1', 'v4', 'v2', 'v3', 'drain', 'faucet'],
-      text: 'Open <b>Valve 1</b> (feed inlet) and <b>Valve 4</b> (filtrate outlet). Keep <b>Valve 2</b> and <b>Valve 3</b> (backwash) closed, and keep the vessel drain and the filtrate faucet closed.',
-      note: 'A valve is open when its handle is parallel to the pipe.',
-      state: { tankvalve: 1, v1: 1, v4: 1 } },
-    { id: 'A4', sec: 'A', title: 'Prepare the feed', parts: ['tank'],
-      text: 'Prepare the feed in the conditioning tank: <b>4.6 L of water</b>, then <b>2.4 kg of coconut pulp</b>. Make sure there is enough liquid for the pump to draw.',
-      note: 'For a first test run, use clean water only.',
-      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.35, feed: 'pulp' } },
+    { id: 'A3', sec: 'A', title: 'Prepare the pulp and water', parts: ['tank'],
+      text: 'Strain the coconut pulp to remove shell pieces and large lumps. Weigh <b>1.0 kg</b> of the strained pulp and measure <b>4.6 L</b> of clean water. Record the actual values as the Initial Weight of Solids and Initial Volume of Liquid on the Data Sheet, and measure the water temperature.',
+      state: {} },
+    { id: 'A4', sec: 'A', title: 'Set the valves for filtration', parts: ['v1', 'v4', 'v2', 'v3', 'drain', 'faucet'],
+      text: 'Open <b>Valve 1</b> and <b>Valve 4</b>. Keep <b>Valve 2</b> and <b>Valve 3</b> closed. Make sure the vessel drain and the filter faucet are closed.',
+      note: 'A ball valve is open when its handle is parallel to the pipe and closed when the handle is perpendicular to it.',
+      state: { v1: 1, v4: 1 } },
+    { id: 'A5', sec: 'A', title: 'Fill the conditioning tank', parts: ['tank'],
+      text: 'Pour the <b>4.6 L of water</b> into the conditioning tank, then add the coconut pulp gradually while stirring until the mixture is even.',
+      state: { v1: 1, v4: 1, tank: 0.086, feed: 'pulp' } },
+    { id: 'A6', sec: 'A', title: 'Plug in and place the container', parts: ['regulator', 'faucet'], cam: { az: 0.5, el: 0.3 },
+      text: 'Plug the pump cord into the <b>voltage regulator</b> and place the empty graduated container under the filter faucet.',
+      state: { v1: 1, v4: 1, tank: 0.086, feed: 'pulp' } },
 
-    { id: 'B1', sec: 'B', title: 'Switch on the pump', parts: ['pump', 'switch'],
-      text: 'Confirm the flow path to the vessel and the filtrate outlet is open, then plug in the cord and turn on the breaker. Stand to the side, not in front of the cover.',
-      warn: 'Never run the gear pump with its outlet path closed.',
-      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.35, feed: 'pulp', pump: 1, gauge: 0.12 } },
-    { id: 'B2', sec: 'B', title: 'Raise the pressure gradually', parts: ['gauge'],
-      text: 'Let the pressure rise slowly while the observer watches the gauge. Stay within the limit set by the instructor and marked on the gauge.',
-      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.33, feed: 'pulp', pump: 1, gauge: 0.5 } },
-    { id: 'B3', sec: 'B', title: 'Collect the filtrate', parts: ['faucet', 'leaves'], cam: { az: -0.5, el: 0.3 },
-      text: 'Open the filtrate faucet over a clean container and start the timer. The pressure pushes the liquid through the leaves; the solids stay on them as a cake.',
-      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.3, feed: 'pulp', pump: 1, gauge: 0.5, faucet: 1, beaker: 0.3, xray: 0.85 } },
-    { id: 'B4', sec: 'B', title: 'Monitor the run', parts: ['gauge', 'vessel', 'pump'],
-      text: 'Watch for: pressure above the limit or a sudden drop, leaks at the cover or joints, pump or pulley noise, a slipping belt, hot parts, cloudy filtrate, or no filtrate flow.',
-      warn: 'Stop at any of these. Do not tighten bolts while the vessel is pressurized.',
-      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.25, feed: 'pulp', pump: 1, gauge: 0.55, faucet: 1, beaker: 0.6, xray: 0.4 } },
-    { id: 'B5', sec: 'B', title: 'Record the results', parts: ['faucet'],
-      text: 'On data sheet WI-CHE-001-F1 record the weight of solids (kg), initial liquid volume (L), filtration time (min) and filtrate volume (L).<br><b>% Recovery</b> = filtrate volume ÷ initial liquid volume × 100<br><b>Filtration rate</b> = filtrate volume ÷ filtration time<br>Report to the nearest 0.01.',
-      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.2, feed: 'pulp', pump: 1, gauge: 0.55, faucet: 1, beaker: 0.9 } },
+    { id: 'B1', sec: 'B', title: 'Turn on the pump switch', parts: ['switch', 'ebox', 'pump', 'gauge'],
+      text: 'Turn on the pump switch and read the pressure gauge. The pump starts and the pressure builds up in the vessel. Record the actual reading in kPa.',
+      warn: 'Stay beside the equipment, not in front of the cover, and watch the gauge.',
+      state: { v1: 1, v4: 1, tank: 0.084, feed: 'pulp', sw: 1, pump: 1, gauge: 0.5, vessel: 1.7, xray: 0.85 } },
+    { id: 'B2', sec: 'B', title: 'Open the faucet and start the stopwatch', parts: ['faucet'], cam: { az: 0.5, el: 0.3 },
+      text: 'Open the filter faucet and <b>start the stopwatch when the first filtrate flows</b>. The pressure pushes the liquid through the leaves; the solids stay on them as a cake.',
+      state: { v1: 1, v4: 1, tank: 0.08, feed: 'pulp', sw: 1, pump: 1, gauge: 0.5, vessel: 1.7, faucet: 1, beaker: 0.05, cake: 0.25, xray: 0.85 } },
+    { id: 'B3', sec: 'B', title: 'Read every 30 seconds', parts: ['faucet', 'gauge'], cam: { az: 0.5, el: 0.3 },
+      text: 'Every <b>30 seconds</b>, read the cumulative filtrate volume (to the nearest 0.05 L) and the pressure gauge, and record them in Table 4. Note any cloudy filtrate, leak or pressure drift under Remarks.<br>If the container fills, pour it into the spare container and keep counting the total.',
+      state: { v1: 1, v4: 1, tank: 0.05, feed: 'pulp', sw: 1, pump: 1, gauge: 0.5, vessel: 1.7, faucet: 1, beaker: 0.4, cake: 0.6, xray: 0.85 } },
+    { id: 'B4', sec: 'B', title: 'Decide when to stop', parts: ['faucet', 'gauge'], cam: { az: 0.5, el: 0.3 },
+      text: 'Stop the run when <b>only drops come out</b>, when the volume <b>does not change between two readings</b>, or after <b>15 minutes</b>. Record the filtration time and the volume of filtrate on the Data Sheet.',
+      state: { v1: 1, v4: 1, tank: 0.03, feed: 'pulp', sw: 1, pump: 1, gauge: 0.5, vessel: 1.5, faucet: 1, beaker: 0.8, cake: 1, xray: 0.85 } },
 
-    { id: 'C1', sec: 'C', title: 'Switch off and unplug the pump', parts: ['switch', 'pump'],
-      text: 'Switch the pump off and unplug it <b>before</b> touching any valve.',
-      warn: 'Closing the outlet on a running gear pump can overpressurize the lines.',
-      state: { tankvalve: 1, v1: 1, v4: 1, tank: 0.2, feed: 'pulp', pump: 0, gauge: 0.5, faucet: 1, beaker: 0.9 } },
-    { id: 'C2', sec: 'C', title: 'Release the pressure and close the valves', parts: ['vent', 'gauge'],
-      text: 'Release the pressure through the vent or drain until the <b>gauge reads zero</b>. Then close the filtrate faucet and all valves.',
-      state: { tank: 0.2, feed: 'pulp', gauge: 0, beaker: 0.9 } },
-    { id: 'C3', sec: 'C', title: 'Drain, clean and dry', parts: ['drain', 'lid', 'tank'],
-      text: 'Drain the vessel and the tank. Clean the equipment, <b>wipe it dry to limit rusting</b>, check for leaks and write the time, observations and problems in the logbook.',
-      warn: 'Open the cover only when the gauge reads zero and the instructor allows it.',
-      state: { drain: 1, tank: 0, lid: 1, beaker: 0.9 } },
+    { id: 'C1', sec: 'C', title: 'Switch off and unplug first', parts: ['switch', 'regulator', 'pump'],
+      text: 'Switch off the pump and <b>unplug it first</b>, before touching any valve.',
+      state: { v1: 1, v4: 1, tank: 0.03, feed: 'pulp', sw: 0, pump: 0, gauge: 0.5, vessel: 1.5, faucet: 1, beaker: 0.8, cake: 1, xray: 0.85 } },
+    { id: 'C2', sec: 'C', title: 'Close V1 and V4, then release the pressure', parts: ['v1', 'v4', 'drain', 'gauge'],
+      text: 'Close <b>Valve 1</b> and <b>Valve 4</b>. Then <b>slowly open the vessel drain</b> to release the remaining pressure until the gauge reads zero.',
+      state: { tank: 0.03, feed: 'pulp', drain: 1, gauge: 0, vessel: 0.4, faucet: 1, beaker: 0.8, cake: 1, xray: 0.85 } },
 
-    { id: 'D1', sec: 'D', title: 'Fill the tank with clean water', parts: ['tank'],
-      text: 'Backwashing removes debris and trapped particles from the filter medium by reversing the flow. Start with every valve closed and the pump off, then fill the conditioning tank with clean water.',
-      state: { tank: 0.6, feed: 'water' } },
-    { id: 'D2', sec: 'D', title: 'Set the valves for backwash', parts: ['v2', 'v3', 'v1', 'v4', 'drain', 'faucet'],
-      text: 'Close <b>Valve 1</b>, <b>Valve 4</b>, the vessel drain and the filtrate faucet. Open <b>Valve 2</b> and <b>Valve 3</b>.',
-      state: { tankvalve: 1, tank: 0.6, feed: 'water', v2: 1, v3: 1 } },
-    { id: 'D3', sec: 'D', title: 'Run the backwash', parts: ['pump', 'leaves'],
-      text: 'Plug in and turn on the pump. Water now flows backwards through the leaves and carries the cake out through Valve 3. Watch the gauge and leaks as in a normal run.',
-      state: { tankvalve: 1, tank: 0.45, feed: 'water', v2: 1, v3: 1, pump: 1, gauge: 0.3, xray: 0.85 } },
-    { id: 'D4', sec: 'D', title: 'Stop, depressurize and inspect', parts: ['switch', 'lid', 'leaves'],
-      text: 'Switch off and unplug the pump, release the pressure until the gauge reads zero, close Valves 2 and 3 and drain. Then inspect and clean the leaves and record what was done in the logbook.',
-      warn: 'Open the cover only with the instructor’s permission.',
-      state: { tank: 0.2, feed: 'water', lid: 1, leaf: 1 } },
+    { id: 'D1', sec: 'D', title: 'Check the pump is off', parts: ['switch', 'gauge'],
+      text: 'Backwash after every filtration run. Make sure the pump is switched off and unplugged and that the pressure gauge reads <b>zero</b>.',
+      state: { tank: 0.03, feed: 'pulp', drain: 1, gauge: 0, vessel: 0.05, faucet: 1, beaker: 0.8, cake: 1 } },
+    { id: 'D2', sec: 'D', title: 'Empty the tank and add 10 L of water', parts: ['tank'],
+      text: 'Empty the conditioning tank of the remaining mixture, then fill it with about <b>10 L of clean water</b>.',
+      state: { tank: 0.154, feed: 'water', drain: 1, gauge: 0, faucet: 1, beaker: 0.8, cake: 1 } },
+    { id: 'D3', sec: 'D', title: 'Close the filtration line', parts: ['v1', 'v4', 'drain', 'faucet'],
+      text: 'Close <b>Valve 1</b>, <b>Valve 4</b>, the vessel drain and the filter faucet. These belong to the filtration line and must be closed so that the water flows in the reverse direction. The filter leaves stay inside the vessel.',
+      state: { tank: 0.154, feed: 'water', cake: 1, beaker: 0.8 } },
+    { id: 'D4', sec: 'D', title: 'Open valves 2 and 3', parts: ['v2', 'v3'],
+      text: 'Open <b>Valve 2</b> and <b>Valve 3</b>.',
+      state: { tank: 0.154, feed: 'water', v2: 1, v3: 1, cake: 1, beaker: 0.8 } },
+    { id: 'D5', sec: 'D', title: 'Run the pump for 2 to 3 minutes', parts: ['regulator', 'switch', 'pump', 'leaves'],
+      text: 'Plug the pump cord into the voltage regulator and turn on the pump. Let it run for <b>2 to 3 minutes</b>. Water flows backwards through the leaves and out through Valve 3.',
+      state: { tank: 0.09, feed: 'water', v2: 1, v3: 1, sw: 1, pump: 1, gauge: 0.3, vessel: 1.5, cake: 0.3, beaker: 0.8, xray: 0.85 } },
+    { id: 'D6', sec: 'D', title: 'Switch off, close V2 and V3, release pressure', parts: ['switch', 'v2', 'v3', 'gauge'],
+      text: 'Switch off and <b>unplug the pump first</b>. Then close <b>Valve 2</b> and <b>Valve 3</b> and release the remaining pressure until the gauge reads zero.',
+      state: { tank: 0.05, feed: 'water', gauge: 0, vessel: 0.1, cake: 0.1, beaker: 0.8 } },
+    { id: 'D7', sec: 'D', title: 'Open the vessel and clean the leaves', parts: ['lid', 'leaves'],
+      text: 'Open the vessel and remove the loosened cake with the <b>plastic scraper</b>. Rinse the leaves and gently brush the filter cloth with the <b>soft brush</b>. Check the cloth for tears or clogging and check that the lid gasket is seated, then close the vessel firmly.',
+      warn: 'Use no metal tools on the filter cloth.',
+      state: { tank: 0.05, feed: 'water', lid: 1, leaf: 1, beaker: 0.8 } },
+    { id: 'D8', sec: 'D', title: 'Reset the valves', parts: ['v1', 'v4', 'v2', 'v3'],
+      text: 'Reset the valves for filtration: <b>Valves 1 and 4 open</b>, <b>Valves 2 and 3 closed</b>. Dispose of the cake and the wash water in the organic waste.',
+      state: { v1: 1, v4: 1, tank: 0.05, feed: 'water', beaker: 0.8 } },
+
+    { id: 'E1', sec: 'E', title: 'Complete the records', parts: [],
+      text: 'Complete the Data Sheet. Clean the equipment, enter the maintenance in the <b>Maintenance Log</b>, report any defect in the <b>Service and Repair Record</b>, and sign out in the <b>Logbook</b>.<br>For a second trial, repeat from preparing a fresh charge (1.0 kg of pulp and 4.6 L of water) and backwash again. Comparing the flux of the two trials gives the flux recovery.',
+      state: {} },
 
     { id: 'G', sec: 'G', type: 'group', title: 'Group members', parts: [], text: '', state: {} }
   ],
@@ -425,12 +503,12 @@ window.CONTENT = {
       '<div class="card"><b>Leaks</b><span>At the cover, gasket and joints</span></div>' +
       '<div class="card"><b>Valves</b><span>Response; open = handle parallel to the pipe</span></div></div>' +
       '<h3>Test run procedure</h3>' +
-      '<ol class="steps"><li>Complete the pre-operation check and get instructor sign-off.</li>' +
-      '<li>Use <b>clean water only</b> in the conditioning tank.</li>' +
-      '<li>Confirm valve positions and the flow path, then start the pump.</li>' +
-      '<li>Check the pump can draw water and push it towards the vessel.</li>' +
-      '<li>Raise pressure gradually; record flow, pressure, leaks and noise.</li>' +
-      '<li>Shut down: pump off and unplugged, release pressure, close valves, drain.</li></ol>' +
+      '<ol class="steps"><li>Sign the logbook and inspect the components.</li>' +
+      '<li>Strain and weigh <b>1.0 kg</b> of pulp, measure <b>4.6 L</b> of water, and set Valves 1 and 4 open, 2 and 3 closed.</li>' +
+      '<li>Mix the feed in the tank, plug into the voltage regulator and turn on the pump switch.</li>' +
+      '<li>Open the filter faucet, start the stopwatch at the first filtrate, and read volume and pressure <b>every 30 seconds</b>.</li>' +
+      '<li>Stop when only drops come out, the volume stops changing, or after <b>15 minutes</b>.</li>' +
+      '<li>Switch off and unplug first, close Valves 1 and 4, slowly open the vessel drain until the gauge reads zero, then backwash.</li></ol>' +
       '' },
     { key: 'maintenance', name: 'Maintenance', html:
       '<h3>Maintenance</h3>' +
@@ -447,22 +525,22 @@ window.CONTENT = {
       '<details><summary>Low flow rate</summary><p>Leaves may be clogged. Switch off, check for fine particles or cake build-up, clean or replace leaves.</p></details>' +
       '<details><summary>Poor filtrate quality</summary><p>Filter media may be torn. Inspect and replace damaged leaves.</p></details>' +
       '<details><summary>Clogged pipeline</summary><p>Little or no filtrate. Check blockages and leaks, clean the piping, re-check the feed ratio.</p></details>' +
-      '<details><summary>Pump runs but does not draw water</summary><p>Check the tank valve, the valve positions, the piping and the leaves for blockage.</p></details>' +
+      '<details><summary>Pump runs but does not draw water</summary><p>Check the valve positions, the piping and the leaves for blockage.</p></details>' +
       '<details><summary>Leaking cover</summary><p>Gasket worn or bolts rusted. Release pressure, then replace the gasket and bolts.</p></details>' +
       '<details><summary>Squeaking pulley or slipping belt</summary><p>Clean, lubricate or replace the pulley and V-belt.</p></details></div>' },
     { key: 'safety', name: 'Safety', html:
-      '<div class="scard"><h4>Before running</h4><ul class="ticks"><li>Only trained users operate the unit. Wear PPE: safety glasses, gloves, closed shoes.</li>' +
-      '<li>Pre-operation check signed off by the instructor before the equipment is energized.</li>' +
+      '<div class="scard"><h4>Before running</h4><ul class="ticks"><li>Only trained users operate the unit. Wear PPE: gloves, goggles, laboratory gown, mask and closed shoes.</li>' +
+      '<li>Inspect the components before use and sign the logbook.</li>' +
       '<li>Roles: operator at the switch, observer at the gauge, one person ready to cut power.</li>' +
       '<li>Water and electricity are present: wipe spills immediately.</li></ul></div>' +
-      '<div class="scard"><h4>While running</h4><ul class="ticks"><li>Raise the pressure gradually and stay within the limit set by the instructor.</li>' +
+      '<div class="scard"><h4>While running</h4><ul class="ticks"><li>Watch the gauge throughout the run.</li>' +
       '<li>Never run the gear pump with its outlet path closed.</li>' +
       '<li>Stand to the side, never in front of the cover. Do not leave it running unattended.</li>' +
       '<li>Do not tighten or loosen the cover, bolts or fittings while the vessel is pressurized.</li>' +
       '<li><b>Stop at:</b> pressure over the limit or a sudden drop, leaks or spraying, squeaking or vibration, belt slipping or burning smell, hot motor/switch/cord, smoke or sparks, pump running with no water, no filtrate, cloudy filtrate.</li></ul></div>' +
-      '<div class="scard"><h4>Shutdown</h4><ol class="steps"><li>Switch off and unplug the pump first.</li><li>Release pressure through the vent or drain until the gauge reads zero.</li>' +
-      '<li>Close all valves, drain the tank and vessel.</li><li>Open the cover only at zero pressure with the instructor’s permission.</li>' +
-      '<li>Clean, dry, check for leaks and record in the logbook.</li></ol></div>' +
+      '<div class="scard"><h4>Shutdown</h4><ol class="steps"><li>Switch off and unplug the pump first.</li><li>Close Valves 1 and 4, then slowly open the vessel drain until the gauge reads zero.</li>' +
+      '<li>Backwash after every run.</li><li>Open the cover only at zero pressure with the instructor’s permission.</li>' +
+      '<li>Clean, check for leaks and record in the logbook.</li></ol></div>' +
       '<div class="scard red"><h4>Emergency</h4><ul class="ticks"><li><b>Malfunction or leak:</b> switch off the pump, unplug if safe, step away, tell the instructor. Tag the unit “DO NOT OPERATE”.</li>' +
       '<li><b>Electric shock:</b> cut the power first, then call the instructor and the campus clinic. Never use water on an electrical fire.</li>' +
       '<li><b>Serious injury:</b> call 911 and the nearest hospital.</li>' +
@@ -480,9 +558,11 @@ function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').
 
 /* ------------------------------------------------------------------ */
 /*  Machine state (what the 3D model shows)                            */
+/*  tank = litres / 65 · vessel = level in the cone (1 = cone full)    */
+/*  beaker = litres / 5 · gauge: 0.5 = about 100 kPa                   */
 /* ------------------------------------------------------------------ */
-var DEF = { tank: 0, feed: 'water', pump: 0, gauge: 0, v1: 0, v2: 0, v3: 0, v4: 0, tankvalve: 0,
-            drain: 0, faucet: 0, lid: 0, leaf: 0, xray: 0, beaker: 0 };
+var DEF = { tank: 0, feed: 'water', pump: 0, gauge: 0, v1: 0, v2: 0, v3: 0, v4: 0,
+            drain: 0, faucet: 0, lid: 0, leaf: 0, xray: 0, beaker: 0, sw: 0, vessel: 0, cake: 0, tankdrain: 0 };
 function mergeState(s) { var o = {}, k; for (k in DEF) o[k] = DEF[k]; for (k in (s || {})) o[k] = s[k]; return o; }
 
 /* ------------------------------------------------------------------ */
@@ -498,16 +578,16 @@ function init3D() {
 
   var scene = new T.Scene();
   var camera = new T.PerspectiveCamera(38, 1, 0.05, 60);
-  var root = new T.Group(); scene.add(root);
+  var root = new T.Group(); root.scale.x = -1; scene.add(root);   /* mirrored: seen from the breaker, tank on the left and vessel on the right */
 
-  scene.add(new T.HemisphereLight(0xffffff, 0xb5c2d0, 0.9));
-  var sun = new T.DirectionalLight(0xffffff, 0.85);
+  scene.add(new T.HemisphereLight(0xf4f7fb, 0x7d8896, 0.78));
+  var sun = new T.DirectionalLight(0xffffff, 1.05);
   sun.position.set(2.2, 3.6, 2.6); sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.025;
-  var sc = sun.shadow.camera; sc.left = -2.2; sc.right = 2.2; sc.top = 2.2; sc.bottom = -2.2; sc.near = 0.5; sc.far = 12;
-  scene.add(sun); sun.target.position.set(0.3, 0.4, 0.15); scene.add(sun.target);
-  var fill = new T.DirectionalLight(0xdbe6ff, 0.3); fill.position.set(-2, 2, -2); scene.add(fill);
-  var floor = new T.Mesh(new T.PlaneGeometry(10, 10), new T.ShadowMaterial({ opacity: 0.17 }));
+  var sc = sun.shadow.camera; sc.left = -2.5; sc.right = 2.5; sc.top = 2.5; sc.bottom = -2.5; sc.near = 0.5; sc.far = 12;
+  scene.add(sun); sun.target.position.set(-0.18, 0.4, 0.4); scene.add(sun.target);
+  var fill = new T.DirectionalLight(0xdbe6ff, 0.32); fill.position.set(-2, 2, -2); scene.add(fill);
+  var floor = new T.Mesh(new T.PlaneGeometry(12, 12), new T.ShadowMaterial({ opacity: 0.24 }));
   floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
 
   /* ---- registry ---- */
@@ -543,7 +623,7 @@ function init3D() {
     if (flat) o.rotation.x = Math.PI / 2;
     put(parent, o, x, y, z); return part ? reg(o, part) : o;
   }
-  /* cylinder between two points; rA at point a, rB at point b */
+  /* cylinder between two points; rA at point a, rB at point b (seg 4 = tapered square leg) */
   function Limb(a, b, rA, rB, m, part, seg) {
     var A = new T.Vector3(a[0], a[1], a[2]), B = new T.Vector3(b[0], b[1], b[2]);
     var d = B.clone().sub(A), len = d.length();
@@ -554,135 +634,218 @@ function init3D() {
     o.quaternion.setFromUnitVectors(new T.Vector3(0, 1, 0), d.clone().normalize());
     root.add(o); return part ? reg(o, part) : o;
   }
-  function Path(pts, r, color, part) {
-    var m = M(color, { r: 0.5, m: 0.1 }), i, s;
+  /* flat bar between two points (w wide, t thick), thickness facing outward */
+  function Bar(a, b, w, t, m, part) {
+    var A = new T.Vector3(a[0], a[1], a[2]), B = new T.Vector3(b[0], b[1], b[2]);
+    var d = B.clone().sub(A), len = d.length(), y = d.clone().normalize();
+    var n = new T.Vector3(d.x, 0, d.z); if (n.lengthSq() < 1e-6) n.set(1, 0, 0); n.normalize();
+    var x = new T.Vector3().crossVectors(y, n).normalize(), z = new T.Vector3().crossVectors(x, y).normalize();
+    var o = new T.Mesh(new T.BoxGeometry(w, len, t), m);
+    o.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(x, y, z));
+    o.position.copy(A).add(d.clone().multiplyScalar(0.5));
+    root.add(o); return part ? reg(o, part) : o;
+  }
+  var PR = 0.019; /* 1-1/2 in pipe, radius */
+  function Path(pts, r, m, part) {
+    var i, s;
     for (i = 0; i < pts.length - 1; i++) Limb(pts[i], pts[i + 1], r, r, m, part);
     for (i = 1; i < pts.length - 1; i++) {
-      s = new T.Mesh(new T.SphereGeometry(r * 1.03, 14, 10), m);
+      s = new T.Mesh(new T.SphereGeometry(r * 1.04, 14, 10), m);
       s.position.set(pts[i][0], pts[i][1], pts[i][2]); root.add(s); reg(s, part);
     }
   }
 
-  /* ---- colours ---- */
-  var GRAY = '#aab1b6', PIPE = '#a3abb0', GREEN = '#2e9c4a', BRASS = '#b08a2e', PGREEN = '#2f6b3f';
+  /* ---- colours: grey industrial palette ---- */
+  var PAINT = '#939ba1', PIPEC = '#8a9298', FIT = '#646c72', BRASS = '#9a7a38', GREENP = '#2b6648', HGREEN = '#2e8c4d', FRAMEC = '#6c7479';
+  var pipeM = M(PIPEC, { m: 0.25, r: 0.5 }), fitM = M(FIT, { m: 0.4, r: 0.45 });
 
   /* ---- animated handles ---- */
-  var valves = {}, faucetPiv = null, needle = null, wheel = null, lidG, leafG;
+  var valves = {}, faucetPiv = null, needle = null, wheel = null, lidG, leafG, swTog = null, swBtn = null, motorG = null;
   function Valve(id, pos, axis, r) {
     var g = new T.Group(); g.position.set(pos[0], pos[1], pos[2]);
-    if (axis === 'z') g.rotation.y = Math.PI / 2; else if (axis === 'y') g.rotation.z = Math.PI / 2;
+    if (axis === 'z') g.rotation.y = Math.PI / 2; else if (axis === 'y') g.rotation.z = Math.PI / 2; else if (axis === 'zf') g.rotation.y = -Math.PI / 2; else if (axis === 'slant') { g.rotation.x = Math.PI - Math.atan2(0.8, 0.6); g.rotation.y = Math.PI / 2; g.rotation.z = Math.PI / 2; } else if (axis === 'yx') { g.rotation.order = 'YXZ'; g.rotation.y = -Math.PI / 2; g.rotation.z = Math.PI / 2; }
     root.add(g);
-    Cyl(r * 1.55, r * 1.55, 0.07, M(BRASS, { m: 0.5, r: 0.4 }), id, g, 0, 0, 0, 'x', 20);
-    Cyl(r * 1.25, r * 1.25, 0.012, M('#c9ccd0', { m: 0.6 }), id, g, 0.048, 0, 0, 'x', 18);
-    Cyl(r * 1.25, r * 1.25, 0.012, M('#c9ccd0', { m: 0.6 }), id, g, -0.048, 0, 0, 'x', 18);
-    Cyl(0.006, 0.006, r * 1.6, M('#888d92', { m: 0.6 }), id, g, 0, r * 1.5, 0, null, 8);
-    var piv = new T.Group(); piv.position.y = r * 2.3; g.add(piv);
-    Box(0.11, 0.012, 0.022, M(GREEN, { r: 0.5, m: 0.1 }), id, piv, 0.045, 0, 0);
-    valves[id] = piv;
+    Cyl(r * 1.45, r * 1.45, 0.075, M(BRASS, { m: 0.45, r: 0.45 }), id, g, 0, 0, 0, 'x', 20);
+    Cyl(r * 1.2, r * 1.2, 0.014, fitM, id, g, 0.05, 0, 0, 'x', 16);
+    Cyl(r * 1.2, r * 1.2, 0.014, fitM, id, g, -0.05, 0, 0, 'x', 16);
+    Cyl(0.007, 0.007, r * 1.6, M('#777d82', { m: 0.6 }), id, g, 0, r * 1.5, 0, null, 8);
+    var piv = new T.Group(); piv.position.y = r * 2.5; g.add(piv);
+    Box(0.13, 0.012, 0.026, M(HGREEN, { r: 0.5, m: 0.1 }), id, piv, 0.05, 0, 0);
+    valves[id] = piv; return g;
   }
 
-  /* ================= conditioning tank ================= */
-  var TX = 1.30, TZ = 0.30, TR = 0.1925, TB = 0.20, TH = 0.56;
-  var steel = M('#c9ced2', { m: 0.3, r: 0.4, d: true });
-  Cyl(TR, TR, TH, steel, 'tank', root, TX, TB + TH / 2, TZ, null, 48, true);
-  Cyl(TR, TR, 0.012, steel, 'tank', root, TX, TB + 0.006, TZ, null, 48);
-  Torus(TR, 0.007, steel, 'tank', root, TX, TB + TH, TZ, true);
-  [0.4, 0.4 + 2.094, 0.4 + 4.188].forEach(function (a) {
-    Limb([TX + Math.cos(a) * 0.15, TB, TZ + Math.sin(a) * 0.15], [TX + Math.cos(a) * 0.19, 0, TZ + Math.sin(a) * 0.19], 0.02, 0.014, steel, 'tank');
+  /* ================= layout constants (metres) ================= */
+  var Z0 = 0.24, ZF = 0.42, ZD = Z0 - 0.03, RX = 0.19, YP = 0.74;   /* Z0: pump, motor and tank axis; ZF: feed row = vessel centre */
+  var VX = -0.55, VZ = ZF;
+
+  /* ================= conditioning tank: 15 in dia, 58.7 cm high, legs 16.5 cm ================= */
+  var TX = 1.07, TZ = Z0 - 0.234, TR = 0.1905, TB = 0.165, TH = 0.587;
+  var steel = M('#aab2b7', { m: 0.35, r: 0.38, d: true });   /* generic metal for small parts */
+  function brushedTexture() {
+    var cv2 = document.createElement('canvas'); cv2.width = 256; cv2.height = 256; var g = cv2.getContext('2d');
+    g.fillStyle = '#d2d6d9'; g.fillRect(0, 0, 256, 256);
+    for (var q = 0; q < 160; q++) {
+      var y = Math.random() * 256, a = 0.025 + Math.random() * 0.05, v = Math.random() < 0.5 ? 255 : 90;
+      g.fillStyle = 'rgba(' + v + ',' + v + ',' + (v + 4) + ',' + a + ')'; g.fillRect(0, y, 256, 1 + Math.random() * 1.2);
+    }
+    var gr = g.createLinearGradient(0, 0, 256, 0);
+    gr.addColorStop(0, 'rgba(255,255,255,0.0)'); gr.addColorStop(0.5, 'rgba(255,255,255,0.22)'); gr.addColorStop(1, 'rgba(255,255,255,0.0)');
+    g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
+    var t2 = new T.CanvasTexture(cv2); t2.encoding = T.sRGBEncoding; t2.wrapS = t2.wrapT = T.RepeatWrapping; return t2;
+  }
+  var tankTex = null; try { tankTex = brushedTexture(); } catch (e3) { tankTex = null; }
+  var tankM = new T.MeshStandardMaterial({ color: tankTex ? 0xffffff : 0xcfd3d6, map: tankTex, metalness: 0.35, roughness: 0.3, side: T.DoubleSide });
+  Cyl(TR, TR, TH, tankM, 'tank', root, TX, TB + TH / 2, TZ, null, 56, true);
+  Cyl(TR, TR, 0.012, tankM, 'tank', root, TX, TB + 0.006, TZ, null, 56);
+  Torus(TR, 0.0064, tankM, 'tank', root, TX, TB + TH, TZ, true);
+  [0.5, 0.5 + 2.094, 0.5 + 4.188].forEach(function (a) {
+    Limb([TX + Math.cos(a) * 0.15, TB + 0.004, TZ + Math.sin(a) * 0.15], [TX + Math.cos(a) * 0.19, 0, TZ + Math.sin(a) * 0.19], 0.061, 0.047, tankM, 'tank', 4);
   });
-  var waterMat = M('#79b6e6', { t: true, o: 0.78, r: 0.15, m: 0 });
-  var water = Cyl(0.185, 0.185, 1, waterMat, null, root, TX, TB, TZ, null, 40);
+  var waterMat = M('#79b6e6', { t: true, o: 0.8, r: 0.15, m: 0 });
+  var water = Cyl(0.186, 0.186, 1, waterMat, null, root, TX, TB, TZ, null, 40);
+  /* outlet: one nozzle in the tank bottom near the pump-side edge, pipe straight down (tee, suction line, drain valve) */
+  var SY = 0.125, XO = TX, DZ = 0.075, NOZY = SY, DRY = SY;
+  Cyl(0.02, 0.02, 0.03, steel, 'tank', root, XO, TB - 0.004, TZ, null, 16);
+  Cyl(0.026, 0.026, 0.003, M('#2a2d2f', { m: 0.3, r: 0.6 }), 'tank', root, XO, TB + 0.0135, TZ, null, 20);   /* drain hole in the tank floor */
+  Cyl(0.014, 0.014, 0.004, M('#0e0f10', { m: 0, r: 0.9 }), 'tank', root, XO, TB + 0.0155, TZ, null, 16);
 
   /* ================= pump frame, motor, pump, belt ================= */
-  var frameM = M('#aeb4b8', { m: 0.3, r: 0.5 });
-  Box(0.95, 0.03, 0.32, frameM, 'frame', root, 0.36, 0.12, TZ);
-  Box(0.95, 0.03, 0.025, frameM, 'frame', root, 0.36, 0.085, TZ - 0.15);
-  Box(0.95, 0.03, 0.025, frameM, 'frame', root, 0.36, 0.085, TZ + 0.15);
-  [[-0.07, -0.14], [-0.07, 0.14], [0.79, -0.14], [0.79, 0.14]].forEach(function (p) {
-    Cyl(0.025, 0.025, 0.02, M('#2b2e30'), 'frame', root, p[0], 0.03, TZ + p[1], 'z', 16);
-    Box(0.02, 0.05, 0.02, frameM, 'frame', root, p[0], 0.065, TZ + p[1]);
+  var frameM = M(FRAMEC, { m: 0.3, r: 0.55 });
+  [-1, 1].forEach(function (s) { Box(0.68, 0.03, 0.03, frameM, 'frame', root, 0.26, 0.09, Z0 + s * 0.18); });
+  [-0.075, 0.595].forEach(function (x) { Box(0.03, 0.03, 0.39, frameM, 'frame', root, x, 0.09, Z0); });
+  Box(0.2, 0.012, 0.34, frameM, 'frame', root, 0.06, 0.108, Z0);
+  Box(0.22, 0.012, 0.30, frameM, 'frame', root, 0.40, 0.108, Z0);
+  [[-0.06, -0.17], [-0.06, 0.17], [0.58, -0.17], [0.58, 0.17]].forEach(function (p) {
+    Cyl(0.021, 0.026, 0.03, M('#17181a', { r: 0.85, m: 0 }), 'frame', root, p[0], 0.015, Z0 + p[1], null, 18);   /* black rubber stopper foot */
+    Cyl(0.008, 0.008, 0.03, M('#8d9296', { m: 0.6 }), 'frame', root, p[0], 0.045, Z0 + p[1], null, 8);
+    Box(0.022, 0.05, 0.022, frameM, 'frame', root, p[0], 0.065, Z0 + p[1]);
   });
-  Box(0.16, 0.03, 0.16, M('#8a9298'), 'motor', root, 0.12, 0.15, TZ);
-  Cyl(0.08, 0.08, 0.22, M('#9aa2a8', { m: 0.35 }), 'motor', root, 0.12, 0.24, TZ, 'z', 30);
-  Cyl(0.086, 0.086, 0.05, M('#6e757a', { m: 0.35 }), 'motor', root, 0.12, 0.24, TZ - 0.135, 'z', 30);
-  Box(0.07, 0.04, 0.07, M('#7c848a'), 'motor', root, 0.12, 0.335, TZ);
-  Box(0.12, 0.03, 0.14, M('#245a34'), 'pump', root, 0.55, 0.15, TZ);
-  var pg = M(PGREEN, { m: 0.3, r: 0.5 });
-  Cyl(0.075, 0.075, 0.14, pg, 'pump', root, 0.55, 0.24, TZ, 'z', 30);
-  Cyl(0.06, 0.06, 0.03, pg, 'pump', root, 0.55, 0.24, TZ + 0.085, 'z', 24);
-  Cyl(0.03, 0.03, 0.12, pg, 'pump', root, 0.63, 0.24, TZ, 'x', 18);
-  Cyl(0.028, 0.028, 0.08, pg, 'pump', root, 0.55, 0.335, TZ, null, 18);
-  Cyl(0.008, 0.008, 0.08, M('#777'), 'pump', root, 0.12, 0.24, TZ + 0.12, 'z', 8);
-  Cyl(0.035, 0.035, 0.03, M('#26282a'), 'belt', root, 0.12, 0.24, TZ + 0.125, 'z', 24);
-  wheel = new T.Group(); wheel.position.set(0.55, 0.24, TZ + 0.125); root.add(wheel);
-  Torus(0.09, 0.011, M(PGREEN, { m: 0.3 }), 'belt', wheel, 0, 0, 0, false);
-  Cyl(0.02, 0.02, 0.04, M(PGREEN), 'belt', wheel, 0, 0, 0, 'z', 14);
-  [0, 1, 2].forEach(function (k) {
-    var sp = Box(0.18, 0.01, 0.01, M(PGREEN), 'belt', wheel, 0, 0, 0); sp.rotation.z = k * Math.PI / 3;
+  /* motor: 34 cm long, axis along z */
+  var MX = 0.06, MY = 0.19, motorM = M('#7a8288', { m: 0.35, r: 0.5 });
+  motorG = new T.Group(); motorG.position.set(MX, MY, Z0); root.add(motorG);
+  Cyl(0.075, 0.075, 0.29, motorM, 'motor', motorG, 0, 0, 0.025, 'z', 30);
+  Cyl(0.082, 0.082, 0.06, M('#5f666b', { m: 0.3 }), 'motor', motorG, 0, 0, -0.14, 'z', 30);
+  Cyl(0.078, 0.078, 0.025, M('#666d72', { m: 0.3 }), 'motor', motorG, 0, 0, 0.18, 'z', 30);
+  var mDk = M('#4f565b', { m: 0.3, r: 0.6 }), mBolt = M('#8d9296', { m: 0.6, r: 0.4 });
+  Box(0.092, 0.05, 0.095, M('#6e767c'), 'motor', motorG, 0, 0.1, 0.03);                         /* terminal box on top */
+  Box(0.082, 0.008, 0.085, M('#868e94', { m: 0.35 }), 'motor', motorG, 0, 0.129, 0.03);          /* its cover */
+  [[-1, -1], [-1, 1], [1, -1], [1, 1]].forEach(function (c) { Cyl(0.005, 0.005, 0.006, mBolt, 'motor', motorG, c[0] * 0.034, 0.134, 0.03 + c[1] * 0.034, null, 6); });
+  Cyl(0.009, 0.009, 0.03, mDk, 'motor', motorG, 0.05, 0.1, 0.03, 'x', 10);                        /* cable gland */
+  [-1, 1].forEach(function (sx) { [-0.04, 0.1].forEach(function (zz) {                              /* cast mounting feet with bolt holes */
+    Box(0.03, 0.03, 0.07, motorM, 'motor', motorG, sx * 0.065, -0.07, zz);
+    Cyl(0.007, 0.007, 0.004, mDk, 'motor', motorG, sx * 0.075, -0.0845, zz, null, 10);
+  }); });
+  Box(0.1, 0.004, 0.025, M('#d9ddde', { r: 0.6, m: 0.1 }), 'motor', motorG, 0, 0.0795, 0.1);   /* name plate on top of the barrel, toward the front */
+  [-0.06, -0.02, 0.02, 0.06, 0.1].forEach(function (z) { Torus(0.0765, 0.0035, motorM, 'motor', motorG, 0, 0, z, false); });   /* shallow cooling ribs */
+  [-0.01, -0.024, -0.038, -0.052, -0.064].forEach(function (yy) { Box(2 * Math.sqrt(0.074 * 0.074 - yy * yy) * 0.8, 0.0065, 0.004, mDk, 'motor', motorG, 0, yy, -0.1725); });   /* horizontal vent slots in the lower half of the fan cover */
+  Torus(0.072, 0.012, M('#7d858b', { m: 0.3, r: 0.5 }), 'motor', motorG, 0, 0, -0.168, false);                                   /* rounded rear of the fan cover */
+  [-1, 1].forEach(function (sx) {                                                                                                     /* two capacitor housings, one on each side of the barrel */
+    Cyl(0.036, 0.036, 0.17, M('#8d959b', { m: 0.35, r: 0.45 }), 'motor', motorG, sx * 0.1, 0.022, 0.03, 'z', 22);
+    Torus(0.036, 0.008, M('#8d959b', { m: 0.35, r: 0.45 }), 'motor', motorG, sx * 0.1, 0.022, 0.115, false);
+    Torus(0.036, 0.008, M('#8d959b', { m: 0.35, r: 0.45 }), 'motor', motorG, sx * 0.1, 0.022, -0.055, false);
+    Box(0.03, 0.012, 0.16, motorM, 'motor', motorG, sx * 0.07, 0.015, 0.03);
+  });
+  [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(function (k) { var ra = k * 0.17; var rb = Box(0.006, 0.01, 0.2, motorM, 'motor', motorG, Math.sin(ra) * 0.078, Math.cos(ra) * 0.078, 0.03); rb.rotation.z = -ra; });   /* axial cooling ribs on top */
+  Cyl(0.014, 0.014, 0.01, mDk, 'motor', motorG, 0, 0, -0.172, 'z', 14);
+  for (var mb = 0; mb < 4; mb++) { var ma = mb * Math.PI / 2 + Math.PI / 4; Cyl(0.006, 0.006, 0.01, mBolt, 'motor', motorG, Math.cos(ma) * 0.066, Math.sin(ma) * 0.066, 0.196, 'z', 6); }   /* end-bell bolts */
+  Box(0.12, 0.02, 0.24, M('#5f666b'), 'motor', motorG, 0, -0.085, 0.02);
+  Cyl(0.009, 0.009, 0.05, M('#9aa0a4', { m: 0.7 }), 'motor', motorG, 0, 0, 0.215, 'z', 8);
+  Cyl(0.04, 0.04, 0.026, M('#26292b', { m: 0.3 }), 'belt', motorG, 0, 0, 0.19, 'z', 24);
+  /* gear pump: 30 cm high (top of the wheel), green */
+  var PX = 0.40, PY = 0.18, pg = M(GREENP, { m: 0.3, r: 0.5 });
+  var pgD = M('#244f38', { m: 0.3, r: 0.55 }), pBolt = M('#7d6b52', { m: 0.5, r: 0.5 });
+  Box(0.15, 0.02, 0.13, pgD, 'pump', root, PX, 0.12, Z0);                                          /* mounting foot */
+  [-1, 1].forEach(function (sx) { Box(0.018, 0.045, 0.1, pgD, 'pump', root, PX + sx * 0.05, 0.145, Z0); [-1, 1].forEach(function (sz) { Cyl(0.007, 0.007, 0.004, M('#143325'), 'pump', root, PX + sx * 0.062, 0.131, Z0 + sz * 0.05, null, 10); }); });   /* pedestal ribs and foot holes */
+  Box(0.15, 0.065, 0.1, pg, 'pump', root, PX, SY + 0.01, Z0);                                      /* casting that carries both ports */
+  Cyl(0.063, 0.063, 0.1, pg, 'pump', root, PX, PY, Z0, 'z', 32);                                   /* gear chamber */
+  Cyl(0.067, 0.067, 0.012, pgD, 'pump', root, PX, PY, Z0 + 0.035, 'z', 32);                        /* joint flange */
+  Cyl(0.066, 0.066, 0.022, pg, 'pump', root, PX, PY, Z0 - 0.06, 'z', 32);                          /* back cover */
+  for (var pb = 0; pb < 6; pb++) { var pa = pb * Math.PI / 3 + 0.3; Cyl(0.0065, 0.0065, 0.008, pBolt, 'pump', root, PX + Math.cos(pa) * 0.053, PY + Math.sin(pa) * 0.053, Z0 - 0.075, 'z', 6); }   /* back-cover bolts */
+  Cyl(0.055, 0.055, 0.025, pg, 'pump', root, PX, PY, Z0 + 0.06, 'z', 28);                          /* front cover */
+  for (var pc = 0; pc < 4; pc++) { var pd = pc * Math.PI / 2 + Math.PI / 4; Cyl(0.006, 0.006, 0.008, pBolt, 'pump', root, PX + Math.cos(pd) * 0.043, PY + Math.sin(pd) * 0.043, Z0 + 0.076, 'z', 6); }
+  Cyl(0.04, 0.04, 0.05, pg, 'pump', root, PX, PY, Z0 + 0.1, 'z', 24);                              /* bearing housing */
+  Box(0.032, 0.003, 0.03, M('#e4e6e2', { r: 0.6, m: 0.1 }), 'pump', root, PX, PY + 0.041, Z0 + 0.105);   /* name plate */
+  Cyl(0.014, 0.014, 0.03, M(BRASS, { m: 0.5 }), 'pump', root, PX, PY + 0.07, Z0 + 0.0, null, 12);  /* bronze plug on top */
+  Cyl(0.017, 0.017, 0.008, M(BRASS, { m: 0.5 }), 'pump', root, PX, PY + 0.088, Z0 + 0.0, null, 6);
+  [1, -1].forEach(function (s) { Cyl(0.031, 0.031, 0.012, M('#7a8186', { m: 0.45, r: 0.5 }), 'pump', root, PX + s * 0.057, SY, Z0, 'x', 20); });   /* threaded port collars */
+  Cyl(0.024, 0.024, 0.075, pg, 'pump', root, PX + 0.045, SY, Z0, 'x', 18);
+  Cyl(0.024, 0.024, 0.075, pg, 'pump', root, PX - 0.045, SY, Z0, 'x', 18);                                        /* outlet port: opposite side of the pump from the inlet */
+  Cyl(0.026, 0.026, 0.03, M(BRASS, { m: 0.5 }), 'pump', root, PX, PY, Z0 + 0.125, 'z', 18);
+  Cyl(0.011, 0.011, 0.1, M('#8d9296', { m: 0.7 }), 'pump', root, PX, PY, Z0 + 0.15, 'z', 10);
+  wheel = new T.Group(); wheel.position.set(PX, PY, Z0 + 0.19); root.add(wheel);
+  var wg = M('#2a6a46', { m: 0.3, r: 0.5 });
+  Cyl(0.118, 0.118, 0.04, wg, 'belt', wheel, 0, 0, 0, 'z', 56, true);                                    /* thick rim */
+  [-0.0175, 0, 0.0175].forEach(function (zz) { Torus(0.118, 0.0055, wg, 'belt', wheel, 0, 0, zz, false); });   /* ridges: two V grooves between them */
+  Cyl(0.026, 0.026, 0.05, wg, 'belt', wheel, 0, 0, 0, 'z', 20);                                          /* hub */
+  Cyl(0.006, 0.006, 0.02, M('#8d9296', { m: 0.6 }), 'belt', wheel, 0.026, 0, 0, 'x', 8);                  /* set screw */
+  [0, 1, 2, 3].forEach(function (k) {                                                                     /* four broad flat spokes */
+    var sg = new T.Group(); sg.rotation.z = k * Math.PI / 2 + 0.35; wheel.add(sg);
+    Box(0.09, 0.03, 0.01, wg, 'belt', sg, 0.07, 0, 0);
   });
   var beltM = M('#1d1f20', { r: 0.9, m: 0 });
-  Limb([0.12, 0.275, TZ + 0.125], [0.55, 0.33, TZ + 0.125], 0.006, 0.006, beltM, 'belt');
-  Limb([0.12, 0.205, TZ + 0.125], [0.55, 0.15, TZ + 0.125], 0.006, 0.006, beltM, 'belt');
-
-  /* ================= breaker box (plate on a post above the motor, motor end) ================= */
-  var SX = -0.03, SY = 0.43;
-  Cyl(0.011, 0.011, 0.30, M('#8a9298', { m: 0.4 }), 'switch', root, SX, 0.285, TZ - 0.02, null, 10);
-  Box(0.15, 0.17, 0.012, M('#9ca3a8', { m: 0.35, r: 0.5 }), 'switch', root, SX, SY, TZ - 0.005);
-  Box(0.07, 0.08, 0.04, M('#8d949a', { m: 0.3 }), 'switch', root, SX, SY + 0.005, TZ - 0.03);
-  Box(0.095, 0.115, 0.05, M('#f0f0ea', { r: 0.55, m: 0.05 }), 'switch', root, SX, SY, TZ + 0.03);
-  Cyl(0.02, 0.02, 0.014, M('#f08a24', { r: 0.5 }), 'switch', root, SX, SY + 0.03, TZ + 0.062, 'z', 18);
-  Box(0.052, 0.028, 0.006, M('#bfe3f0', { t: true, o: 0.45, r: 0.1, m: 0 }), 'switch', root, SX, SY - 0.022, TZ + 0.057);
-  Box(0.012, 0.02, 0.01, M('#f2c230', { r: 0.5 }), 'switch', root, SX + 0.01, SY - 0.022, TZ + 0.059);
-  Limb([SX, 0.372, TZ + 0.03], [0.08, 0.345, TZ + 0.03], 0.004, 0.004, M('#1d1d1d'), 'switch');
-  Limb([0.08, 0.345, TZ + 0.03], [0.12, 0.335, TZ], 0.004, 0.004, M('#1d1d1d'), 'switch');
-
-  /* ================= pressure vessel ================= */
-  var VX = -0.55, VZ = 0;
-  var paint = M('#b4bbbf', { m: 0.25, r: 0.55, d: true });
-  var shell = [];
-  shell.push(Cyl(0.23, 0.23, 0.30, paint, 'vessel', root, VX, 0.77, VZ, null, 48, true));
-  shell.push(Cyl(0.23, 0.05, 0.17, paint, 'vessel', root, VX, 0.535, VZ, null, 48, true));
-  shell.forEach(function (m) { m.userData.shell = true; });
-  Cyl(0.05, 0.05, 0.04, paint, 'vessel', root, VX, 0.43, VZ, null, 24);
-  Torus(0.235, 0.014, paint, 'vessel', root, VX, 0.92, VZ, true);
-  [Math.PI / 3, Math.PI, 5 * Math.PI / 3].forEach(function (a) {
-    Limb([VX + Math.cos(a) * 0.2, 0.64, VZ + Math.sin(a) * 0.2], [VX + Math.cos(a) * 0.34, 0, VZ + Math.sin(a) * 0.34], 0.042, 0.03, paint, 'vessel', 4);
-    Cyl(0.03, 0.03, 0.012, paint, 'vessel', root, VX + Math.cos(a) * 0.34, 0.006, VZ + Math.sin(a) * 0.34, null, 14);
+  [-0.0085, 0.0085].forEach(function (dz) {
+    Limb([MX, MY + 0.04, Z0 + 0.19 + dz], [PX, PY + 0.121, Z0 + 0.19 + dz], 0.005, 0.005, beltM, 'belt');
+    Limb([MX, MY - 0.04, Z0 + 0.19 + dz], [PX, PY - 0.121, Z0 + 0.19 + dz], 0.005, 0.005, beltM, 'belt');
   });
+    [-0.0085, 0.0085].forEach(function (dz) { Cyl(0.1215, 0.1215, 0.009, beltM, 'belt', wheel, 0, 0, dz, 'z', 56, true); });   /* belts riding in the grooves */
 
+  /* ================= pressure vessel: 40 cm dia, 97 cm overall, legs 54 cm ================= */
+  var paint = M(PAINT, { m: 0.22, r: 0.55, d: true });
+  var shell = [];
+  shell.push(Cyl(0.2, 0.2, 0.25, paint, 'vessel', root, VX, 0.665, VZ, null, 56, true));
+  var dishG = new T.SphereGeometry(0.2, 48, 14, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2); dishG.scale(1, 0.35, 1);
+  shell.push(reg(put(root, new T.Mesh(dishG, paint), VX, 0.54, VZ), 'vessel'));
+  shell.forEach(function (m) { m.userData.shell = true; });
+  Cyl(0.045, 0.045, 0.04, paint, 'vessel', root, VX, 0.455, VZ, null, 24);
+  Torus(0.215, 0.014, paint, 'vessel', root, VX, 0.79, VZ, true);
+  [Math.PI / 3, Math.PI, 5 * Math.PI / 3].forEach(function (a) {
+    Bar([VX + Math.cos(a) * 0.2, 0.54, VZ + Math.sin(a) * 0.2], [VX + Math.cos(a) * 0.3, 0, VZ + Math.sin(a) * 0.3], 0.07, 0.012, paint, 'vessel');
+  });
   /* cover group (lifts) */
-  lidG = new T.Group(); lidG.position.set(VX, 0.92, VZ); root.add(lidG);
-  Cyl(0.245, 0.245, 0.03, paint, 'lid', lidG, 0, 0.015, 0, null, 48);
-  var dome = new T.Mesh(new T.SphereGeometry(0.235, 40, 16, 0, Math.PI * 2, 0, Math.PI / 2), paint);
+  lidG = new T.Group(); lidG.position.set(VX, 0.79, VZ); root.add(lidG);
+  Cyl(0.245, 0.245, 0.03, paint, 'lid', lidG, 0, 0.015, 0, null, 56);
+  var dome = new T.Mesh(new T.SphereGeometry(0.235, 44, 16, 0, Math.PI * 2, 0, Math.PI / 2), paint);
   dome.scale.set(1, 0.45, 1); reg(put(lidG, dome, 0, 0.03, 0), 'lid');
-  Cyl(0.008, 0.008, 0.06, M('#9aa0a4', { m: 0.5 }), 'lid', lidG, -0.07, 0.16, 0, null, 8);
-  Cyl(0.008, 0.008, 0.06, M('#9aa0a4', { m: 0.5 }), 'lid', lidG, 0.07, 0.16, 0, null, 8);
-  Cyl(0.01, 0.01, 0.16, M('#9aa0a4', { m: 0.5 }), 'lid', lidG, 0, 0.19, 0, 'x', 10);
+  Cyl(0.008, 0.008, 0.05, M('#9aa0a4', { m: 0.5 }), 'lid', lidG, -0.07, 0.125, 0, null, 8);
+  Cyl(0.008, 0.008, 0.05, M('#9aa0a4', { m: 0.5 }), 'lid', lidG, 0.07, 0.125, 0, null, 8);
+  Cyl(0.01, 0.01, 0.16, M('#9aa0a4', { m: 0.5 }), 'lid', lidG, 0, 0.152, 0, 'x', 10);
   for (var k = 0; k < 6; k++) {
-    var ang = k * Math.PI / 3 + 0.3, lug = Box(0.045, 0.03, 0.028, M('#a2a9ae', { m: 0.4 }), 'lid', lidG, Math.cos(ang) * 0.25, 0.012, Math.sin(ang) * 0.25);
+    var ang = k * Math.PI / 3 + 0.3, lug = Box(0.045, 0.03, 0.028, M('#8f979c', { m: 0.4 }), 'lid', lidG, Math.cos(ang) * 0.25, 0.012, Math.sin(ang) * 0.25);
     lug.rotation.y = -ang;
-    Cyl(0.007, 0.007, 0.055, M('#7e8388', { m: 0.7 }), 'lid', lidG, Math.cos(ang) * 0.25, -0.02, Math.sin(ang) * 0.25, null, 8);
+    Cyl(0.007, 0.007, 0.055, M('#6f757a', { m: 0.7 }), 'lid', lidG, Math.cos(ang) * 0.25, -0.02, Math.sin(ang) * 0.25, null, 8);
   }
   /* gauge (on the cover) */
-  var gx = -0.12, gz = -0.09;
-  Cyl(0.01, 0.01, 0.09, M(BRASS, { m: 0.5 }), 'gauge', lidG, gx, 0.165, gz, null, 10);
-  var head = new T.Group(); head.position.set(gx, 0.235, gz); head.rotation.x = -0.75; lidG.add(head);
-  Cyl(0.05, 0.05, 0.03, M('#26282a', { m: 0.3 }), 'gauge', head, 0, 0, 0, 'z', 32);
-  var face = new T.Mesh(new T.CircleGeometry(0.043, 32), M('#f4f4ee', { r: 0.8, m: 0 }));
+  var gx = -0.15, gz = -0.12;
+  Cyl(0.01, 0.01, 0.06, M(BRASS, { m: 0.5 }), 'gauge', lidG, gx, 0.075, gz, null, 10);
+  var head = new T.Group(); head.position.set(gx, 0.13, gz); head.rotation.x = -0.75; lidG.add(head);
+  Cyl(0.045, 0.045, 0.03, M('#26282a', { m: 0.3 }), 'gauge', head, 0, 0, 0, 'z', 32);
+  var face = new T.Mesh(new T.CircleGeometry(0.039, 32), M('#f1f1ea', { r: 0.8, m: 0 }));
   reg(put(head, face, 0, 0, 0.0158), 'gauge');
-  Torus(0.047, 0.004, M('#c9ccd0', { m: 0.7 }), 'gauge', head, 0, 0, 0.0155, false);
+  Torus(0.043, 0.004, M('#c9ccd0', { m: 0.7 }), 'gauge', head, 0, 0, 0.0155, false);
   needle = new T.Group(); needle.position.z = 0.02; head.add(needle);
-  Box(0.004, 0.036, 0.002, M('#d8302a', { r: 0.5, m: 0 }), 'gauge', needle, 0, 0.016, 0);
-  /* vent */
-  Cyl(0.012, 0.012, 0.05, M(BRASS, { m: 0.5 }), 'vent', lidG, 0.12, 0.15, -0.08, null, 10);
-  Cyl(0.02, 0.02, 0.012, M('#d9b24a', { m: 0.5 }), 'vent', lidG, 0.12, 0.18, -0.08, null, 12);
+  Box(0.004, 0.032, 0.002, M('#d8302a', { r: 0.5, m: 0 }), 'gauge', needle, 0, 0.014, 0);
+  /* swing bolt: hinged eye bolt on the vessel rim, directly behind the pressure gauge (same radial line, outer side) */
+  var sbM = M(BRASS, { m: 0.5 }), sbD = M('#7a7f84', { m: 0.5 });
+  var sbG = new T.Group(); sbG.position.set(VX, 0, VZ); sbG.rotation.y = Math.atan2(gx, gz); root.add(sbG);
+  [-1, 1].forEach(function (s) { Box(0.008, 0.032, 0.022, sbD, 'swingbolt', sbG, s * 0.016, 0.768, 0.212); });
+  Cyl(0.0045, 0.0045, 0.044, sbD, 'swingbolt', sbG, 0, 0.772, 0.222, 'x', 10);
+  Cyl(0.013, 0.013, 0.014, sbM, 'swingbolt', sbG, 0, 0.772, 0.222, 'x', 16);
+  Cyl(0.0045, 0.0045, 0.09, sbD, 'swingbolt', sbG, 0, 0.722, 0.228, null, 10);
+  Cyl(0.015, 0.015, 0.005, sbD, 'swingbolt', sbG, 0, 0.678, 0.228, null, 18);
+  Cyl(0.009, 0.009, 0.012, sbM, 'swingbolt', sbG, 0, 0.668, 0.228, null, 6);
 
-  /* filter leaves (inside the vessel): riveted channel frame, hanger ring, diamond expanded metal over fine mesh */
+  /* ---- vessel water (seen through the shell in x-ray) ---- */
+  var vwaterMat = M('#79b6e6', { t: true, o: 0.75, r: 0.15, m: 0 });
+  var vcG = new T.SphereGeometry(0.19, 36, 12, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2); vcG.scale(1, 0.35, 1);
+  var vwCone = new T.Mesh(vcG, vwaterMat); root.add(vwCone);
+  var vwCyl = new T.Mesh(new T.CylinderGeometry(0.19, 0.19, 1, 40), vwaterMat); root.add(vwCyl);
+
+  /* ---- filter leaves (inside the vessel): riveted channel frame, hanger ring, diamond expanded metal over fine mesh ---- */
   function leafTexture() {
     var c = document.createElement('canvas'); c.width = 512; c.height = 384;
     var g = c.getContext('2d'), x, y, W = 512, H = 384, dx = H / 0.72;
-    g.fillStyle = '#c9cdce'; g.fillRect(0, 0, W, H);
-    g.lineWidth = 1; g.strokeStyle = 'rgba(70,76,82,0.42)'; g.beginPath();
+    g.fillStyle = '#9aa0a5'; g.fillRect(0, 0, W, H);
+    g.lineWidth = 1; g.strokeStyle = 'rgba(40,46,52,0.5)'; g.beginPath();
     for (x = 0; x <= W; x += 3) { g.moveTo(x, 0); g.lineTo(x, H); }
     for (y = 0; y <= H; y += 3) { g.moveTo(0, y); g.lineTo(W, y); }
     g.stroke();
@@ -691,84 +854,188 @@ function init3D() {
       for (x0 = -dx - 64; x0 <= W + dx + 64; x0 += 64) { g.moveTo(x0 + off, 0); g.lineTo(x0 + off + sign * dx, H); }
       g.stroke();
     }
-    diag(1, 6, '#7d848a', 0); diag(-1, 6, '#7d848a', 0);
-    diag(1, 2, '#e4e8ea', -1.5); diag(-1, 2, '#e4e8ea', -1.5);
-    var t = new T.CanvasTexture(c); t.anisotropy = 4; t.encoding = T.sRGBEncoding; return t;
+    diag(1, 6, '#6a7076', 0); diag(-1, 6, '#6a7076', 0);
+    diag(1, 2, '#d6dbde', -1.5); diag(-1, 2, '#d6dbde', -1.5);
+    var t = new T.CanvasTexture(c); t.anisotropy = 4; t.encoding = T.sRGBEncoding; t.wrapS = t.wrapT = T.RepeatWrapping; return t;
   }
   leafG = new T.Group(); root.add(leafG);
-  var rodM = M('#9aa0a4', { m: 0.5, r: 0.4 }), RODY = 0.915, LY = 0.79;
+  var rodM = M('#8d9499', { m: 0.45, r: 0.4 }), frameLeafM = M('#8b9298', { m: 0.45, r: 0.45 }), rivetM = M('#5f666b', { m: 0.6, r: 0.4 });
+  var cakeMat = new T.MeshStandardMaterial({ color: 0xb59f72, roughness: 0.95, metalness: 0, transparent: true, opacity: 0, side: T.DoubleSide, depthWrite: false });
   var leafTex = null; try { leafTex = leafTexture(); } catch (e0) { leafTex = null; }
-  var frameLeafM = M('#9ea5a9', { m: 0.45, r: 0.45 }), rivetM = M('#6f767b', { m: 0.6, r: 0.4 });
-  var faceMat = new T.MeshStandardMaterial({ color: leafTex ? 0xffffff : 0xcfd3d4, map: leafTex, roughness: 0.6, metalness: 0.25, side: T.DoubleSide });
-  Cyl(0.012, 0.012, 0.3, rodM, 'leaves', leafG, VX, RODY, VZ, 'z', 12);
+  var rivetG = new T.CylinderGeometry(0.0045, 0.0045, 0.004, 10);
+  Cyl(0.012, 0.012, 0.26, rodM, 'leaves', leafG, VX, YP, VZ, 'z', 12);
+  var RIVY = 0.735, LH = 0.14;
   for (var li = 0; li < 5; li++) {
-    var lz = VZ + (li - 2) * 0.045;
-    Box(0.30, 0.016, 0.016, frameLeafM, 'leaves', leafG, VX, LY + 0.102, lz);
-    Box(0.30, 0.016, 0.016, frameLeafM, 'leaves', leafG, VX, LY - 0.102, lz);
-    Box(0.016, 0.188, 0.016, frameLeafM, 'leaves', leafG, VX - 0.142, LY, lz);
-    Box(0.016, 0.188, 0.016, frameLeafM, 'leaves', leafG, VX + 0.142, LY, lz);
-    var lf = new T.Mesh(new T.PlaneGeometry(0.27, 0.19), faceMat);
-    reg(put(leafG, lf, VX, LY, lz), 'leaves');
-    Torus(0.017, 0.0035, rodM, 'leaves', leafG, VX, RODY, lz, false);
+    var dz = (li - 2) * 0.045, lz = VZ + dz, lw = 2 * Math.sqrt(0.157 * 0.157 - dz * dz) * 0.9, lcy = RIVY - LH / 2;
+    Box(lw, 0.014, 0.014, frameLeafM, 'leaves', leafG, VX, RIVY - 0.007, lz);
+    Box(lw, 0.014, 0.014, frameLeafM, 'leaves', leafG, VX, RIVY - LH + 0.007, lz);
+    Box(0.014, LH - 0.028, 0.014, frameLeafM, 'leaves', leafG, VX - lw / 2 + 0.007, lcy, lz);
+    Box(0.014, LH - 0.028, 0.014, frameLeafM, 'leaves', leafG, VX + lw / 2 - 0.007, lcy, lz);
+    var fm = new T.MeshStandardMaterial({ color: 0xffffff, map: null, roughness: 0.6, metalness: 0.25, side: T.DoubleSide });
+    if (leafTex) { var tx = leafTex.clone(); tx.repeat.set(lw / 0.27, 1); tx.needsUpdate = true; fm.map = tx; } else fm.color.set(0x8f969b);
+    var lf = new T.Mesh(new T.PlaneGeometry(lw - 0.026, LH - 0.026), fm);
+    reg(put(leafG, lf, VX, lcy, lz), 'leaves');
+    [-1, 1].forEach(function (s) {
+      var cp = new T.Mesh(new T.PlaneGeometry(lw - 0.026, LH - 0.026), cakeMat); put(leafG, cp, VX, lcy, lz + s * 0.0095);
+    });
+    Box(0.02, 0.016, 0.01, frameLeafM, 'leaves', leafG, VX, RIVY + 0.006, lz);
+    Torus(0.013, 0.0032, rodM, 'leaves', leafG, VX, YP, lz, false);
     var rv = [], q;
-    for (q = 0; q < 5; q++) { rv.push([-0.12 + q * 0.06, 0.102]); rv.push([-0.12 + q * 0.06, -0.102]); }
-    for (q = 0; q < 3; q++) { rv.push([-0.142, -0.05 + q * 0.05]); rv.push([0.142, -0.05 + q * 0.05]); }
+    for (q = 0; q < 4; q++) { rv.push([-lw / 2 + 0.03 + q * (lw - 0.06) / 3, 0.0]); }
     rv.forEach(function (p) {
-      Cyl(0.0045, 0.0045, 0.004, rivetM, null, leafG, VX + p[0], LY + p[1], lz + 0.0088, 'z', 10);
-      Cyl(0.0045, 0.0045, 0.004, rivetM, null, leafG, VX + p[0], LY + p[1], lz - 0.0088, 'z', 10);
+      [RIVY - 0.007, RIVY - LH + 0.007].forEach(function (yy) {
+        [-1, 1].forEach(function (s) { var r1 = new T.Mesh(rivetG, rivetM); r1.rotation.x = Math.PI / 2; put(leafG, r1, VX + p[0], yy, lz + s * 0.0075); });
+      });
     });
   }
-  Limb([VX, RODY, VZ], [VX + 0.23, RODY, VZ], 0.012, 0.012, rodM, 'leaves');
+  /* manifold connections through the vessel wall (one each side) */
+  Limb([VX, YP, VZ + 0.13], [VX - 0.14, YP, VZ + 0.13], 0.013, 0.013, rodM, 'leaves');
+  Limb([VX - 0.14, YP, VZ + 0.13], [VX - 0.14, 0.58, VZ + 0.13], 0.013, 0.013, rodM, 'leaves');
 
-  /* ================= piping ================= */
-  var FY = 0.68; /* feed inlet height on the vessel side wall */
-  Path([[TX - TR, 0.24, TZ], [0.69, 0.24, TZ]], 0.014, PIPE, 'piping');                                    /* tank -> pump */
-  Path([[0.55, 0.375, TZ], [0.55, FY, TZ], [VX, FY, TZ], [VX, FY, 0.23]], 0.014, PIPE, 'piping');          /* pump -> vessel side inlet */
-  Path([[VX + 0.23, RODY, 0], [-0.15, RODY, 0], [-0.15, 0.30, 0]], 0.014, PIPE, 'piping');                 /* filtrate */
-  Path([[0.2, FY, TZ], [0.2, 1.15, TZ], [-0.22, 1.15, TZ], [-0.22, 1.15, 0], [-0.22, RODY, 0]], 0.014, PIPE, 'piping'); /* backwash in */
-  Path([[VX - 0.05, 0.5, 0.09], [VX - 0.05, 0.5, 0.42], [VX - 0.05, 0.22, 0.42]], 0.014, PIPE, 'piping');  /* backwash out */
-  Path([[VX, 0.43, 0], [VX, 0.3, 0]], 0.014, PIPE, 'piping');                                               /* drain */
-  Torus(0.016, 0.004, M(PIPE), 'piping', root, VX - 0.05, 0.22, 0.42, true);
-  Torus(0.016, 0.004, M(PIPE), 'piping', root, VX, 0.3, 0, true);
+  /* ================= switch assembly on the short pipe above the riser ================= */
+  var SWY = 0.80, SWZ = ZF + 0.065;
+  /* electrical box (gray metal, with knockouts) mounted on the stub, and the circuit breaker mounted against it */
+  var EBX = RX, SWX = RX;
+  Box(0.11, 0.1, 0.075, M('#8a9298', { m: 0.35, r: 0.5 }), 'ebox', root, EBX, 0.80, ZF);
+  Cyl(0.011, 0.011, 0.012, M('#5d6469', { m: 0.4 }), 'ebox', root, EBX - 0.025, 0.815, ZF + 0.0385, 'z', 16);
+  Cyl(0.011, 0.011, 0.012, M('#5d6469', { m: 0.4 }), 'ebox', root, EBX - 0.02, 0.775, ZF + 0.0385, 'z', 16);
+  Box(0.12, 0.008, 0.02, M('#7d858b', { m: 0.45 }), 'ebox', root, EBX, 0.752, ZF + 0.03);
+  Cyl(0.009, 0.009, 0.02, M('#8a9298', { m: 0.4 }), 'ebox', root, EBX, 0.742, ZF, null, 12);
+  /* circuit breaker: white enclosure, hinged clear window over a two-pole breaker with yellow toggles, orange push button on top */
+  var swWhite = M('#f1f1ec', { r: 0.55, m: 0.04 }), swGray = M('#c9ccce', { r: 0.5, m: 0.1 });
+  Box(0.07, 0.13, 0.062, swWhite, 'switch', root, SWX, SWY, SWZ);
+  Box(0.056, 0.076, 0.006, swGray, 'switch', root, SWX, SWY + 0.022, SWZ + 0.033);
+  Box(0.046, 0.066, 0.004, M('#bfe3f0', { t: true, o: 0.45, r: 0.1, m: 0 }), 'switch', root, SWX, SWY + 0.022, SWZ + 0.037);
+  Box(0.036, 0.054, 0.018, M('#d8dcdd', { r: 0.5, m: 0.1 }), 'switch', root, SWX, SWY + 0.022, SWZ + 0.026);
+  Box(0.03, 0.012, 0.002, M('#ffffff', { r: 0.8, m: 0 }), 'switch', root, SWX, SWY + 0.04, SWZ + 0.0355);
+  Box(0.07, 0.012, 0.03, swGray, 'switch', root, SWX, SWY - 0.043, SWZ + 0.02);
+  Cyl(0.004, 0.004, 0.02, swGray, 'switch', root, SWX - 0.029, SWY + 0.022, SWZ + 0.036, null, 8);
+  Cyl(0.004, 0.004, 0.02, swGray, 'switch', root, SWX - 0.029, SWY - 0.012, SWZ + 0.036, null, 8);
+  Box(0.01, 0.014, 0.008, swGray, 'switch', root, SWX + 0.03, SWY + 0.022, SWZ + 0.036);
+  Cyl(0.021, 0.021, 0.008, M('#c9302a', { r: 0.5 }), 'switch', root, SWX, SWY + 0.068, SWZ, null, 20);
+  swTog = new T.Group(); swTog.position.set(SWX, SWY + 0.027, SWZ + 0.033); root.add(swTog);
+  Box(0.011, 0.016, 0.008, M('#f2c230', { r: 0.5 }), 'switch', swTog, -0.0085, 0, 0);
+  Box(0.011, 0.016, 0.008, M('#f2c230', { r: 0.5 }), 'switch', swTog, 0.0085, 0, 0);
+  swBtn = Cyl(0.016, 0.016, 0.012, M('#e8742a', { r: 0.5 }), 'switch', root, SWX, SWY + 0.077, SWZ, null, 18);
+  var cableM = M('#15171a', { r: 0.8, m: 0 });
+  Limb([0.155, 0.77, ZF - 0.02], [0.155, 0.34, ZF - 0.02], 0.0045, 0.0045, cableM, 'switch');
+  Limb([0.155, 0.34, ZF - 0.02], [MX, 0.34, Z0 + 0.03], 0.0045, 0.0045, cableM, 'switch');
+  Limb([MX, 0.34, Z0 + 0.03], [MX, 0.305, Z0 + 0.03], 0.0045, 0.0045, cableM, 'switch');
 
-  Valve('tankvalve', [0.95, 0.24, TZ], 'x', 0.014);
-  Valve('v1', [-0.15, FY, TZ], 'x', 0.014);
-  Valve('v2', [-0.05, 1.15, TZ], 'x', 0.014);
-  Valve('v3', [VX - 0.05, 0.5, 0.25], 'z', 0.014);
-  Valve('v4', [-0.15, 0.65, 0], 'y', 0.014);
-  Valve('drain', [VX, 0.37, 0], 'y', 0.014);
-  /* swing check valve */
-  var chk = M(BRASS, { m: 0.5, r: 0.4 });
-  Box(0.07, 0.05, 0.05, chk, 'check', root, 0.38, FY, TZ);
-  Cyl(0.026, 0.026, 0.03, chk, 'check', root, 0.38, FY + 0.04, TZ, null, 18);
+  /* ================= voltage regulator and power cord (shown schematically) ================= */
+  var regB = M('#6d757b', { m: 0.3, r: 0.5 });
+  Box(0.22, 0.13, 0.16, regB, 'regulator', root, -0.18, 0.065, 0.86);
+  Box(0.09, 0.035, 0.006, M('#c9e6d2', { r: 0.4, m: 0 }), 'regulator', root, -0.18, 0.09, 0.943);
+  Cyl(0.02, 0.02, 0.012, M('#2a2d30'), 'regulator', root, -0.12, 0.045, 0.944, 'z', 16);
+  Limb([MX - 0.03, 0.12, Z0 + 0.19], [-0.12, 0.01, Z0 + 0.25], 0.006, 0.006, cableM, 'regulator');
+  Limb([-0.12, 0.01, Z0 + 0.25], [-0.12, 0.01, 0.80], 0.006, 0.006, cableM, 'regulator');
+  Limb([-0.12, 0.01, 0.80], [-0.12, 0.05, 0.86], 0.006, 0.006, cableM, 'regulator');
 
-  /* filtrate faucet: clear plastic tap, cross handle, elbow spout with ring tip */
-  var FXX = -0.15;
+  /* ================= piping (1-1/2 in) ================= */
+  var YT = 0.36, XF = -0.85, ZL = 0.03, ZFa = VZ + 0.13, ZT = 0.24, XD = -0.78;
+  /* tank outlet (top-view photo): hole in the middle of the tank floor -> pipe runs forward under the tank and leaves at the front edge of the pump side -> tee -> suction line to the pump; a short branch goes to the front and down to the drain valve */
+  var DX = TX - 0.07, ZW = TZ + Math.sqrt(TR * TR - 0.07 * 0.07), DZ2 = Z0 + 0.05;
+  Path([[XO, TB, TZ], [XO, SY, TZ], [DX, SY, TZ], [DX, SY, Z0]], PR, pipeM, 'piping');
+  Sph(PR * 1.3, pipeM, 'piping', root, DX, SY, Z0);
+  Path([[DX, SY, Z0], [0.47, SY, Z0]], PR, pipeM, 'piping');                                                    /* tee -> pump suction */
+  Path([[DX, SY, Z0], [DX + 0.045, SY, Z0]], PR, pipeM, 'piping');                                                /* short blind stub on the other side of the tee */
+  Cyl(PR * 1.25, PR * 1.25, 0.012, fitM, 'piping', root, DX + 0.051, SY, Z0, 'x', 14);
+  /* drain: one straight line leaving the tee down and toward the front: short pipe, lever valve, open black discharge pipe (all on the same slanted axis) */
+  var dN = [0, 0, 1], dA = 0.03, dV = 0.058, dB = 0.086, dE = 0.137;
+  function dP(t) { return [DX, SY, Z0 + t]; }
+  Limb(dP(0), dP(dA + 0.006), PR, PR, pipeM, 'piping');
+  Limb(dP(dB - 0.006), dP(dE), PR, PR, M('#2b2e30', { m: 0.3, r: 0.6 }), 'piping');
+  Path([[PX - 0.083, SY, Z0], [PX - 0.11, SY, Z0], [PX - 0.11, YT, Z0], [PX - 0.11, YT, ZF], [RX, YT, ZF], [RX, YP, ZF]], PR, pipeM, 'piping');           /* pump -> riser */
+  Path([[RX, YP, ZF], [VX + 0.2, YP, ZF]], PR, pipeM, 'piping');                                                 /* riser -> vessel inlet (54 cm) */
+  Path([[RX, YP, ZF], [RX, YP + 0.11, ZF]], PR, pipeM, 'piping');                                                /* short pipe carrying the electrical box (11 cm) */
+  Path([[RX, YP, ZF], [RX, YP, ZL], [XF, YP, ZL], [XF, YP, ZFa]], PR, pipeM, 'piping');                           /* long pipe: valve near the breaker, runs behind the vessel to the far end */
+  Path([[VX - 0.152, 0.58, ZFa], [XF, 0.58, ZFa]], PR, pipeM, 'piping');                                          /* vessel low port stub */
+  Path([[XF, YP, ZFa], [XF, 0.36, ZFa]], PR, pipeM, 'piping');                                                   /* filtrate line down to the faucet (36 cm) */
+  Path([[XF, YP, ZT], [XD, YP, ZT], [XD, 0.24, ZT]], PR, pipeM, 'piping');                                        /* disposal drop (50 cm) */
+  Path([[VX, 0.47, VZ], [VX, 0.33, VZ]], PR, pipeM, 'piping');                                                    /* vessel drain */
+  Sph(PR * 1.18, pipeM, 'piping', root, RX, YP, ZF);
+  Sph(PR * 1.18, pipeM, 'piping', root, XF, YP, ZT);
+  [[XD, 0.24, ZT], [VX, 0.33, VZ]].forEach(function (p) { Torus(PR * 1.08, 0.004, fitM, 'piping', root, p[0], p[1], p[2], true); });
+  /* long pipe holder: angled bar from the vessel leg foot up to the long pipe */
+  Limb([-0.40, 0.012, 0.16], [-0.30, YP - PR - 0.004, ZL], 0.012, 0.012, M(FRAMEC, { m: 0.3 }), 'piping');
+  Box(0.06, 0.01, 0.06, M(FRAMEC, { m: 0.3 }), 'piping', root, -0.40, 0.005, 0.16);
+  Box(0.045, 0.02, 0.05, M(FRAMEC, { m: 0.3 }), 'piping', root, -0.30, YP - PR - 0.008, ZL);
+
+  /* ================= valves (green levers) ================= */
+  Valve('tankdrain', dP(dV), 'zf', PR).scale.set(0.75, 0.75, 0.75);
+  Valve('v1', [-0.07, YP, ZF], 'x', PR);
+  Valve('v2', [RX, YP, 0.22], 'z', PR);
+  Valve('v3', [XD, 0.60, ZT], 'y', PR);
+  Valve('v4', [XF, YP, 0.40], 'z', PR);
+  Valve('drain', [VX, 0.415, VZ], 'y', PR);
+
+  /* ================= filtrate faucet: clear plastic tap with cross handle, container below ================= */
+  var FXX = XF, FZ = ZFa + 0.125;
   var tap = M('#e9eef0', { t: true, o: 0.82, r: 0.25, m: 0 }), tapDk = M('#cfd8dc', { t: true, o: 0.92, r: 0.3, m: 0 });
-  Cyl(0.02, 0.02, 0.06, tap, 'faucet', root, FXX, 0.275, 0, null, 16);
-  Cyl(0.027, 0.027, 0.014, tapDk, 'faucet', root, FXX, 0.31, 0, null, 6);
-  Cyl(0.013, 0.013, 0.055, tap, 'faucet', root, FXX, 0.25, 0.0275, 'z', 12);
-  Sph(0.016, tap, 'faucet', root, FXX, 0.25, 0.055);
-  Cyl(0.013, 0.011, 0.045, tap, 'faucet', root, FXX, 0.2275, 0.055, null, 12);
-  Torus(0.012, 0.003, tapDk, 'faucet', root, FXX, 0.205, 0.055, true);
-  faucetPiv = new T.Group(); faucetPiv.position.set(FXX, 0.327, 0); root.add(faucetPiv);
-  Cyl(0.007, 0.007, 0.02, tapDk, 'faucet', faucetPiv, 0, -0.005, 0, null, 10);
-  Cyl(0.014, 0.014, 0.012, tap, 'faucet', faucetPiv, 0, 0.006, 0, null, 14);
-  Box(0.08, 0.012, 0.016, tap, 'faucet', faucetPiv, 0, 0.006, 0);
-  Box(0.016, 0.012, 0.08, tap, 'faucet', faucetPiv, 0, 0.006, 0);
-  var glass = M('#cfe8f2', { t: true, o: 0.28, r: 0.1, m: 0, d: true });
-  Cyl(0.042, 0.036, 0.16, glass, null, root, FXX, 0.08, 0.055, null, 24, true);
-  var beakerLiq = Cyl(0.034, 0.034, 1, M('#cfe6f2', { t: true, o: 0.85, r: 0.1, m: 0 }), null, root, FXX, 0.003, 0.055, null, 20);
-  var drip = Sph(0.006, M('#bcdff2', { t: true, o: 0.9, m: 0 }), null, root, FXX, 0.2, 0.055);
+  var elbM = M(FIT, { m: 0.4, r: 0.45 });
+  Sph(PR * 1.32, elbM, 'piping', root, FXX, 0.36, ZFa);                                                 /* 90-degree elbow: vertical pipe in, horizontal out toward the front */
+  Cyl(PR * 1.3, PR * 1.3, 0.03, elbM, 'piping', root, FXX, 0.382, ZFa, null, 16);
+  Cyl(PR * 1.3, PR * 1.3, 0.03, elbM, 'piping', root, FXX, 0.36, ZFa + 0.028, 'z', 16);
+  Cyl(0.017, 0.017, 0.032, M('#aab2b6', { m: 0.5, r: 0.4 }), 'faucet', root, FXX, 0.36, ZFa + 0.062, 'z', 12);   /* threaded adapter */
+  Cyl(0.02, 0.02, 0.058, tap, 'faucet', root, FXX, 0.36, ZFa + 0.105, 'z', 16);
+  Cyl(0.007, 0.007, 0.03, tapDk, 'faucet', root, FXX, 0.385, ZFa + 0.105, null, 10);
+  Sph(0.021, tap, 'faucet', root, FXX, 0.36, FZ);
+  Cyl(0.014, 0.012, 0.06, tap, 'faucet', root, FXX, 0.33, FZ, null, 14);
+  Torus(0.013, 0.003, tapDk, 'faucet', root, FXX, 0.30, FZ, true);
+  faucetPiv = new T.Group(); faucetPiv.position.set(FXX, 0.40, ZFa + 0.105); root.add(faucetPiv);
+  Cyl(0.012, 0.012, 0.012, tap, 'faucet', faucetPiv, 0, 0, 0, null, 14);
+  Box(0.08, 0.011, 0.016, tap, 'faucet', faucetPiv, 0, 0.002, 0);
+  Box(0.016, 0.011, 0.08, tap, 'faucet', faucetPiv, 0, 0.002, 0);
+  var glass = M('#cfe8f2', { t: true, o: 0.3, r: 0.1, m: 0, d: true });
+  Cyl(0.077, 0.071, 0.24, glass, null, root, FXX, 0.12, FZ, null, 32, true);
+  var liqM = M('#bcdff2', { t: true, o: 0.85, r: 0.1, m: 0 });
+  var beakerLiq = Cyl(0.068, 0.068, 1, liqM, null, root, FXX, 0.003, FZ, null, 28);
+  var streamF = Cyl(0.0035, 0.0035, 1, liqM, null, root, FXX, 0.2, FZ, null, 8);
+  var streamB = Cyl(0.005, 0.005, 1, liqM, null, root, XD, 0.08, ZT, null, 8);
+  var streamD = Cyl(0.005, 0.005, 1, liqM, null, root, VX, 0.165, VZ, null, 8);
+  [streamF, streamB, streamD].forEach(function (s) { s.castShadow = false; });
+
+  /* ================= liquid flow overlays (animated bands drawn over the pipes) ================= */
+  function stripeTexture() {
+    var c = document.createElement('canvas'); c.width = 128; c.height = 8;
+    var g = c.getContext('2d'), gr = g.createLinearGradient(0, 0, 128, 0);
+    gr.addColorStop(0, 'rgba(255,255,255,0.15)'); gr.addColorStop(0.45, 'rgba(255,255,255,0.95)');
+    gr.addColorStop(0.7, 'rgba(255,255,255,0.95)'); gr.addColorStop(1, 'rgba(255,255,255,0.15)');
+    g.fillStyle = gr; g.fillRect(0, 0, 128, 8);
+    var t = new T.CanvasTexture(c); t.wrapS = T.RepeatWrapping; t.wrapT = T.ClampToEdgeWrapping; return t;
+  }
+  var baseStripe = null; try { baseStripe = stripeTexture(); } catch (e1) { baseStripe = null; }
+  var flows = {};
+  function Flow(key, pts) {
+    var path = new T.CurvePath(), i, L;
+    for (i = 0; i < pts.length - 1; i++) path.add(new T.LineCurve3(new T.Vector3(pts[i][0], pts[i][1], pts[i][2]), new T.Vector3(pts[i + 1][0], pts[i + 1][1], pts[i + 1][2])));
+    L = path.getLength();
+    var geo = new T.TubeGeometry(path, Math.max(8, Math.round(L / 0.008)), PR * 1.13, 10, false);
+    var tex = baseStripe ? baseStripe.clone() : null;
+    if (tex) { tex.wrapS = T.RepeatWrapping; tex.repeat.set(Math.max(1, L / 0.09), 1); tex.needsUpdate = true; }
+    var mat = new T.MeshBasicMaterial({ color: 0x4aa3ee, map: tex, transparent: true, opacity: 0, depthWrite: false });
+    var mesh = new T.Mesh(geo, mat); mesh.visible = false; mesh.renderOrder = 3; root.add(mesh);
+    flows[key] = { mesh: mesh, mat: mat, tex: tex, k: 0 };
+  }
+  Flow('in',    [[XO, TB, TZ], [XO, SY, TZ], [DX, SY, TZ], [DX, SY, Z0], [0.47, SY, Z0]]);
+  Flow('dis',   [[PX - 0.083, SY, Z0], [PX - 0.11, SY, Z0], [PX - 0.11, YT, Z0], [PX - 0.11, YT, ZF], [RX, YT, ZF], [RX, YP, ZF]]);
+  Flow('feed',  [[RX, YP, ZF], [VX + 0.2, YP, ZF]]);
+  Flow('filt',  [[VX, YP, ZFa], [VX - 0.14, YP, ZFa], [VX - 0.14, 0.58, ZFa], [XF, 0.58, ZFa], [XF, 0.36, ZFa], [XF, 0.36, FZ], [XF, 0.30, FZ]]);
+  Flow('bw',    [[RX, YP, ZF], [RX, YP, ZL], [XF, YP, ZL], [XF, YP, ZT]]);
+  Flow('bwout', [[XF, YP, ZT], [XD, YP, ZT], [XD, 0.24, ZT]]);
+  Flow('drain', [[VX, 0.47, VZ], [VX, 0.33, VZ]]);
 
   /* ---- boxes per part (for camera focus) ---- */
   root.updateMatrixWorld(true);
   Object.keys(P).forEach(function (id) {
     var b = new T.Box3(); P[id].objs.forEach(function (o) { b.expandByObject(o); }); P[id].box = b;
   });
+  var overall = new T.Box3(); Object.keys(P).forEach(function (id) { if (P[id].box && !P[id].box.isEmpty()) overall.union(P[id].box); });
+  window.__MODEL_BOX = { min: overall.min.toArray(), max: overall.max.toArray() };
+  window.__PART_BOX = {}; Object.keys(P).forEach(function (id) { var b = P[id].box; if (b && !b.isEmpty()) window.__PART_BOX[id] = [b.min.toArray(), b.max.toArray()]; });
 
   /* ---- camera / controls ---- */
-  var view = { az: 0.65, el: 0.36, r: 3.4, tx: 0.32, ty: 0.52, tz: 0.15 };
+  var view = { az: 0.65, el: 0.36, r: 3.6, tx: -0.18, ty: 0.45, tz: 0.40 };
   var want = {}; Object.keys(view).forEach(function (k) { want[k] = view[k]; });
   var inset = { l: 0, b: 0, t: 0 };
   var idle = true;
@@ -778,8 +1045,8 @@ function init3D() {
     return Math.max((sy * (h / ah)) / (2 * tanH), (sx * (w / aw)) / (2 * tanH * asp)) * margin;
   }
   function homeTarget() {
-    var r = fitR(2.7, 1.6, 1.08);
-    return { az: 0.65, el: 0.36, r: Math.min(Math.max(r, 2.0), 7.5), tx: 0.32, ty: 0.52, tz: 0.15 };
+    var r = fitR(2.55, 1.5, 1.08);
+    return { az: 0.65, el: 0.36, r: Math.min(Math.max(r, 2.0), 7.5), tx: -0.18, ty: 0.45, tz: 0.40 };
   }
   function setWant(o) { Object.keys(o).forEach(function (k) { want[k] = o[k]; }); }
   function nearAz(az) { var cz = want.az; return az + Math.round((cz - az) / (2 * Math.PI)) * 2 * Math.PI; }
@@ -896,41 +1163,61 @@ function init3D() {
     hoverId = id; refreshGlow(); cv.style.cursor = id ? 'pointer' : '';
   }
 
+
   /* ---- state ---- */
   var cur = mergeState({}), tgt = mergeState({}), lastTrans = false, ov = { xray: 0, lid: 0 };
   function eff(k) { return ov[k] ? Math.max(tgt[k], ov[k]) : tgt[k]; }
   function setState(s) {
     tgt = mergeState(s);
-    waterMat.color.set(tgt.feed === 'pulp' ? '#d8c79c' : '#79b6e6');
+    var pulp = tgt.feed === 'pulp';
+    waterMat.color.set(pulp ? '#d8c79c' : '#79b6e6'); vwaterMat.color.set(pulp ? '#d8c79c' : '#79b6e6');
+    ['in', 'dis', 'feed', 'drain'].forEach(function (k) { flows[k].mat.color.set(pulp ? 0xcdb67f : 0x4aa3ee); });
   }
   function resetNow() { cur = mergeState({}); tgt = mergeState({}); }
   function setOverride(k, on) { ov[k] = on ? 1 : 0; }
+  flows.filt.mat.color.set(0x8fd0f5); flows.bwout.mat.color.set(0x7fb4d8);
 
-  /* ---- labels ---- */
-  var labEls = {}, labelsOn = false;
+  /* ---- labels and floating notes ---- */
+  var labEls = {}, labelsOn = false, noteEls = [];
   Object.keys(PARTS).forEach(function (id) {
     if (!PARTS[id].label) return;
     var d = document.createElement('div'); d.className = 'lbl hidden'; d.textContent = PARTS[id].label;
     $('#labels').appendChild(d); labEls[id] = d;
   });
+  function anchorOf(id) {
+    var b = P[id].box, v = new T.Vector3((b.min.x + b.max.x) / 2, b.max.y, (b.min.z + b.max.z) / 2);
+    if (id === 'lid' || id === 'gauge') v.y += cur.lid * 0.38;
+    if (id === 'leaves') v.y += cur.leaf * 0.3;
+    return v;
+  }
+  function setNotes(list) {
+    noteEls.forEach(function (n) { if (n.el.parentNode) n.el.parentNode.removeChild(n.el); });
+    noteEls = [];
+    (list || []).forEach(function (n, i) {
+      if (!P[n.part]) return;
+      var d = document.createElement('div'); d.className = 'note3d'; d.textContent = n.text;
+      $('#labels').appendChild(d); noteEls.push({ el: d, id: n.part, i: i });
+    });
+  }
   function updateLabels() {
-    var w = window.innerWidth, h = window.innerHeight;
+    var w = window.innerWidth, h = window.innerHeight, v;
     Object.keys(labEls).forEach(function (id) {
       var el = labEls[id];
       if (!labelsOn || (id === 'leaves' && cur.xray < 0.3)) { el.classList.add('hidden'); return; }
-      var b = P[id].box, v = new T.Vector3((b.min.x + b.max.x) / 2, b.max.y, (b.min.z + b.max.z) / 2);
-      if (id === 'lid' || id === 'gauge' || id === 'vent') v.y += cur.lid * 0.38;
-      if (id === 'leaves') v.y += cur.leaf * 0.3;
-      v.project(camera);
+      v = anchorOf(id).project(camera);
       if (v.z > 1 || v.z < -1) { el.classList.add('hidden'); return; }
       el.classList.remove('hidden');
-      el.style.left = ((v.x * 0.5 + 0.5) * w) + 'px';
-      el.style.top = ((-v.y * 0.5 + 0.5) * h) + 'px';
+      el.style.left = ((v.x * 0.5 + 0.5) * w) + 'px'; el.style.top = ((-v.y * 0.5 + 0.5) * h) + 'px';
+    });
+    noteEls.forEach(function (n) {
+      v = anchorOf(n.id).project(camera);
+      if (v.z > 1 || v.z < -1) { n.el.style.display = 'none'; return; }
+      n.el.style.display = 'block';
+      n.el.style.left = ((v.x * 0.5 + 0.5) * w) + 'px'; n.el.style.top = ((-v.y * 0.5 + 0.5) * h - n.i * 4) + 'px';
     });
   }
 
   /* ---- resize ---- */
-  var homeActive = true;
   function resize() {
     var w = window.innerWidth, h = window.innerHeight;
     renderer.setSize(w, h, false); camera.aspect = w / h;
@@ -942,28 +1229,57 @@ function init3D() {
 
   /* ---- frame loop ---- */
   var last = performance.now(), PI2 = Math.PI / 2;
-  var valveIds = ['v1', 'v2', 'v3', 'v4', 'tankvalve', 'drain'];
+  var valveIds = ['v1', 'v2', 'v3', 'v4', 'drain', 'tankdrain'];
+  function opn(k) { return cur[k] > 0.7; }
+  function stream(m, topY, botY, on) {
+    m.visible = on; if (!on) return;
+    var len = Math.max(0.001, topY - botY); m.scale.y = len; m.position.y = botY + len / 2;
+  }
   function frame(now) {
     requestAnimationFrame(frame);
     var dt = Math.min((now - last) / 1000, 0.05); last = now; var t = now / 1000;
+    if (api.onFrame) api.onFrame(dt);
     var a = Math.min(1, dt * 4), k;
     for (k in cur) { if (typeof cur[k] === 'number') cur[k] += (eff(k) - cur[k]) * a; }
     valveIds.forEach(function (id) { valves[id].rotation.y = (1 - cur[id]) * PI2; });
     faucetPiv.rotation.y = cur.faucet * PI2 * 0.5;
-    lidG.position.y = 0.92 + cur.lid * 0.38;
+    lidG.position.y = 0.79 + cur.lid * 0.38;
     leafG.position.y = cur.leaf * 0.3;
     var trans = cur.xray > 0.02;
     shell.forEach(function (m) {
-      m.material.opacity = 1 - 0.8 * cur.xray;
+      m.material.opacity = 1 - 0.82 * cur.xray;
       if (trans !== lastTrans) { m.material.transparent = trans; m.material.depthWrite = !trans; m.material.needsUpdate = true; }
     });
     lastTrans = trans;
-    wheel.rotation.z -= dt * 12 * cur.pump;
+    var run = cur.pump > 0.5;
+    wheel.rotation.z -= dt * 9 * cur.pump;
+    motorG.position.y = 0.19 + (run ? Math.sin(t * 95) * 0.0005 : 0);
     needle.rotation.z = 2.35 - cur.gauge * 4.7 + Math.sin(t * 28) * 0.012 * cur.pump;
-    var wh = cur.tank * 0.5; water.visible = wh > 0.004; water.scale.y = Math.max(wh, 0.001); water.position.y = TB + 0.012 + wh / 2;
-    var bh = cur.beaker * 0.13; beakerLiq.visible = bh > 0.003; beakerLiq.scale.y = Math.max(bh, 0.001); beakerLiq.position.y = 0.004 + bh / 2;
-    var flowing = cur.faucet > 0.6 && cur.pump > 0.6;
-    drip.visible = flowing; if (flowing) drip.position.y = 0.2 - ((t * 1.6) % 1) * 0.11;
+    swTog.position.y = SWY + 0.027 + (cur.sw - 0.5) * 0.016;
+    swBtn.material.color.set(cur.sw > 0.5 ? '#ff8c3c' : '#b8541a');
+    /* liquids */
+    var wh = cur.tank * TH; water.visible = wh > 0.003; water.scale.y = Math.max(wh, 0.001); water.position.y = TB + 0.012 + wh / 2;
+    var vf = Math.min(cur.vessel, 1), vx = Math.max(cur.vessel - 1, 0) * 0.24;
+    vwCone.visible = vf > 0.01; vwCone.scale.set(Math.max(vf, 0.001), Math.max(vf, 0.001), Math.max(vf, 0.001)); vwCone.position.set(VX, 0.54, VZ);
+    vwCyl.visible = vx > 0.003; vwCyl.scale.y = Math.max(vx, 0.001); vwCyl.position.set(VX, 0.54 + vx / 2, VZ);
+    cakeMat.opacity = Math.min(1, cur.cake) * 0.92;
+    var bh = cur.beaker * 0.22; beakerLiq.visible = bh > 0.003; beakerLiq.scale.y = Math.max(bh, 0.001); beakerLiq.position.y = 0.004 + bh / 2;
+    /* where is liquid moving? derived from valves, pump and pressure */
+    var fIn = run && cur.tank > 0.003;
+    var fFeed = fIn && opn('v1');
+    var fFilt = opn('v1') && opn('v4') && cur.faucet > 0.6 && cur.vessel > 0.15 && cur.gauge > 0.12;
+    var fBw = fIn && opn('v2');
+    var fBwOut = fBw && opn('v3');
+    var fDr = opn('drain') && cur.vessel > 0.03;
+    var fwant = { 'in': fIn, dis: fIn, feed: fFeed, filt: fFilt, bw: fBw, bwout: fBwOut, drain: fDr }, fk, f;
+    for (fk in flows) {
+      f = flows[fk]; f.k += ((fwant[fk] ? 1 : 0) - f.k) * Math.min(1, dt * 6);
+      f.mat.opacity = f.k * 0.88; f.mesh.visible = f.k > 0.02;
+      if (f.tex && f.mesh.visible) f.tex.offset.x -= dt * 1.2;
+    }
+    stream(streamF, 0.3, 0.004 + bh, fFilt);
+    stream(streamB, 0.16, 0.004, fBwOut);
+    stream(streamD, 0.33, 0.004, fDr);
     if (hlIds.length) {
       var pulse = 0.38 + 0.22 * Math.sin(t * 3.2);
       hlIds.forEach(function (id) { P[id].objs.forEach(function (o) { o.material.emissiveIntensity = pulse; }); });
@@ -974,16 +1290,16 @@ function init3D() {
     camera.position.set(view.tx + view.r * Math.sin(view.az) * ce, view.ty + view.r * Math.sin(view.el), view.tz + view.r * Math.cos(view.az) * ce);
     camera.lookAt(view.tx, view.ty, view.tz);
     var la = view.az + 0.85;
-    sun.position.set(0.3 + Math.sin(la) * 3.0, 3.6, 0.15 + Math.cos(la) * 3.0);
-    fill.position.set(0.3 - Math.sin(la) * 2.5, 2, 0.15 - Math.cos(la) * 2.5);
+    sun.position.set(-0.18 + Math.sin(la) * 3.0, 3.6, 0.4 + Math.cos(la) * 3.0);
+    fill.position.set(-0.18 - Math.sin(la) * 2.5, 2, 0.4 - Math.cos(la) * 2.5);
     updateLabels();
     renderer.render(scene, camera);
   }
 
   var api = {
-    onPick: null, onHover: null, isHome: function () { return true; },
+    onPick: null, onHover: null, onFrame: null, isHome: function () { return true; },
     setHighlight: setHighlight, focus: focus, home: goHome, setState: setState, resetNow: resetNow,
-    setLabels: function (on) { labelsOn = on; }, resize: resize, setOverride: setOverride,
+    setLabels: function (on) { labelsOn = on; }, resize: resize, setOverride: setOverride, setNotes: setNotes,
     stopIdle: function () { idle = false; },
     setInset: function (l, b, t) { inset.l = l || 0; inset.b = b || 0; inset.t = t || 0; resize(); },
     preset: function (az, el) { idle = false; goHome(az, el); }
@@ -992,7 +1308,6 @@ function init3D() {
   requestAnimationFrame(frame);
   return api;
 }
-
 /* ------------------------------------------------------------------ */
 /*  UI                                                                 */
 /* ------------------------------------------------------------------ */
@@ -1050,6 +1365,8 @@ function groupHTML() {
 
 function renderSheet() {
   var el = $('#sheet'), home = $('#home'), h = '', nav = '';
+  if (mode === 'sim') { el.classList.add('hidden'); home.classList.add('hidden'); $('#sim').classList.remove('hidden'); return; }
+  $('#sim').classList.add('hidden');
   if (mode === 'home' && !selPart) { el.classList.add('hidden'); home.classList.remove('hidden'); return; }
   home.classList.add('hidden'); el.classList.remove('hidden');
   if (mode === 'home') {
@@ -1077,7 +1394,7 @@ function renderSheet() {
 
 function updateInset() {
   if (!gl) return;
-  var w = window.innerWidth, hEl = !$('#sheet').classList.contains('hidden') ? $('#sheet') : $('#home'), r = hEl.getBoundingClientRect();
+  var w = window.innerWidth, hEl = !$('#sim').classList.contains('hidden') ? $('#sim') : !$('#sheet').classList.contains('hidden') ? $('#sheet') : $('#home'), r = hEl.getBoundingClientRect();
   if (w >= 900) gl.setInset(Math.round(r.right + 6), 0, HEADER_H);
   else gl.setInset(0, Math.round(window.innerHeight - r.top + 4), HEADER_H);
 }
@@ -1087,7 +1404,7 @@ function camFor(ids, s) {
   return {};
 }
 function applyScene() {
-  if (!gl) return;
+  if (!gl || mode === 'sim') return;
   if (mode === 'home') {
     gl.setState({});
     gl.setHighlight(selPart ? [selPart] : []);
@@ -1105,6 +1422,7 @@ function refresh(scrollToDetail) {
   if (b) { if (scrollToDetail) { var d = b.querySelector('.detail'); if (d && d.scrollIntoView) { try { d.scrollIntoView({ block: 'nearest' }); } catch (x) {} } } else b.scrollTop = 0; }
 }
 function go(newMode, idx) {
+  if (mode === 'sim' && newMode !== 'sim') SIM.stop();
   mode = newMode; if (idx !== undefined) stepIdx = idx;
   selPart = null; stepMenu = false;
   if (gl) { gl.stopIdle(); gl.isHome = function () { return mode === 'home' && !selPart; }; }
@@ -1153,8 +1471,8 @@ function infoHTML(item) {
     h += '</div>';
   } else if (h === '@MODEL@') {
     h = '<h3>Interactive 3D model</h3><ul class="ticks"><li><b>Rotate:</b> drag with one finger or the mouse.</li><li><b>Zoom:</b> pinch, or use the mouse wheel.</li><li><b>Pan:</b> two fingers, or right-click drag.</li>' +
-      '<li><b>Component info:</b> tap any part. Hover shows its name on a computer.</li><li><b>Toolbar:</b> reset the view, switch viewpoint, show labels, see inside the vessel (X-ray) or lift the cover.</li><li><b>Keyboard:</b> &larr; &rarr; move through steps, Esc closes panels.</li><li><b>Procedure:</b> press Start procedure to be guided step by step.</li></ul>' +
-      '<p class="note">The model is a stylized rebuild from photos and measurements of the actual unit. Pipe routing and valve positions are schematic and should be checked against the equipment.</p>' +
+      '<li><b>Component info:</b> tap any part. Hover shows its name on a computer.</li><li><b>Toolbar:</b> reset the view, switch viewpoint, show labels, see inside the vessel (X-ray) or lift the cover.</li><li><b>Keyboard:</b> &larr; &rarr; move through steps, Esc closes panels.</li><li><b>Procedure:</b> press Start procedure to be guided step by step.</li><li><b>Simulation:</b> press Run simulation to watch a full run: liquid flowing through the pipes, the pump, valves and switch moving, then the backwash. Play, pause, skip stages or change the speed.</li></ul>' +
+      '<p class="note">The model is a stylized rebuild from photos and measurements of the actual unit. The overall layout follows the equipment photos and the measured dimensions; small fittings and internal liquid levels are schematic.</p>' +
       '<p><button class="sbtn" data-act="closeinfo">Open the 3D model</button></p>';
   }
   return h;
@@ -1192,12 +1510,172 @@ function onKey(e) {
   if (tag === 'INPUT' || tag === 'TEXTAREA') return;
   var infoOpen = !$('#infoOv').classList.contains('hidden');
   if (e.key === 'Escape') {
-    if (infoOpen) closeInfo(); else if (selPart) { selPart = null; refresh(); } else if (mode === 'step') go('home');
+    if (infoOpen) closeInfo(); else if (selPart) { selPart = null; refresh(); } else if (mode === 'step' || mode === 'sim') go('home');
+  } else if (!infoOpen && mode === 'sim') {
+    if (e.key === ' ') { e.preventDefault(); SIM.toggle(); } else if (e.key === 'ArrowRight') SIM.next(); else if (e.key === 'ArrowLeft') SIM.prev();
   } else if (!infoOpen && mode === 'step') {
     if (e.key === 'ArrowRight') { if (stepIdx < STEPS.length - 1) go('step', stepIdx + 1); }
     else if (e.key === 'ArrowLeft') { if (stepIdx > 0) go('step', stepIdx - 1); }
   }
 }
+
+/* ------------------------------------------------------------------ */
+/*  Process simulation (follows manual 10.3 and 10.4)                  */
+/* ------------------------------------------------------------------ */
+var SIM = (function () {
+  var TBL_T = [0, 7, 23, 50, 84, 132, 185, 249, 326], TBL_V = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4];
+  function cl(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
+  function L(a, b, p) { return a + (b - a) * cl(p); }
+  function seg(p, a, b) { return cl((p - a) / (b - a)); }
+  function volAt(t) {
+    for (var i = 1; i < TBL_T.length; i++) if (t <= TBL_T[i]) return L(TBL_V[i - 1], TBL_V[i], (t - TBL_T[i - 1]) / (TBL_T[i] - TBL_T[i - 1]));
+    return 4;
+  }
+  function B(o) {
+    var s = { v1: 0, v2: 0, v3: 0, v4: 0, drain: 0, faucet: 0, tank: 0, feed: 'water', sw: 0, pump: 0, gauge: 0, vessel: 0, cake: 0, beaker: 0, xray: 0, lid: 0, leaf: 0 };
+    for (var k in o) s[k] = o[k]; return s;
+  }
+  var PULP = 0.086, KPA = 200;   /* gauge 0.5 = 100 kPa (the sample calculation uses 100 kPa) */
+  var ST = [
+    { id: 'Valves', title: 'Set the valves for filtration', dur: 5, parts: ['v1', 'v4', 'v2', 'v3'], cam: { az: 0.2, el: 0.35 },
+      text: 'Valves 1 and 4 are opened and valves 2 and 3 stay closed. A ball valve is open when its handle is parallel to the pipe. The vessel drain and the filter faucet stay closed.',
+      notes: [{ part: 'v1', text: 'Valve 1 open' }, { part: 'v4', text: 'Valve 4 open' }, { part: 'v2', text: 'Valve 2 closed' }, { part: 'v3', text: 'Valve 3 closed' }],
+      fn: function (p) { return B({ v1: p > 0.3 ? 1 : 0, v4: p > 0.5 ? 1 : 0 }); } },
+    { id: 'Feed', title: 'Fill the conditioning tank', dur: 6, parts: ['tank'], cam: { az: -0.9, el: 0.35 },
+      text: 'The 4.6 L of water goes into the conditioning tank first, then the 1.0 kg of strained coconut pulp is added gradually while stirring until the mixture is even.',
+      notes: [{ part: 'tank', text: 'Water, then pulp' }],
+      fn: function (p) { return B({ v1: 1, v4: 1, tank: p < 0.55 ? L(0, 0.071, p / 0.55) : L(0.071, PULP, seg(p, 0.55, 1)), feed: p < 0.55 ? 'water' : 'pulp' }); } },
+    { id: 'Start', title: 'Plug in and switch on the pump', dur: 8, parts: ['regulator', 'switch', 'ebox', 'pump', 'gauge'], cam: { az: -0.55, el: 0.3 },
+      text: 'The pump cord is plugged into the voltage regulator and the pump is switched on at the circuit breaker. The gear pump draws the feed from the tank and fills the pressure vessel.',
+      notes: [{ part: 'pump', text: 'Gear pump running' }, { part: 'switch', text: 'Circuit breaker on' }, { part: 'gauge', text: 'Read the gauge' }],
+      fn: function (p) {
+        var f = seg(p, 0.15, 0.85), on = p > 0.15;
+        return B({ v1: 1, v4: 1, feed: 'pulp', sw: on ? 1 : 0, pump: on ? 1 : 0, tank: PULP * (1 - 0.7 * f), vessel: 1.7 * f, gauge: 0.5 * seg(p, 0.25, 0.95), xray: 0.85 });
+      } },
+    { id: 'Faucet', title: 'Open the filter faucet', dur: 4, parts: ['faucet'], cam: { az: 0.55, el: 0.3 },
+      text: 'The filter faucet is opened and the stopwatch starts when the first filtrate flows. The pressure pushes the liquid through the filter leaves while the solids stay behind.',
+      notes: [{ part: 'faucet', text: 'Start the stopwatch at first filtrate' }],
+      fn: function (p) { return B({ v1: 1, v4: 1, feed: 'pulp', sw: 1, pump: 1, tank: PULP * 0.3, vessel: 1.7, gauge: 0.5, faucet: p > 0.2 ? 1 : 0, beaker: p > 0.6 ? 0.02 : 0, cake: 0.1 * seg(p, 0.5, 1), xray: 0.85 }); },
+      hud: function (p) { return { t: 0, v: 0, p: 100 }; } },
+    { id: 'Run', title: 'Filtration: read every 30 seconds', dur: 34, parts: ['faucet', 'gauge', 'leaves'], cam: { az: 0.45, el: 0.32 },
+      text: 'Every 30 seconds the group reads the cumulative filtrate volume and the pressure and records them in Table 4. The cake builds up on the leaves, so the filtrate flows more slowly as time passes. Time and volume follow the illustrative data in Table 6 of the manual (shown here in compressed time).',
+      notes: [{ part: 'faucet', text: 'Filtrate collects in the container' }, { part: 'leaves', text: 'Cake builds on the leaves' }],
+      fn: function (p) {
+        var t = 326 * p, V = volAt(t);
+        return B({ v1: 1, v4: 1, feed: 'pulp', sw: 1, pump: 1, tank: PULP * 0.3 * (1 - V / 4), vessel: 1.7 - 1.2 * (V / 4), gauge: 0.5, faucet: 1, beaker: V / 5, cake: 0.1 + 0.9 * (V / 4), xray: 0.85 });
+      },
+      hud: function (p) { var t = 326 * p; return { t: t, v: volAt(t), p: 100 }; } },
+    { id: 'Stop', title: 'Stop when only drops come out', dur: 5, parts: ['faucet', 'gauge'], cam: { az: 0.45, el: 0.32 },
+      text: 'The run is stopped when only drops come out, when the volume does not change between two readings, or after 15 minutes. The filtration time and the filtrate volume are recorded on the Data Sheet.',
+      notes: [{ part: 'faucet', text: 'Only drops left' }],
+      fn: function (p) { return B({ v1: 1, v4: 1, feed: 'pulp', sw: 1, pump: 1, tank: 0, vessel: L(0.5, 0.1, p), gauge: 0.5, faucet: 1, beaker: 0.8, cake: 1, xray: 0.85 }); },
+      hud: function () { return { t: 326, v: 4, p: 100 }; } },
+    { id: 'Off', title: 'Switch off and unplug first', dur: 4, parts: ['switch', 'regulator', 'pump'], cam: { az: -0.55, el: 0.3 },
+      text: 'The pump is switched off and unplugged first, before any valve is touched.',
+      notes: [{ part: 'switch', text: 'Pump off, then unplug' }],
+      fn: function (p) { var off = p > 0.3; return B({ v1: 1, v4: 1, feed: 'pulp', sw: off ? 0 : 1, pump: off ? 0 : 1, vessel: 0.1, gauge: 0.5, faucet: 1, beaker: 0.8, cake: 1, xray: 0.85 }); },
+      hud: function () { return { t: 326, v: 4, p: 100 }; } },
+    { id: 'Release', title: 'Close valves 1 and 4, release the pressure', dur: 7, parts: ['v1', 'v4', 'drain', 'gauge'], cam: { az: 0.2, el: 0.3 },
+      text: 'Valves 1 and 4 are closed. Then the vessel drain is opened slowly to release the remaining pressure until the gauge reads zero.',
+      notes: [{ part: 'drain', text: 'Open slowly' }, { part: 'gauge', text: 'Wait for zero' }],
+      fn: function (p) {
+        return B({ v1: p < 0.2 ? 1 : 0, v4: p < 0.3 ? 1 : 0, feed: 'pulp', drain: p > 0.35 ? 1 : 0, vessel: L(0.1, 0, seg(p, 0.5, 1)), gauge: 0.5 * (1 - seg(p, 0.4, 0.95)), faucet: 1, beaker: 0.8, cake: 1, xray: 0.85 });
+      },
+      hud: function (p) { return { t: 326, v: 4, p: Math.round(100 * (1 - seg(p, 0.4, 0.95))) }; } },
+    { id: 'BW prep', title: 'Prepare the backwash', dur: 9, parts: ['tank', 'v1', 'v4', 'drain', 'faucet', 'v2', 'v3'], cam: { az: -0.2, el: 0.4 },
+      text: 'The remaining mixture is emptied and the tank is filled with about 10 L of clean water. Valve 1, valve 4, the vessel drain and the filter faucet are closed so the water flows in the reverse direction. Then valves 2 and 3 are opened. The filter leaves stay inside the vessel.',
+      notes: [{ part: 'tank', text: 'About 10 L clean water' }, { part: 'v2', text: 'Valve 2 open' }, { part: 'v3', text: 'Valve 3 open' }],
+      fn: function (p) {
+        return B({ feed: 'water', tank: L(0, 0.154, seg(p, 0.05, 0.4)), drain: p < 0.55 ? 1 : 0, faucet: p < 0.55 ? 1 : 0, v2: p > 0.75 ? 1 : 0, v3: p > 0.85 ? 1 : 0, beaker: 0.8, cake: 1 });
+      } },
+    { id: 'Backwash', nokpa: true, title: 'Run the backwash for 2 to 3 minutes', dur: 12, parts: ['pump', 'v2', 'v3', 'leaves'], cam: { az: -0.45, el: 0.4 },
+      text: 'The pump is plugged in and turned on and runs for 2 to 3 minutes. Water flows backwards through the leaves and carries the loosened cake out through valve 3. The pressure shown on the gauge here is schematic.',
+      notes: [{ part: 'v2', text: 'Water enters in reverse' }, { part: 'v3', text: 'Cake and wash water leave' }],
+      fn: function (p) {
+        var on = p > 0.08;
+        return B({ feed: 'water', v2: 1, v3: 1, sw: on ? 1 : 0, pump: on ? 1 : 0, tank: L(0.154, 0.04, p), vessel: on ? 0.7 : 0, gauge: on ? 0.25 : 0, beaker: 0.8, cake: L(1, 0.25, seg(p, 0.1, 1)), xray: 0.85 });
+      },
+      hud: function (p) { return { t: 150 * p, v: 4, p: null, bw: true }; } },
+    { id: 'BW stop', nokpa: true, title: 'Switch off, close valves 2 and 3', dur: 6, parts: ['switch', 'v2', 'v3', 'gauge'], cam: { az: -0.2, el: 0.35 },
+      text: 'The pump is switched off and unplugged first. Then valves 2 and 3 are closed and the remaining pressure is released until the gauge reads zero.',
+      notes: [{ part: 'switch', text: 'Off and unplugged first' }],
+      fn: function (p) {
+        var off = p > 0.25;
+        return B({ feed: 'water', v2: p < 0.5 ? 1 : 0, v3: p < 0.6 ? 1 : 0, sw: off ? 0 : 1, pump: off ? 0 : 1, tank: 0.04, vessel: L(0.7, 0, seg(p, 0.3, 1)), gauge: 0.25 * (1 - seg(p, 0.5, 0.95)), beaker: 0.8, cake: 0.25, xray: 0.85 });
+      } },
+    { id: 'Clean', title: 'Open the vessel and clean the leaves', dur: 9, parts: ['lid', 'leaves'], cam: { az: -0.5, el: 0.5 },
+      text: 'With the gauge at zero the vessel is opened. The loosened cake is removed with the plastic scraper, the leaves are rinsed and the filter cloth is gently brushed. The cloth is checked for tears or clogging, the lid gasket is checked, and the vessel is closed firmly.',
+      notes: [{ part: 'leaves', text: 'Scrape, rinse, brush (no metal tools)' }],
+      fn: function (p) { return B({ feed: 'water', tank: 0.04, lid: p > 0.1 ? 1 : 0, leaf: seg(p, 0.25, 0.4) > 0 ? 1 : 0, cake: p < 0.55 ? 0.25 : 0, beaker: 0.8 }); } },
+    { id: 'Reset', title: 'Reset the valves for filtration', dur: 5, parts: ['v1', 'v4', 'v2', 'v3', 'lid'], cam: { az: 0.2, el: 0.35 },
+      text: 'The vessel is closed and the valves are reset for filtration: valves 1 and 4 open, valves 2 and 3 closed. The cake and wash water are disposed of in the organic waste. The equipment is ready for the next trial.',
+      notes: [{ part: 'v1', text: 'Valve 1 open' }, { part: 'v4', text: 'Valve 4 open' }],
+      fn: function (p) { return B({ feed: 'water', tank: 0.04, lid: p < 0.25 ? 1 : 0, leaf: p < 0.1 ? 1 : 0, v1: p > 0.5 ? 1 : 0, v4: p > 0.65 ? 1 : 0, beaker: p > 0.3 ? 0 : 0.8 }); } }
+  ];
+  var starts = [], total = 0;
+  ST.forEach(function (s) { starts.push(total); total += s.dur; });
+  var t = 0, playing = true, speed = 1, idx = -1, hudAcc = 0, lastHud = '';
+
+  function fmtT(s) { s = Math.round(s); var m = Math.floor(s / 60); return m + ':' + (s % 60 < 10 ? '0' : '') + (s % 60); }
+  function stageAt(x) { var i = ST.length - 1; while (i > 0 && x < starts[i]) i--; return i; }
+  function dots() {
+    var h = '<div class="sdots">';
+    ST.forEach(function (s, i) { h += '<i data-sstage="' + i + '" class="' + (i < idx ? 'done' : i === idx ? 'act' : '') + '"' + (i === idx ? ' style="--p:' + Math.round(cl((t - starts[i]) / s.dur) * 100) + '%"' : '') + ' title="' + s.title + '"></i>'; });
+    return h + '</div>';
+  }
+  function render() {
+    var s = ST[idx], el = $('#sim');
+    el.style.setProperty('--ac', '#e8981a');
+    var done = t >= total - 0.001;
+    el.innerHTML = '<div class="sbody"><div class="top"><span class="eyeb" style="margin:0"><i class="badge">Simulation</i></span><button class="x" data-sact="exit" aria-label="Close">×</button></div>' +
+      dots() + '<div class="eyeb">Stage ' + (idx + 1) + ' of ' + ST.length + '</div><h2>' + esc(s.title) + '</h2><p>' + s.text + '</p>' +
+      '<div class="hud" id="simHud"></div><div class="simnote">Times, volumes and the 100 kPa pressure are the illustrative sample values in the manual. Liquid levels inside the equipment are schematic.</div></div>' +
+      '<div class="nav"><button class="ic" data-sact="prev" aria-label="Previous stage">‹</button><button class="pri" data-sact="play">' + (done ? '↻ Replay' : playing ? '❚❚ Pause' : '▶ Play') + '</button>' +
+      '<button class="ic" data-sact="next" aria-label="Next stage">›</button><button class="spd" data-sact="speed" aria-label="Speed">' + speed + '×</button><button class="ic" data-sact="reset" aria-label="Reset">⟲</button></div>';
+    lastHud = ''; hud(true);
+  }
+  function hud(force) {
+    var s = ST[idx], p = cl((t - starts[idx]) / s.dur), h = s.hud ? s.hud(p) : null, el = $('#simHud'); if (!el) return;
+    var st = s.fn(p), kpa = s.nokpa ? null : h && h.p !== undefined ? h.p : Math.round(st.gauge * KPA), time = h ? h.t : null;
+    var html = '<div><b>' + (kpa === null ? 'n/a' : kpa) + '</b><span>kPa</span></div>' +
+      '<div><b>' + (time === null ? '–' : fmtT(time)) + '</b><span>' + (h && h.bw ? 'Backwash' : 'Time') + '</span></div>' +
+      '<div><b>' + (h && !h.bw ? h.v.toFixed(2) : st.beaker ? (st.beaker * 5).toFixed(2) : '0.00') + '</b><span>Filtrate L</span></div>' +
+      '<div><b>' + (h && h.t > 0 && !h.bw ? Math.floor(h.t / 30) : '–') + '</b><span>Readings</span></div>';
+    if (html !== lastHud || force) { el.innerHTML = html; lastHud = html; }
+  }
+  function enter() {
+    var s = ST[idx];
+    gl.setHighlight(s.parts); gl.focus(s.parts, s.cam || {}); gl.setNotes(s.notes || []);
+    render();
+  }
+  function tick(dt) {
+    if (playing) { t += dt * speed; if (t >= total) { t = total; playing = false; render(); } }
+    var i = stageAt(Math.min(t, total - 1e-6));
+    if (i !== idx) { idx = i; enter(); }
+    var s = ST[idx], p = cl((t - starts[idx]) / s.dur);
+    gl.setState(s.fn(p));
+    hudAcc += dt; if (hudAcc > 0.1) { hudAcc = 0; hud(); var a = $('#sim .sdots .act'); if (a) a.style.setProperty('--p', Math.round(p * 100) + '%'); }
+  }
+  function seekStage(i) { i = Math.max(0, Math.min(ST.length - 1, i)); t = starts[i]; idx = -1; playing = true; tick(0); }
+  function start() {
+    t = 0; playing = true; speed = 1; idx = -1;
+    if (!gl) { toast('3D view is not available on this device'); return false; }
+    gl.onFrame = tick; tick(0); return true;
+  }
+  function stop() { if (gl) { gl.onFrame = null; gl.setNotes([]); } }
+  function act(a, el) {
+    if (a === 'exit') go('home');
+    else if (a === 'play') { if (t >= total - 0.001) { seekStage(0); } else { playing = !playing; render(); } }
+    else if (a === 'next') seekStage(idx + 1);
+    else if (a === 'prev') seekStage(t - starts[idx] > 1.5 ? idx : idx - 1);
+    else if (a === 'reset') { seekStage(0); playing = false; render(); }
+    else if (a === 'speed') { speed = speed === 1 ? 2 : speed === 2 ? 4 : 1; render(); }
+  }
+  return {
+    start: start, stop: stop, act: act, stage: function (i) { seekStage(i); }, count: ST.length,
+    toggle: function () { act('play'); }, next: function () { seekStage(idx + 1); }, prev: function () { act('prev'); }, total: total
+  };
+})();
 
 /* ---------- boot ---------- */
 function loadThree() {
@@ -1217,6 +1695,8 @@ function boot() {
   $('#home').addEventListener('click', function (e) { var t = e.target.closest('[data-tab]'); if (t) openInfo(t.dataset.tab); });
   $('#infoOv').addEventListener('click', onInfoClick);
   $('#bStart').addEventListener('click', function () { go('step', 0); });
+  $('#bSim').addEventListener('click', function () { if (!gl) { toast('3D view is not available'); return; } go('sim'); SIM.start(); });
+  $('#sim').addEventListener('click', function (e) { var t = e.target.closest('[data-sact],[data-sstage]'); if (!t) return; if (t.dataset.sstage !== undefined) SIM.stage(parseInt(t.dataset.sstage, 10)); else SIM.act(t.dataset.sact); });
   $('#bInfo').addEventListener('click', function () { openInfo(); });
   $('#bLabels').addEventListener('click', function () { labelsOn = !labelsOn; this.classList.toggle('on', labelsOn); if (gl) gl.setLabels(labelsOn); toast(labelsOn ? 'Labels on' : 'Labels off'); });
   $('#bXray').addEventListener('click', function () { xrayOn = !xrayOn; this.classList.toggle('on', xrayOn); if (gl) gl.setOverride('xray', xrayOn); toast(xrayOn ? 'X-ray: vessel is see-through' : 'X-ray off'); });
@@ -1225,7 +1705,7 @@ function boot() {
   $('#bView').addEventListener('click', function () {
     presetIdx = (presetIdx + 1) % PRESETS.length; var p = PRESETS[presetIdx];
     $('#vName').textContent = p[0]; toast('View: ' + p[0]);
-    if (gl) { if (mode === 'home' && !selPart) gl.preset(p[1], p[2]); else gl.focus(selPart ? [selPart] : STEPS[stepIdx].parts, { az: p[1], el: p[2] }); }
+    if (gl) { if ((mode === 'home' && !selPart) || mode === 'sim') gl.preset(p[1], p[2]); else gl.focus(selPart ? [selPart] : STEPS[stepIdx].parts, { az: p[1], el: p[2] }); }
   });
   document.addEventListener('keydown', onKey);
   setTimeout(hideCoach, 9000);
