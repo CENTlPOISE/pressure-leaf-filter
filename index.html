@@ -474,6 +474,25 @@ body:not(.landing) #land:not(.leaving){display:none}
 @media (min-width:900px) and (max-height:720px){.land-feats{display:none}}
 @media (min-width:900px) and (max-width:1180px){.land-card{display:none}.land-nav button{padding:9px 11px}}
 @media (prefers-reduced-motion:reduce){#land *,.land-card{animation:none!important}}
+
+/* ---- floating part card ---- */
+#pconn{position:fixed;inset:0;width:100%;height:100%;z-index:6;pointer-events:none;overflow:visible}
+#pconn line{stroke:var(--v);stroke-width:1.5;stroke-linecap:round;opacity:.85}
+#pconn #pdot{fill:var(--v);stroke:#fff;stroke-width:1.5}
+#pconn #pring{fill:none;stroke:var(--v);stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:pring 1.8s ease-out infinite}
+@keyframes pring{0%{transform:scale(1);opacity:.8}100%{transform:scale(3.2);opacity:0}}
+#pconn.off,#pcard.hidden{opacity:0;visibility:hidden}
+.pcard{position:fixed;left:0;top:0;z-index:7;width:272px;max-width:calc(100vw - 16px);padding:13px 15px 14px;border-radius:18px;will-change:transform;transition:opacity .22s,visibility .22s;pointer-events:auto}
+.pcard .pcb{max-height:min(38vh,300px);overflow:auto;padding-right:2px;animation:pcin .28s ease both}
+.pcard .pcb .detail{margin:0;background:transparent;border:0;padding:0;font-size:13px}
+.pcard .pcb .detail .dh{margin-right:30px}
+.pcard .pcb .detail .dh b{font-size:15px}
+.pcard .pcx{position:absolute;z-index:3;right:7px;top:7px;width:30px;height:30px;touch-action:manipulation;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.35);color:var(--ink);font-size:16px;line-height:1;cursor:pointer;padding:0}
+@keyframes pcin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+html[data-theme=dark] .pcard .pcx{background:rgba(255,255,255,.08)}
+html[data-theme=dark] #pconn #pdot{stroke:#0f1520}
+@media (max-width:899px){.pcard{width:236px;padding:11px 13px 12px}.pcard .pcb{max-height:30vh}}
+@media (prefers-reduced-motion:reduce){#pconn #pring{animation:none}.pcard .pcb{animation:none}}
 </style>
 </head>
 <body class="landing">
@@ -550,6 +569,8 @@ body:not(.landing) #land:not(.leaving){display:none}
 <div id="sim" class="glass hidden"></div>
 <div id="infoOv" class="hidden"></div>
 <div id="labels"></div>
+<svg id="pconn" aria-hidden="true"><line id="pline" x1="0" y1="0" x2="0" y2="0"/><circle id="pdot" r="5"/><circle id="pring" r="5"/></svg>
+<div id="pcard" class="glass pcard hidden" role="dialog" aria-live="polite"><button class="pcx" aria-label="Close" data-pc="close">×</button><div class="pcb"></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 /* =====================================================================
@@ -1549,6 +1570,7 @@ function init3D() {
     sun.position.set(-0.18 + Math.sin(la) * 3.0, 3.6, 0.4 + Math.cos(la) * 3.0);
     fill.position.set(-0.18 - Math.sin(la) * 2.5, 2, 0.4 - Math.cos(la) * 2.5);
     updateLabels();
+    if (api.onPost) { try { api.onPost(dt); } catch (e0) {} }
     renderer.render(scene, camera);
   }
 
@@ -1557,6 +1579,21 @@ function init3D() {
     setHighlight: setHighlight, focus: focus, home: goHome, setState: setState, resetNow: resetNow,
     setLabels: function (on) { labelsOn = on; }, resize: resize, setOverride: setOverride, setNotes: setNotes,
     stopIdle: function () { idle = false; },
+    partRect: function (id) {
+      var q = P[id]; if (!q || !q.box) return null;
+      camera.updateMatrixWorld();
+      var b = q.box, dy = (id === 'lid' || id === 'gauge') ? cur.lid * 0.38 : id === 'leaves' ? cur.leaf * 0.3 : 0;
+      var w = window.innerWidth, h = window.innerHeight, l = 1e9, t = 1e9, r = -1e9, bt = -1e9, i, v, ok = true;
+      for (i = 0; i < 8; i++) {
+        v = new T.Vector3(i & 1 ? b.max.x : b.min.x, (i & 2 ? b.max.y : b.min.y) + dy, i & 4 ? b.max.z : b.min.z).project(camera);
+        if (v.z > 1 || v.z < -1) ok = false;
+        l = Math.min(l, (v.x * 0.5 + 0.5) * w); r = Math.max(r, (v.x * 0.5 + 0.5) * w);
+        t = Math.min(t, (-v.y * 0.5 + 0.5) * h); bt = Math.max(bt, (-v.y * 0.5 + 0.5) * h);
+      }
+      if (!ok) return null;
+      var a = anchorOf(id).project(camera);
+      return { l: l, t: t, r: r, b: bt, ax: (a.x * 0.5 + 0.5) * w, ay: (-a.y * 0.5 + 0.5) * h };
+    },
     setInset: function (l, b, t, rr) { inset.l = l || 0; inset.b = b || 0; inset.t = t || 0; inset.r = rr || 0; resize(); },
     setTheme: function (th) { var d = th === 'dark'; hemi.intensity = d ? 0.95 : 0.78; floor.material.opacity = d ? 0.4 : 0.24; },
     preset: function (az, el) { idle = false; goHome(az, el); }
@@ -1570,7 +1607,7 @@ function init3D() {
 /* ------------------------------------------------------------------ */
 var gl = null;
 var mode = 'home', stepIdx = 0, selPart = null, stepMenu = false, partsOpen = false;
-var labelsOn = false, xrayOn = false, coverOn = false, presetIdx = 0;
+var freeRect = null, labelsOn = false, xrayOn = false, coverOn = false, presetIdx = 0;
 var TAGS = { repair: 'Needs repair', service: 'Needs service', ok: 'No issue', check: 'To inspect', tbc: 'To confirm' };
 var PRESETS = [['Front', 0, 0.05], ['Iso', 0.65, 0.36], ['Right', Math.PI / 2, 0.1], ['Back', Math.PI, 0.1], ['Left', -Math.PI / 2, 0.1], ['Top', 0.3, 1.4]];
 var HEADER_H = 64;
@@ -1620,7 +1657,7 @@ function groupHTML() {
 }
 
 function renderSheet() {
-  var el = $('#sheet'), home = $('#home'), h = '', nav = '', sp = partsOpen ? null : selPart;   /* with the components panel open, part details are shown there */
+  var el = $('#sheet'), home = $('#home'), h = '', nav = '', sp = null;   /* with the components panel open, part details are shown there */
   if (mode === 'sim') { el.classList.add('hidden'); home.classList.add('hidden'); $('#sim').classList.remove('hidden'); return; }
   $('#sim').classList.add('hidden');
   if (mode === 'home' && !sp) { el.classList.add('hidden'); home.classList.remove('hidden'); return; }
@@ -1640,7 +1677,6 @@ function renderSheet() {
       h += '<div class="eyeb"><i class="badge">' + s.id + '</i>' + esc(sec.name) + '</div><h2>' + esc(s.title) + '</h2><p>' + s.text + '</p>' + coHTML(s);
       if (s.parts.length) h += '<div class="chips">' + s.parts.map(function (id) {
         return '<button class="chip' + (selPart === id ? ' sel' : '') + '" data-part="' + id + '">' + esc(PARTS[id].name) + '</button>'; }).join('') + '</div>';
-      if (sp) h += partDetail(sp) + '<button class="link" data-act="backstep">Hide part info</button>';
     }
     var last = stepIdx === STEPS.length - 1;
     nav = '<button data-act="back"' + (stepIdx === 0 ? ' disabled' : '') + '>‹ Back</button><button class="pri" data-act="next">' + (last ? 'Finish' : 'Next ›') + '</button>';
@@ -1684,7 +1720,7 @@ function renderParts() {
     });
     h += '</div></div>';
   });
-  h += '</div>' + (selPart ? '<div class="pdetail">' + partDetail(selPart) + '</div>' : '<div class="phint">Select a component to read what it does. It is highlighted in the 3D model.</div>');
+  h += '</div>' + (selPart ? '' : '<div class="phint">Select a component. Its description appears next to it in the 3D model.</div>');
   var keep = el.querySelector('.pscroll'), st = keep ? keep.scrollTop : 0;
   el.innerHTML = h; el.classList.remove('hidden');
   var ns = el.querySelector('.pscroll'); if (ns) ns.scrollTop = st;
@@ -1712,7 +1748,8 @@ function updateInset() {
     if (partsOpen) { var pr = $('#parts').getBoundingClientRect(); right = Math.round(w - pr.left + 12); left = w < 1360 ? 0 : $('#home').getBoundingClientRect().right; }
     else left = r.right;
     gl.setInset(Math.round(left + 16), 16, 16, right);
-  } else gl.setInset(0, Math.round(h - r.top + 4), HEADER_H, 0);
+    freeRect = { l: Math.round(left + 16), t: 16, r: w - right, b: h - 16 };
+  } else { gl.setInset(0, Math.round(h - r.top + 4), HEADER_H, 0); freeRect = { l: 8, t: HEADER_H + 4, r: w - 8, b: Math.round(r.top - 6) }; }
 }
 /* ---------- theme ---------- */
 function setTheme(t, save) {
@@ -1768,7 +1805,7 @@ function applyScene() {
   }
 }
 function refresh(scrollToDetail) {
-  renderSheet(); renderParts(); updateInset(); applyScene();
+  renderSheet(); renderParts(); updateInset(); applyScene(); pcSync();
   var b = $('#sheet .sbody');
   if (b) { if (scrollToDetail) { var d = b.querySelector('.detail'); if (d && d.scrollIntoView) { try { d.scrollIntoView({ block: 'nearest' }); } catch (x) {} } } else b.scrollTop = 0; }
 }
@@ -1780,7 +1817,7 @@ function go(newMode, idx) {
   hideCoach(); refresh();
 }
 function choosePart(id) {
-  if (!id) { if (mode === 'home' && selPart) { selPart = null; refresh(); } return; }
+  if (!id || id === selPart) { if (selPart && mode !== 'sim') { selPart = null; refresh(); } return; }
   selPart = id; stepMenu = false; hideCoach(); if (gl) gl.stopIdle(); refresh(true);
 }
 
@@ -2036,6 +2073,62 @@ var SIM = (function () {
   };
 })();
 
+
+/* ---------- floating part card (anchored to the selected part's projected screen position) ---------- */
+var pcard = { el: null, body: null, line: null, dot: null, ring: null, svg: null, id: null, shown: false, x: 0, y: 0, w: 272, h: 120, side: '', glide: 0 };
+function pcInit() {
+  var c = pcard; c.el = $('#pcard'); c.body = c.el.querySelector('.pcb'); c.svg = $('#pconn'); c.line = $('#pline'); c.dot = $('#pdot'); c.ring = $('#pring');
+  c.el.addEventListener('click', function (e) { if (e.target.closest('[data-pc=close]')) { selPart = null; refresh(); } });
+}
+function pcMeasure() { var c = pcard; if (!c.el) return; c.w = c.el.offsetWidth || 272; c.h = c.el.offsetHeight || 120; }
+function pcHide() { var c = pcard; if (!c.el) return; c.el.classList.add('hidden'); c.svg.classList.add('off'); c.shown = false; c.id = null; }
+function pcSync() {
+  var c = pcard; if (!c.el) return;
+  if (!selPart || mode === 'sim' || isLanding() || !gl) { pcHide(); return; }
+  if (c.id !== selPart) {
+    c.body.innerHTML = partDetail(selPart);
+    c.body.style.animation = 'none'; void c.body.offsetWidth; c.body.style.animation = '';
+    c.id = selPart; c.glide = 0.42;
+    c.shown = false; pcMeasure();
+  }
+}
+function pcOverlap(ax, ay, aw, ah, r) {
+  var w = Math.min(ax + aw, r.r) - Math.max(ax, r.l), h = Math.min(ay + ah, r.b) - Math.max(ay, r.t);
+  return w > 0 && h > 0 ? w * h : 0;
+}
+function pcTick(dt) {
+  var c = pcard; if (!c.el || !c.id || !selPart) return;
+  var R = gl.partRect(selPart), W = window.innerWidth, H = window.innerHeight;
+  if (!R || R.r < 0 || R.l > W || R.b < 0 || R.t > H) { c.el.classList.add('hidden'); c.svg.classList.add('off'); c.shown = false; return; }
+  var F = freeRect || { l: 8, t: 8, r: W - 8, b: H - 8 }, cw = c.w, ch = c.h, G = 28, M = 10;
+  var cx = (R.l + R.r) / 2, cy = (R.t + R.b) / 2;
+  cx = Math.max(4, Math.min(W - 4, cx)); cy = Math.max(4, Math.min(H - 4, cy));
+  var rr = { l: R.l - 8, t: R.t - 8, r: R.r + 8, b: R.b + 8 };
+  var cands = [
+    ['r', R.r + G, cy - ch / 2], ['l', R.l - G - cw, cy - ch / 2], ['t', cx - cw / 2, R.t - G - ch], ['b', cx - cw / 2, R.b + G],
+    ['tr', R.r + G, R.t - ch + 20], ['tl', R.l - G - cw, R.t - ch + 20], ['br', R.r + G, R.b - 20], ['bl', R.l - G - cw, R.b - 20],
+    ['c1', F.l + M, F.t + M], ['c2', F.r - cw - M, F.t + M], ['c3', F.l + M, F.b - ch - M], ['c4', F.r - cw - M, F.b - ch - M]
+  ], best = null, i, k, x, y, sc, ov, dx, dy;
+  for (i = 0; i < cands.length; i++) {
+    k = cands[i]; x = Math.max(F.l + M * 0.5, Math.min(F.r - cw - M * 0.5, k[1])); y = Math.max(F.t + M * 0.5, Math.min(F.b - ch - M * 0.5, k[2]));
+    ov = pcOverlap(x, y, cw, ch, rr);
+    dx = x + cw / 2 - cx; dy = y + ch / 2 - cy;
+    sc = ov * 2 + Math.sqrt(dx * dx + dy * dy) * 0.6 + Math.abs(x - k[1]) + Math.abs(y - k[2]) + (k[0] === c.side ? -260 : 0) + (i >= 8 ? 120 : 0);
+    if (!best || sc < best.sc) best = { sc: sc, x: x, y: y, side: k[0] };
+  }
+  if (best.side !== c.side) { c.side = best.side; if (c.shown) c.glide = Math.max(c.glide, 0.3); }
+  if (!c.shown) { c.x = best.x; c.y = best.y; c.shown = true; c.el.classList.remove('hidden'); c.svg.classList.remove('off'); }
+  else if (c.glide > 0) { var kk = 1 - Math.exp(-(dt || 0.016) * 11); c.x += (best.x - c.x) * kk; c.y += (best.y - c.y) * kk; c.glide -= (dt || 0.016); }
+  else { c.x = best.x; c.y = best.y; }
+  c.el.style.transform = 'translate3d(' + Math.round(c.x * 10) / 10 + 'px,' + Math.round(c.y * 10) / 10 + 'px,0)';
+  /* connector: from the nearest point on the card to the part */
+  var sx = Math.max(c.x, Math.min(c.x + cw, cx)), sy = Math.max(c.y, Math.min(c.y + ch, cy));
+  var inside = cx > c.x && cx < c.x + cw && cy > c.y && cy < c.y + ch;
+  c.line.setAttribute('x1', sx); c.line.setAttribute('y1', sy); c.line.setAttribute('x2', cx); c.line.setAttribute('y2', cy);
+  c.line.style.display = inside ? 'none' : '';
+  c.dot.setAttribute('cx', cx); c.dot.setAttribute('cy', cy); c.ring.setAttribute('cx', cx); c.ring.setAttribute('cy', cy);
+}
+
 /* ---------- boot ---------- */
 function loadThree() {
   return new Promise(function (res, rej) {
@@ -2090,8 +2183,8 @@ function boot() {
   });
   document.addEventListener('keydown', onKey);
   setTimeout(hideCoach, 9000);
-  renderSheet();
-  window.addEventListener('resize', function () { updateInset(); });
+  renderSheet(); pcInit();
+  window.addEventListener('resize', function () { updateInset(); pcMeasure(); });
   if (window.ResizeObserver) { var ro = new ResizeObserver(function () { updateInset(); }); ro.observe($('#sheet')); ro.observe($('#home')); ro.observe($('#parts')); ro.observe($('#land .land-main')); }
   loadThree().then(function () {
     try {
@@ -2100,7 +2193,7 @@ function boot() {
       setTheme(document.documentElement.getAttribute('data-theme'), false);
       gl.isHome = function () { return mode === 'home' && !selPart; };
       $('#c').addEventListener('pointerdown', hideCoach);
-      updateInset(); applyScene();
+      gl.onPost = pcTick; updateInset(); applyScene();
     } catch (err) {
       gl = null;
       var f = $('#fallback'); f.style.display = 'block';
