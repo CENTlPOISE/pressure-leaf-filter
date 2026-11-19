@@ -336,7 +336,7 @@ body{background-image:radial-gradient(1000px 640px at 62% 34%,rgba(255,255,255,.
 html[data-theme=dark],html[data-theme=dark] body{background-color:#070816}
 html[data-theme=dark] body{background-image:radial-gradient(900px 620px at 66% 38%,rgba(99,82,255,.38),rgba(99,82,255,0) 68%),radial-gradient(700px 520px at 6% 96%,rgba(50,120,255,.2),rgba(50,120,255,0) 70%),radial-gradient(600px 420px at 96% 6%,rgba(160,90,255,.16),rgba(160,90,255,0) 70%),linear-gradient(rgba(160,170,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(160,170,255,.07) 1px,transparent 1px);background-size:auto,auto,auto,120px 120px,120px 120px;background-color:#070816}
 /* liquid glass surfaces */
-.glass{background:radial-gradient(130% 90% at 0% 0%,rgba(255,255,255,.62),rgba(255,255,255,0) 52%),linear-gradient(145deg,rgba(255,255,255,.74),rgba(246,247,255,.58));-webkit-backdrop-filter:blur(24px) saturate(1.7);backdrop-filter:blur(24px) saturate(1.7);border:1px solid rgba(255,255,255,.75);box-shadow:0 14px 44px rgba(60,60,150,.16),0 2px 6px rgba(60,60,150,.08),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.3)}
+.glass{background:radial-gradient(130% 90% at 0% 0%,rgba(255,255,255,.62),rgba(255,255,255,0) 52%),linear-gradient(145deg,rgba(255,255,255,.74),rgba(246,247,255,.58));-webkit-backdrop-filter:blur(12px) saturate(1.25);backdrop-filter:blur(12px) saturate(1.25);border:1px solid rgba(255,255,255,.75);box-shadow:0 14px 44px rgba(60,60,150,.16),0 2px 6px rgba(60,60,150,.08),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.3)}
 html[data-theme=dark] .glass{background:radial-gradient(130% 90% at 0% 0%,rgba(150,140,255,.22),rgba(150,140,255,0) 55%),linear-gradient(145deg,rgba(38,42,88,.68),rgba(15,17,40,.62));border:1px solid rgba(190,185,255,.16);box-shadow:0 16px 48px rgba(0,0,10,.55),0 0 0 1px rgba(255,255,255,.03),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(255,255,255,.04)}
 /* controls */
 .cta{background:linear-gradient(135deg,#2b2f5c,#171a3a);color:#fff;transition:transform .18s,box-shadow .18s,filter .18s;box-shadow:0 8px 22px rgba(30,30,90,.3),inset 0 1px 0 rgba(255,255,255,.18)}
@@ -371,8 +371,8 @@ html[data-theme=dark] #infoOv .modal{background:linear-gradient(160deg,#171b3a,#
 .hero{background:linear-gradient(135deg,#2a2c66,#4a3fc0 55%,#3a86d8)}
 ol.steps li:before,.mem i{background:linear-gradient(135deg,#6a5cf0,#4da8ff);color:#fff}
 html[data-theme=dark] ol.steps li:before,html[data-theme=dark] .mem i{background:linear-gradient(135deg,#7a6cff,#4da8ff);color:#fff}
-.lbl{background:rgba(30,32,78,.9);backdrop-filter:blur(6px)}
-#tip,#toast{background:rgba(30,32,78,.92);backdrop-filter:blur(8px)}
+.lbl{background:rgba(30,32,78,.92)}
+#tip,#toast{background:rgba(30,32,78,.94)}
 /* ---- components panel ---- */
 #parts{position:fixed;z-index:6;display:flex;flex-direction:column;border-radius:var(--r);overflow:hidden;animation:pop .28s cubic-bezier(.2,.8,.2,1)}
 #parts .ph{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px}
@@ -436,7 +436,7 @@ html[data-theme=dark] .land-nav button.on{background:rgba(255,255,255,.16)}
 #land .land-cta:hover svg{transform:translateX(4px)}
 #land .land-cta:after{content:"";position:absolute;top:0;bottom:0;width:60px;left:-80px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:shine 4.5s 1.4s infinite}
 @keyframes shine{0%{left:-80px}30%,100%{left:130%}}
-.land-ghost{border:1px solid var(--line);background:rgba(255,255,255,.4);backdrop-filter:blur(10px);color:var(--ink);padding:15px 22px;border-radius:999px;font:700 14.5px inherit;font-family:inherit;cursor:pointer;transition:.18s}
+.land-ghost{border:1px solid var(--line);background:rgba(255,255,255,.55);color:var(--ink);padding:15px 22px;border-radius:999px;font:700 14.5px inherit;font-family:inherit;cursor:pointer;transition:.18s}
 .land-ghost:hover{transform:translateY(-2px);background:rgba(255,255,255,.7);box-shadow:0 8px 20px rgba(80,70,190,.16)}
 html[data-theme=dark] .land-ghost{background:rgba(255,255,255,.07);border-color:rgba(190,185,255,.2)}
 html[data-theme=dark] .land-ghost:hover{background:rgba(255,255,255,.14)}
@@ -831,7 +831,7 @@ function mergeState(s) { var o = {}, k; for (k in DEF) o[k] = DEF[k]; for (k in 
 function init3D() {
   var T = window.THREE, cv = $('#c');
   var renderer = new T.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = T.PCFSoftShadowMap;
   renderer.outputEncoding = T.sRGBEncoding;
@@ -843,7 +843,7 @@ function init3D() {
   var hemi = new T.HemisphereLight(0xf4f7fb, 0x7d8896, 0.78); scene.add(hemi);
   var sun = new T.DirectionalLight(0xffffff, 1.05);
   sun.position.set(2.2, 3.6, 2.6); sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.025;
+  sun.shadow.mapSize.set(1024, 1024); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.025;
   var sc = sun.shadow.camera; sc.left = -2.5; sc.right = 2.5; sc.top = 2.5; sc.bottom = -2.5; sc.near = 0.5; sc.far = 12;
   scene.add(sun); sun.target.position.set(-0.18, 0.4, 0.4); scene.add(sun.target);
   var fill = new T.DirectionalLight(0xdbe6ff, 0.32); fill.position.set(-2, 2, -2); scene.add(fill);
@@ -1725,14 +1725,14 @@ function setTheme(t, save) {
 function toggleTheme() { setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true); }
 /* ---------- landing page ---------- */
 function enterApp(after) {
-  var land = $('#land'); if (!isLanding()) { if (after) after(); return; }
+  var land = $('#land'); if (!isLanding()) { if (typeof after === 'function') after(); return; }
   land.classList.add('leaving', 'out');
   document.body.classList.remove('landing');
   mode = 'home'; selPart = null; stepMenu = false;
   if (gl) { gl.isHome = function () { return mode === 'home' && !selPart; }; gl.home(); }
   presetIdx = 0; $('#vName').textContent = 'View';
   refresh();
-  if (after) after();
+  if (typeof after === 'function') after();
   setTimeout(function () { land.classList.remove('leaving'); }, 480);
 }
 function showLanding() {
@@ -2052,7 +2052,7 @@ function boot() {
   $('#homeFoot').textContent = C.group.section + ' · ' + C.group.term;
   $('#landInst').textContent = C.institution; $('#landEyebrow').textContent = C.subtitle;
   $('#landFoot').textContent = C.group.section + ' · ' + C.group.term;
-  $('#bExplore').addEventListener('click', enterApp);
+  $('#bExplore').addEventListener('click', function () { enterApp(); });
   $('#bTheme').addEventListener('click', toggleTheme); $('#bTheme2').addEventListener('click', toggleTheme);
   $('#bHome').addEventListener('click', showLanding);
   $('#bParts').addEventListener('click', function () { togglePartsPanel(); });
